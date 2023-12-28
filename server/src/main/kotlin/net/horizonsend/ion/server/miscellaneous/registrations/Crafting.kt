@@ -5,13 +5,17 @@ import net.horizonsend.ion.server.IonServerComponent
 import net.horizonsend.ion.server.features.customitems.CustomItems
 import net.horizonsend.ion.server.features.customitems.CustomItems.ALUMINUM_INGOT
 import net.horizonsend.ion.server.features.customitems.CustomItems.ALUMINUM_BLOCK
+import net.horizonsend.ion.server.features.customitems.CustomItems.BLUEENERGYSWORD
 import net.horizonsend.ion.server.features.customitems.CustomItems.CANNON_RECEIVER
 import net.horizonsend.ion.server.features.customitems.CustomItems.CHETHERITE
 import net.horizonsend.ion.server.features.customitems.CustomItems.CHETHERITE_BLOCK
 import net.horizonsend.ion.server.features.customitems.CustomItems.CIRCUITRY
 import net.horizonsend.ion.server.features.customitems.CustomItems.DETONATOR
+import net.horizonsend.ion.server.features.customitems.CustomItems.ENERGY_SABER_HILT
 import net.horizonsend.ion.server.features.customitems.CustomItems.GAS_CANISTER_EMPTY
+import net.horizonsend.ion.server.features.customitems.CustomItems.GREENENERGYSWORD
 import net.horizonsend.ion.server.features.customitems.CustomItems.GUN_BARREL
+import net.horizonsend.ion.server.features.customitems.CustomItems.ORANGEENERGYSWORD
 import net.horizonsend.ion.server.features.customitems.CustomItems.PISTOL
 import net.horizonsend.ion.server.features.customitems.CustomItems.PISTOL_RECEIVER
 import net.horizonsend.ion.server.features.customitems.CustomItems.RAW_ALUMINUM
@@ -20,6 +24,8 @@ import net.horizonsend.ion.server.features.customitems.CustomItems.RAW_TITANIUM
 import net.horizonsend.ion.server.features.customitems.CustomItems.RAW_TITANIUM_BLOCK
 import net.horizonsend.ion.server.features.customitems.CustomItems.RAW_URANIUM
 import net.horizonsend.ion.server.features.customitems.CustomItems.RAW_URANIUM_BLOCK
+import net.horizonsend.ion.server.features.customitems.CustomItems.PURPLEENERGYSWORD
+import net.horizonsend.ion.server.features.customitems.CustomItems.REDENERGYSWORD
 import net.horizonsend.ion.server.features.customitems.CustomItems.RIFLE
 import net.horizonsend.ion.server.features.customitems.CustomItems.RIFLE_RECEIVER
 import net.horizonsend.ion.server.features.customitems.CustomItems.SHOTGUN_RECEIVER
@@ -32,6 +38,7 @@ import net.horizonsend.ion.server.features.customitems.CustomItems.TITANIUM_INGO
 import net.horizonsend.ion.server.features.customitems.CustomItems.TITANIUM_BLOCK
 import net.horizonsend.ion.server.features.customitems.CustomItems.URANIUM
 import net.horizonsend.ion.server.features.customitems.CustomItems.URANIUM_BLOCK
+import net.horizonsend.ion.server.features.customitems.CustomItems.YELLOWENERGYSWORD
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Material.AIR
@@ -347,6 +354,30 @@ object Crafting : IonServerComponent() {
 			setIngredient('x', AIR)
 			setIngredient('a', ExactChoice(ALUMINUM_INGOT.constructItemStack()))
 		}
+
+		//Energy Sword hilt
+		itemStackShapeRecipe("energy_sword_hilt", CustomItems.ENERGY_SABER_HILT.constructItemStack()){
+			shape("tpt", "ara", "ara")
+			setIngredient('t', ExactChoice(TITANIUM_INGOT.constructItemStack()))
+			setIngredient('p', PRISMARINE_CRYSTALS)
+			setIngredient('a', ExactChoice(ALUMINUM_INGOT.constructItemStack()))
+			setIngredient('r', REDSTONE)
+		}
+
+		mapOf(
+			YELLOWENERGYSWORD to GOLD_INGOT,
+			REDENERGYSWORD to REDSTONE,
+			BLUEENERGYSWORD to Material.DIAMOND,
+			ORANGEENERGYSWORD to COPPER_INGOT,
+			PURPLEENERGYSWORD to AMETHYST_SHARD,
+			GREENENERGYSWORD to Material.EMERALD
+		).forEach {
+			itemStackShapelessRecipe(it.key.identifier, it.key.constructItemStack()){
+				addIngredient(ExactChoice(ENERGY_SABER_HILT.constructItemStack()))
+				addIngredient(it.value)
+			}
+		}
+
 
 		// Circuitry Crafting 1
 		itemStackShapeRecipe("circuitry_1", CIRCUITRY.constructItemStack()) {

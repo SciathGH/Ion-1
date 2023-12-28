@@ -45,7 +45,7 @@ object PowerArmorManager {
 					when (module) {
 						PowerArmorModule.SPEED_BOOSTING -> {
 							player.addPotionEffect(
-								PotionEffect(PotionEffectType.SPEED, 20, 2, true, true)
+								PotionEffect(PotionEffectType.SPEED, 20, 0, true, true)
 							)
 
 							if (hasMovedInLastSecond(player) && !player.world.name.lowercase(Locale.getDefault())

@@ -1,11 +1,15 @@
 package net.horizonsend.ion.server.features.customitems.blasters.objects
 
+import io.papermc.paper.entity.TeleportFlag
 import net.horizonsend.ion.common.database.cache.nations.NationCache
 import net.horizonsend.ion.common.database.schema.misc.SLPlayer
 import net.horizonsend.ion.common.extensions.alert
+import net.horizonsend.ion.common.extensions.userError
 import net.horizonsend.ion.common.utils.miscellaneous.randomDouble
-import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.EnergyWeapons.Balancing
+import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration
+import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.EnergyWeapons.GunBalancing
 import net.horizonsend.ion.server.features.customitems.CustomItem
+import net.horizonsend.ion.server.features.customitems.CustomItems
 import net.horizonsend.ion.server.features.customitems.CustomItems.customItem
 import net.horizonsend.ion.server.features.customitems.blasters.RayTracedParticleProjectile
 import net.horizonsend.ion.server.features.space.SpaceWorlds
@@ -25,8 +29,10 @@ import org.bukkit.Particle
 import org.bukkit.Particle.DustOptions
 import org.bukkit.Particle.REDSTONE
 import org.bukkit.SoundCategory.PLAYERS
+import org.bukkit.entity.Flying
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
@@ -34,7 +40,7 @@ import org.bukkit.util.Vector
 import java.util.Locale
 import java.util.function.Supplier
 
-abstract class Blaster<T : Balancing>(
+abstract class Blaster<T : GunBalancing>(
     identifier: String,
 
     material: Material,
@@ -55,7 +61,34 @@ abstract class Blaster<T : Balancing>(
 	val balancing get() = balancingSupplier.get()
 
 	override fun handleSecondaryInteract(livingEntity: LivingEntity, itemStack: ItemStack) {
-		fireWeapon(livingEntity, itemStack)
+		var primaryCount = 0
+		var secondaryCount = 0
+		var tertiaryCount = 0
+		val inventory = (livingEntity as? InventoryHolder)?.inventory
+		if (inventory == null) {fireWeapon(livingEntity, itemStack); return}
+		for (i in inventory.contents){
+			val customItemIdentifier = i?.customItem?.identifier ?: continue
+			when((CustomItems.getByIdentifier(customItemIdentifier) as Blaster<*>).balancingSupplier.get().type){
+				PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.PRIMARY -> primaryCount++
+				PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.SECONDARY -> secondaryCount++
+				PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.TERTIARY -> tertiaryCount++
+			}
+		}
+		if (primaryCount > 1){
+			livingEntity.userError("Over Primary weapon limit, limit is 1 but you have $primaryCount weapons ")
+			return
+		}
+		else if (secondaryCount > 1){
+			livingEntity.userError("Over Secondary weapon limit, limit is 1 but you have $secondaryCount weapons")
+			return
+		}
+		else if (tertiaryCount > 1){
+			livingEntity.userError("Over Tertiary weapon limit, limit is 1 but you have $tertiaryCount weapons")
+			return
+		}
+		else{
+			fireWeapon(livingEntity, itemStack)
+		}
 	}
 
 	override fun handleTertiaryInteract(livingEntity: LivingEntity, itemStack: ItemStack) {
@@ -207,6 +240,7 @@ abstract class Blaster<T : Balancing>(
 		}
 
 		fireProjectiles(livingEntity)
+		recoil(livingEntity, balancing)
 	}
 
 	private fun getParticleType(entity: LivingEntity): Particle = REDSTONE // Default
@@ -265,5 +299,19 @@ abstract class Blaster<T : Balancing>(
 		(livingEntity as? Player)?.setCooldown(itemStack.type, (balancing.timeBetweenShots - 1).coerceAtLeast(0))
 
 		return true
+	}
+	private fun recoil(entity: LivingEntity, gunBalancing: GunBalancing){
+		val recoil = gunBalancing.recoil/gunBalancing.packetsPerShot
+		if ((entity as Player).isGliding) return
+		for (i in 1..gunBalancing.packetsPerShot){
+			Tasks.syncDelay(i.toLong()) {
+				val loc = entity.location
+				loc.pitch -= recoil
+				(entity as? Player)?.teleport(
+					loc,
+					*TeleportFlag.Relative.values()
+				)
+			}
+		}
 	}
 }

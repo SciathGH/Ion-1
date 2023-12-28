@@ -4,6 +4,7 @@ import net.horizonsend.ion.server.IonServer
 import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration
 import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.EnergyWeapons.Multishot
 import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.EnergyWeapons.Singleshot
+import net.horizonsend.ion.server.features.customitems.EnergySword.EnergySword
 import net.horizonsend.ion.server.features.customitems.blasters.objects.Blaster
 import net.horizonsend.ion.server.features.customitems.blasters.objects.Magazine
 import net.horizonsend.ion.server.features.customitems.minerals.Smeltable
@@ -12,6 +13,7 @@ import net.horizonsend.ion.server.features.customitems.throwables.ThrownDetonato
 import net.horizonsend.ion.server.features.customitems.throwables.ThrownPumpkinGrenade
 import net.horizonsend.ion.server.features.customitems.throwables.objects.ThrowableCustomItem
 import net.horizonsend.ion.server.features.customitems.throwables.objects.ThrownCustomItem
+import net.horizonsend.ion.server.miscellaneous.registrations.NamespacedKeys
 import net.horizonsend.ion.server.miscellaneous.registrations.NamespacedKeys.CUSTOM_ITEM
 import net.horizonsend.ion.server.miscellaneous.utils.Tasks
 import net.horizonsend.ion.server.miscellaneous.utils.updateMeta
@@ -26,6 +28,7 @@ import net.kyori.adventure.text.format.NamedTextColor.RED
 import net.kyori.adventure.text.format.NamedTextColor.YELLOW
 import net.kyori.adventure.text.format.TextDecoration.BOLD
 import net.kyori.adventure.text.format.TextDecoration.ITALIC
+import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Material
 import org.bukkit.Material.DIAMOND_HOE
 import org.bukkit.Material.GOLDEN_HOE
@@ -35,12 +38,14 @@ import org.bukkit.Material.IRON_INGOT
 import org.bukkit.Material.IRON_ORE
 import org.bukkit.Material.RAW_IRON
 import org.bukkit.Material.RAW_IRON_BLOCK
+import org.bukkit.Material.SHIELD
 import org.bukkit.Material.WARPED_FUNGUS_ON_A_STICK
 import org.bukkit.block.Dispenser
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Item
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.persistence.PersistentDataType.STRING
 import kotlin.math.roundToInt
 
@@ -222,6 +227,117 @@ object CustomItems {
 			) {}
 		)
 
+	val YELLOWENERGYSWORD = register(
+			object : EnergySword<PVPBalancingConfiguration.EnergyWeapons.EnergySwordBalancing>(
+				identifier = "YELLOW_ENERGY_SWORD",
+				material = SHIELD,
+				customModelData = 1,
+				displayName = text("Yellow Energy Sword", YELLOW, BOLD).decoration(ITALIC, false)
+			) {
+				override fun constructItemStack(): ItemStack {
+					val item = ItemStack(SHIELD)
+					item.editMeta {
+						it.displayName(MiniMessage.miniMessage().deserialize("<b><yellow>Yellow Energy Sword"))
+						it.lore(listOf(MiniMessage.miniMessage().deserialize("<gray>You can get more colours by donating on the patreon")))
+						it.isUnbreakable = true
+						it.persistentDataContainer.set(CUSTOM_ITEM, STRING, identifier)
+					}
+					return item
+				}
+			}
+	)
+	val REDENERGYSWORD = register(
+		object : EnergySword<PVPBalancingConfiguration.EnergyWeapons.EnergySwordBalancing>(
+			identifier = "RED_ENERGY_SWORD",
+			material = SHIELD,
+			customModelData = 1,
+			displayName = text("Red Energy Sword", RED, BOLD).decoration(ITALIC, false)
+		) {
+			override fun constructItemStack(): ItemStack {
+				val item = ItemStack(SHIELD)
+				item.editMeta {
+					it.displayName(MiniMessage.miniMessage().deserialize("<b><red>Red Energy Sword"))
+					it.isUnbreakable = true
+					it.persistentDataContainer.set(CUSTOM_ITEM, STRING, identifier)
+				}
+				return item
+			}
+		}
+	)
+	val BLUEENERGYSWORD = register(
+		object : EnergySword<PVPBalancingConfiguration.EnergyWeapons.EnergySwordBalancing>(
+			identifier = "BLUE_ENERGY_SWORD",
+			material = SHIELD,
+			customModelData = 1,
+			displayName = text("Blue Energy Sword", BLUE, BOLD).decoration(ITALIC, false)
+		) {
+			override fun constructItemStack(): ItemStack {
+				val item = ItemStack(SHIELD)
+				item.editMeta {
+					it.displayName(MiniMessage.miniMessage().deserialize("<b><blue>Blue Energy Sword"))
+					it.isUnbreakable = true
+					it.persistentDataContainer.set(CUSTOM_ITEM, STRING, identifier)
+				}
+				return item
+			}
+		}
+	)
+	val GREENENERGYSWORD = register(
+		object : EnergySword<PVPBalancingConfiguration.EnergyWeapons.EnergySwordBalancing>(
+			identifier = "GREEN_ENERGY_SWORD",
+			material = SHIELD,
+			customModelData = 1,
+			displayName = text("Green Energy Sword", GREEN, BOLD).decoration(ITALIC, false)
+		) {
+			override fun constructItemStack(): ItemStack {
+				val item = ItemStack(SHIELD)
+				item.editMeta {
+					it.displayName(MiniMessage.miniMessage().deserialize("<b><green>Yellow Energy Sword"))
+					it.isUnbreakable = true
+					it.persistentDataContainer.set(CUSTOM_ITEM, STRING, identifier)
+				}
+				return item
+			}
+		}
+	)
+	val ORANGEENERGYSWORD = register(
+		object : EnergySword<PVPBalancingConfiguration.EnergyWeapons.EnergySwordBalancing>(
+			identifier = "ORANGE_ENERGY_SWORD",
+			material = SHIELD,
+			customModelData = 1,
+			displayName = text("Orange Energy Sword", GOLD, BOLD).decoration(ITALIC, false)
+		) {
+			override fun constructItemStack(): ItemStack {
+				val item = ItemStack(SHIELD)
+				item.editMeta {
+					it.displayName(MiniMessage.miniMessage().deserialize("<b><gold>Orange Energy Sword"))
+					it.isUnbreakable = true
+					it.persistentDataContainer.set(CUSTOM_ITEM, STRING, identifier)
+				}
+				return item
+			}
+		}
+	)
+	val PURPLEENERGYSWORD = register(
+		object : EnergySword<PVPBalancingConfiguration.EnergyWeapons.EnergySwordBalancing>(
+			identifier = "PURPLE_ENERGY_SWORD",
+			material = SHIELD,
+			customModelData = 1,
+			displayName = text("Purple Energy Sword", LIGHT_PURPLE, BOLD).decoration(ITALIC, false)
+		) {
+			override fun constructItemStack(): ItemStack {
+				val item = ItemStack(SHIELD)
+				item.editMeta {
+					it.displayName(MiniMessage.miniMessage().deserialize("<b><light_purple>Purple Energy Sword"))
+					it.isUnbreakable = true
+					it.persistentDataContainer.set(CUSTOM_ITEM, STRING, identifier)
+				}
+				return item
+			}
+		}
+	)
+
+
 	// Guns End
 	// Gun Parts Start
 
@@ -234,6 +350,7 @@ object CustomItems {
 	val SNIPER_RECEIVER = register("SNIPER_RECEIVER", 505, text("Sniper Receiver"))
 	val SHOTGUN_RECEIVER = register("SHOTGUN_RECEIVER", 506, text("Shotgun Receiver"))
 	val CANNON_RECEIVER = register("CANNON_RECEIVER", 507, text("Cannon Receiver"))
+	val ENERGY_SABER_HILT = register("ENERGY_SABER_HILT", 508, text("Energy Saber Hilt"))
 
 	// Gun Parts End
 	// Gas Canisters Start

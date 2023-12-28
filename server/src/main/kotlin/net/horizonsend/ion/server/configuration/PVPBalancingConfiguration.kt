@@ -52,7 +52,8 @@ data class PVPBalancingConfiguration(
 			timeBetweenShots = 6,
 			shotDeviation = 0.0,
 			mobDamageMultiplier = 1.0,
-			consumesAmmo = false
+			consumesAmmo = false,
+			type = WeaponTypeEnum.TERTIARY
 		),
 		val rifle: Singleshot = Singleshot(
 			damage = 5.5,
@@ -73,7 +74,8 @@ data class PVPBalancingConfiguration(
 			timeBetweenShots = 8,
 			shotDeviation = 0.0,
 			mobDamageMultiplier = 2.0,
-			consumesAmmo = true
+			consumesAmmo = true,
+			type = WeaponTypeEnum.SECONDARY
 		),
 		val submachineBlaster: Singleshot = Singleshot(
 			damage = 1.5,
@@ -94,7 +96,8 @@ data class PVPBalancingConfiguration(
 			timeBetweenShots = 2,
 			shotDeviation = 0.025,
 			mobDamageMultiplier = 2.0,
-			consumesAmmo = true
+			consumesAmmo = true,
+			type = WeaponTypeEnum.SECONDARY
 		),
 		val sniper: Singleshot = Singleshot(
 			damage = 12.0,
@@ -115,7 +118,8 @@ data class PVPBalancingConfiguration(
 			timeBetweenShots = 40,
 			shotDeviation = 0.0,
 			mobDamageMultiplier = 2.0,
-			consumesAmmo = true
+			consumesAmmo = true,
+			type = WeaponTypeEnum.PRIMARY
 		),
 		val shotgun: Multishot = Multishot(
 			damage = 1.75,
@@ -139,7 +143,8 @@ data class PVPBalancingConfiguration(
 			timeBetweenShots = 20,
 			shotDeviation = 0.1,
 			mobDamageMultiplier = 2.0,
-			consumesAmmo = true
+			consumesAmmo = true,
+			type = WeaponTypeEnum.PRIMARY
 		),
 
 		val cannon: Singleshot = Singleshot(
@@ -162,7 +167,8 @@ data class PVPBalancingConfiguration(
 			timeBetweenShots = 12,
 			shotDeviation = 0.07,
 			mobDamageMultiplier = 2.0,
-			consumesAmmo = true
+			consumesAmmo = true,
+			type = WeaponTypeEnum.TERTIARY
 		),
 
 		val standardMagazine: AmmoStorage = AmmoStorage(
@@ -174,6 +180,11 @@ data class PVPBalancingConfiguration(
 			capacity = 20,
 			refillType = "minecraft:emerald",
 			ammoPerRefill = 20
+		),
+		val energySwordBalancing: EnergySwordBalancing = EnergySwordBalancing(
+			damage = 4.0,
+			blockAmount = 20.0f,
+			type = WeaponTypeEnum.TERTIARY
 		)
 	) {
 		@Serializable
@@ -197,8 +208,9 @@ data class PVPBalancingConfiguration(
 			override val timeBetweenShots: Int,
 			override val shotDeviation: Double,
 			override val mobDamageMultiplier: Double,
-			override val consumesAmmo: Boolean
-		) : Balancing()
+			override val consumesAmmo: Boolean,
+			override val type: WeaponTypeEnum
+		) : GunBalancing()
 
 		@Serializable
 		data class Multishot(
@@ -225,8 +237,9 @@ data class PVPBalancingConfiguration(
 			override val timeBetweenShots: Int,
 			override val shotDeviation: Double,
 			override val mobDamageMultiplier: Double,
-			override val consumesAmmo: Boolean
-		) : Balancing()
+			override val consumesAmmo: Boolean,
+			override val type: WeaponTypeEnum
+		) : GunBalancing()
 
 		@Serializable
 		data class AmmoStorage(
@@ -235,7 +248,7 @@ data class PVPBalancingConfiguration(
 			override val ammoPerRefill: Int
 		) : AmmoStorageBalancing
 
-		abstract class Balancing : ProjectileBalancing {
+		abstract class GunBalancing : ProjectileBalancing, WeaponType {
 			abstract val magazineSize: Int
 			abstract val ammoPerRefill: Int
 			abstract val packetsPerShot: Int
@@ -265,6 +278,23 @@ data class PVPBalancingConfiguration(
 			val capacity: Int
 			val refillType: String
 			val ammoPerRefill: Int
+		}
+
+		@Serializable
+		data class EnergySwordBalancing(
+			val damage: Double,
+			val blockAmount: Float,
+			override val type: WeaponTypeEnum
+		): WeaponType
+
+		interface WeaponType{
+			val type: WeaponTypeEnum
+		}
+
+		enum class WeaponTypeEnum{
+			PRIMARY,
+			SECONDARY,
+			TERTIARY
 		}
 	}
 }
