@@ -2,6 +2,7 @@ package net.horizonsend.ion.server.features.customitems
 
 import io.papermc.paper.event.block.BlockPreDispenseEvent
 import net.horizonsend.ion.server.features.customitems.CustomItems.customItem
+import net.horizonsend.ion.server.features.customitems.EnergySword.EnergySword
 import net.horizonsend.ion.server.listener.SLEventListener
 import org.bukkit.Material
 import org.bukkit.block.Dispenser
@@ -19,7 +20,7 @@ import org.bukkit.inventory.meta.Damageable
 class CustomItemListeners : SLEventListener() {
 	@EventHandler(priority = EventPriority.LOWEST)
 	@Suppress("Unused")
-	fun rightClick(event: PlayerInteractEvent) {
+	fun onPlayerInteract(event: PlayerInteractEvent) {
 		if (event.item == null) return
 
 		if (event.hand != EquipmentSlot.HAND) return
@@ -28,7 +29,7 @@ class CustomItemListeners : SLEventListener() {
 		when (event.action) {
 			Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK -> {
 				customItem.handleSecondaryInteract(event.player, event.player.inventory.itemInMainHand)
-				if (customItem !is CustomBlockItem) {
+				if (customItem !is CustomBlockItem || CustomItems.getByIdentifier(customItem.identifier) !is EnergySword<*>) {
 					event.isCancelled = true
 				}
 			}

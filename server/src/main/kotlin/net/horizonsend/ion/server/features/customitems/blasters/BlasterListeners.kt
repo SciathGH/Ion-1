@@ -70,7 +70,7 @@ class BlasterListeners : SLEventListener() {
 
 	@EventHandler
 	fun onPlayerItemHoldEvent(event: PlayerItemHeldEvent) {
-		val itemStack = event.player.inventory.getItem(event.newSlot) ?: return
+		val itemStack = event.player.inventory.getItem(event.player.inventory.heldItemSlot) ?: return //cant use event.item as players could offhand a gun and spam saber fast
 		val customItem = itemStack.customItem as? Blaster<*> ?: return
 
 		// adding a potion effect because it takes ages for that attack cooldown to come up

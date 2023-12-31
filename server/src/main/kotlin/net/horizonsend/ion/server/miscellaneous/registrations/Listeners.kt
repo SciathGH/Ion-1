@@ -5,6 +5,7 @@ import net.horizonsend.ion.server.features.client.VoidNetwork
 import net.horizonsend.ion.server.features.client.networking.packets.WorldPacket
 import net.horizonsend.ion.server.features.customblocks.CustomBlockListeners
 import net.horizonsend.ion.server.features.customitems.CustomItemListeners
+import net.horizonsend.ion.server.features.customitems.EnergySword.EnergySwordListener
 import net.horizonsend.ion.server.features.customitems.blasters.BlasterListeners
 import net.horizonsend.ion.server.features.machine.CryoPods
 import net.horizonsend.ion.server.features.misc.HyperspaceBeaconManager
@@ -66,6 +67,7 @@ val listeners: List<Listener> = listOf(
 
 	// Ion
 	BlasterListeners(),
+	EnergySwordListener(),
 	CancelListeners(),
 	CustomItemListeners(),
 	CustomBlockListeners(),

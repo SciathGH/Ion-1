@@ -182,8 +182,9 @@ data class PVPBalancingConfiguration(
 			ammoPerRefill = 20
 		),
 		val energySwordBalancing: EnergySwordBalancing = EnergySwordBalancing(
-			damage = 4.0,
+			damage = 7.0, //This value is added to the damage of the shield currently, in this case 1
 			blockAmount = 20.0f,
+			blockRechargePerTick= 0.25f,
 			type = WeaponTypeEnum.TERTIARY
 		)
 	) {
@@ -284,6 +285,7 @@ data class PVPBalancingConfiguration(
 		data class EnergySwordBalancing(
 			val damage: Double,
 			val blockAmount: Float,
+			val blockRechargePerTick: Float,
 			override val type: WeaponTypeEnum
 		): WeaponType
 

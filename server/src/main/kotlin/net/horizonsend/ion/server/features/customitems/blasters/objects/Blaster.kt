@@ -11,6 +11,7 @@ import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.Energy
 import net.horizonsend.ion.server.features.customitems.CustomItem
 import net.horizonsend.ion.server.features.customitems.CustomItems
 import net.horizonsend.ion.server.features.customitems.CustomItems.customItem
+import net.horizonsend.ion.server.features.customitems.EnergySword.EnergySword
 import net.horizonsend.ion.server.features.customitems.blasters.RayTracedParticleProjectile
 import net.horizonsend.ion.server.features.space.SpaceWorlds
 import net.horizonsend.ion.server.miscellaneous.utils.Tasks
@@ -68,11 +69,21 @@ abstract class Blaster<T : GunBalancing>(
 		if (inventory == null) {fireWeapon(livingEntity, itemStack); return}
 		for (i in inventory.contents){
 			val customItemIdentifier = i?.customItem?.identifier ?: continue
-			when((CustomItems.getByIdentifier(customItemIdentifier) as Blaster<*>).balancingSupplier.get().type){
-				PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.PRIMARY -> primaryCount++
-				PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.SECONDARY -> secondaryCount++
-				PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.TERTIARY -> tertiaryCount++
+			if (CustomItems.getByIdentifier(customItemIdentifier) is Blaster<*>){
+				when((CustomItems.getByIdentifier(customItemIdentifier) as Blaster<*>).balancingSupplier.get().type){
+					PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.PRIMARY -> primaryCount++
+					PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.SECONDARY -> secondaryCount++
+					PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.TERTIARY -> tertiaryCount++
+				}
 			}
+			else if(CustomItems.getByIdentifier(customItemIdentifier) is EnergySword<*>){
+				when((CustomItems.getByIdentifier(customItemIdentifier) as EnergySword<*>).balancing.type){
+					PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.PRIMARY -> primaryCount++
+					PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.SECONDARY -> secondaryCount++
+					PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.TERTIARY -> tertiaryCount++
+				}
+			}
+			else continue
 		}
 		if (primaryCount > 1){
 			livingEntity.userError("Over Primary weapon limit, limit is 1 but you have $primaryCount weapons ")
@@ -302,7 +313,7 @@ abstract class Blaster<T : GunBalancing>(
 	}
 	private fun recoil(entity: LivingEntity, gunBalancing: GunBalancing){
 		val recoil = gunBalancing.recoil/gunBalancing.packetsPerShot
-		if ((entity as Player).isGliding) return
+		if ((entity as Player).isSneaking) return
 		for (i in 1..gunBalancing.packetsPerShot){
 			Tasks.syncDelay(i.toLong()) {
 				val loc = entity.location
