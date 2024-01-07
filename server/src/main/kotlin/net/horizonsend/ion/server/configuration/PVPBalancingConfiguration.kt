@@ -79,7 +79,7 @@ data class PVPBalancingConfiguration(
 			consumesAmmo = true,
 			type = WeaponTypeEnum.SECONDARY,
 			blockbreakAmount = 0.5,
-			switchToTimeTicks = 10
+			switchToTimeTicks = 0
 		),
 		val submachineBlaster: Singleshot = Singleshot(
 			damage = 1.5,
@@ -127,7 +127,7 @@ data class PVPBalancingConfiguration(
 			consumesAmmo = true,
 			type = WeaponTypeEnum.PRIMARY,
 			blockbreakAmount = 4.0,
-			switchToTimeTicks = 10
+			switchToTimeTicks = 5
 		),
 		val shotgun: Multishot = Multishot(
 			damage = 1.75,
@@ -154,7 +154,7 @@ data class PVPBalancingConfiguration(
 			consumesAmmo = true,
 			type = WeaponTypeEnum.PRIMARY,
 			blockbreakAmount = 1.5,
-			switchToTimeTicks = 20
+			switchToTimeTicks = 5
 		),
 
 		val cannon: Singleshot = Singleshot(

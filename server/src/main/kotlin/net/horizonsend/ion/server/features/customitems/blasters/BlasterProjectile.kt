@@ -9,6 +9,7 @@ import net.horizonsend.ion.server.IonServer
 import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.EnergyWeapons.ProjectileBalancing
 import net.horizonsend.ion.server.features.customitems.CustomItems.customItem
 import net.horizonsend.ion.server.features.customitems.EnergySword.EnergySword
+import net.horizonsend.ion.server.features.customitems.EnergySword.EnergySwordListener
 import net.horizonsend.ion.server.features.gear.powerarmor.PowerArmorManager
 import net.horizonsend.ion.server.features.space.SpaceWorlds
 import net.horizonsend.ion.server.features.starship.damager.addToDamagers
@@ -20,7 +21,6 @@ import net.kyori.adventure.sound.Sound.Source
 import net.kyori.adventure.sound.Sound.sound
 import net.kyori.adventure.text.Component.text
 import net.kyori.adventure.text.format.NamedTextColor
-import net.minecraft.world.damagesource.DamageSource
 import org.bukkit.FluidCollisionMode
 import org.bukkit.Location
 import org.bukkit.Material
@@ -28,14 +28,10 @@ import org.bukkit.Particle
 import org.bukkit.Particle.DustOptions
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer
 import org.bukkit.entity.Damageable
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
@@ -225,12 +221,8 @@ class RayTracedParticleProjectile(
 		val customItem1 = item1.customItem
 		val customItem2 = item2.customItem
 		if(customItem1 == null&&customItem2 == null) return false
-		if (customItem1 is EnergySword<*>){
-			return isBlockedByShield(item1, customItem1, vector, hitPlayer)
-		}
-		if (customItem2 is EnergySword<*>){
-			return isBlockedByShield(item1, customItem2, vector, hitPlayer)
-		}
+		if (customItem1 is EnergySword<*>) return isBlockedByShield(item1, customItem1, vector, hitPlayer)
+		if (customItem2 is EnergySword<*>) return isBlockedByShield(item1, customItem2, vector, hitPlayer)
 		return false
 	}
 
@@ -244,6 +236,20 @@ class RayTracedParticleProjectile(
 	}
 
 	private fun tryDamageEntity(entity: Damageable, damage: Double, shooter: Entity?){
+		val lastParryTime = EnergySwordListener.peopleToLastParryTime[entity] ?: 0
+		//check if it should be parried
+		if (shouldRebound(entity, this.directionVector) && entity is Player &&
+			(System.currentTimeMillis() - lastParryTime <=750)
+			) {
+			val item1 = entity.inventory.itemInMainHand
+			val item2 = entity.inventory.itemInOffHand
+			val sword1 = item1.customItem as? EnergySword<*>
+			val sword2 = item2.customItem as? EnergySword<*>
+			if (sword1 == null&& sword2 == null) return //should never happen
+			if (sword1 != null) deflectProjectile(entity, true); entity.setCooldown(item1.type, 0)
+			if (sword2 != null) deflectProjectile(entity, true); entity.setCooldown(item2.type, 0)
+			return
+		}
 		//check if it should rebound
 		if(shouldRebound(entity, this.directionVector) && entity is Player){
 			val item1 = entity.inventory.itemInMainHand
@@ -256,12 +262,12 @@ class RayTracedParticleProjectile(
 				sword1.setCurrentBlock(item1, block.minus(balancing.blockbreakAmount), entity as? LivingEntity)
 				if (sword1.getCurrentBlock(item1) <=0.0) damageEntity(damage-sword1.getCurrentBlock(item1), DamageCause.PROJECTILE, entity, shooter)
 
-				else deflectProjectile(entity.location, entity)
+				else deflectProjectile(entity)
 			} else {
 				val block = sword2?.getCurrentBlock(item2)
 				sword2?.setCurrentBlock(item2, block?.minus(balancing.blockbreakAmount) ?: return, entity as? LivingEntity)
 				if (sword2!!.getCurrentBlock(item1) <=0.0) damageEntity(damage-sword2.getCurrentBlock(item2), DamageCause.PROJECTILE, entity, shooter)
-				else deflectProjectile(entity.location, entity)
+				else deflectProjectile(entity)
 			}
 			return
 		}
@@ -276,13 +282,16 @@ class RayTracedParticleProjectile(
 		(entity as? Player)?.isSprinting =  wasSprinting ?: false
 	}
 
-	private fun deflectProjectile(location: Location, newShooter: Entity) {
-		val newLocation = location
-		val offsetX = randomDouble(-1 * .35, .35)
-		val offsetY = randomDouble(-1 * .35, .35)
-		val offsetZ = randomDouble(-1 * .35, .35)
-
-		newLocation.direction = newLocation.direction.clone().add(Vector(offsetX, offsetY, offsetZ)).normalize()
+	private fun deflectProjectile(newShooter: Entity, trueRebound: Boolean = false) {
+		val newLocation = (newShooter as? Player)?.eyeLocation ?: return
+		val d = .35 //dispersion
+		val offsetX = randomDouble(-1 * d, d)
+		val offsetY = randomDouble(-1 * d, d)
+		val offsetZ = randomDouble(-1 * d, d)
+		newLocation.direction = (newShooter as? Player)?.eyeLocation?.direction ?: return
+		if (!trueRebound) {
+			newLocation.direction = newLocation.direction.clone().add(Vector(offsetX, offsetY, offsetZ)).normalize()
+		}
 		RayTracedParticleProjectile(
 			newLocation, newShooter, balancing, particle, explosiveShot, dustOptions, soundWhizz, damage*0.5).fire()
 	}

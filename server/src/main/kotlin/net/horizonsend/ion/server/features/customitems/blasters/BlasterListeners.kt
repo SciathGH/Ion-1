@@ -85,7 +85,7 @@ class BlasterListeners : SLEventListener() {
 				NamedTextColor.RED
 			)
 		)
-
+		if (event.player.getCooldown(itemStack.type) > customItem.balancing.switchToTimeTicks) return //dont let player bypass reload
 		event.player.setCooldown(itemStack.type, customItem.balancing.switchToTimeTicks) //add a cooldown for some weapons
 	}
 

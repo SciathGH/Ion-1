@@ -15,6 +15,7 @@ import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.minecraft.util.TimeUtil
 import net.minecraft.world.item.ShieldItem
+import okhttp3.internal.notify
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
@@ -105,13 +106,7 @@ object EnergySwordListener : SLEventListener() {
 			)
 			.append(name)
 
-		if (victim.world.name.contains("arena", ignoreCase = true)) {
-			event.deathMessage(newMessage)
-		} else {
-			event.deathMessage(null)
-
-			if (IonServer.configuration.serverName == "survival") Notify.online(newMessage) else IonServer.server.sendMessage(newMessage)
-		}
+		event.deathMessage(newMessage)
 	}
 	@EventHandler
 	fun onPlayerItemHoldEvent(event: PlayerItemHeldEvent) {

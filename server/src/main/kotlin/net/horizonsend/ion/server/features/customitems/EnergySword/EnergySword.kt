@@ -57,6 +57,7 @@ abstract class EnergySword<T : EnergySwordBalancing>(
 	}
 
 	override fun handleTertiaryInteract(livingEntity: LivingEntity, itemStack: ItemStack) {
+		if ((livingEntity as Player).hasCooldown(itemStack.type))return
 		//Put this time as a tertiaryInteract, this is so we can track when people parry
 		EnergySwordListener.peopleToLastParryTime[livingEntity as Player] = System.currentTimeMillis()
 		livingEntity.setCooldown(itemStack.type, 20) //Add a cooldown, so players don't spam it
