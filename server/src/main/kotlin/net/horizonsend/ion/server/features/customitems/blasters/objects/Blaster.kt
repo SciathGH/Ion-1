@@ -1,6 +1,5 @@
 package net.horizonsend.ion.server.features.customitems.blasters.objects
 
-import io.papermc.paper.entity.TeleportFlag
 import net.horizonsend.ion.common.database.cache.nations.NationCache
 import net.horizonsend.ion.common.database.schema.misc.SLPlayer
 import net.horizonsend.ion.common.extensions.alert
@@ -11,8 +10,8 @@ import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.Energy
 import net.horizonsend.ion.server.features.customitems.CustomItem
 import net.horizonsend.ion.server.features.customitems.CustomItems
 import net.horizonsend.ion.server.features.customitems.CustomItems.customItem
-import net.horizonsend.ion.server.features.customitems.EnergySword.EnergySword
 import net.horizonsend.ion.server.features.customitems.blasters.RayTracedParticleProjectile
+import net.horizonsend.ion.server.features.nations.gui.item
 import net.horizonsend.ion.server.features.space.SpaceWorlds
 import net.horizonsend.ion.server.miscellaneous.utils.Tasks
 import net.kyori.adventure.audience.Audience
@@ -30,15 +29,13 @@ import org.bukkit.Particle
 import org.bukkit.Particle.DustOptions
 import org.bukkit.Particle.REDSTONE
 import org.bukkit.SoundCategory.PLAYERS
-import org.bukkit.entity.Flying
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
-import java.util.Locale
+import java.util.*
 import java.util.function.Supplier
 
 abstract class Blaster<T : GunBalancing>(
@@ -67,20 +64,15 @@ abstract class Blaster<T : GunBalancing>(
 		var tertiaryCount = 0
 		val inventory = (livingEntity as? InventoryHolder)?.inventory
 		if (inventory == null) {fireWeapon(livingEntity, itemStack); return}
-		for (i in inventory.contents){
-			val customItemIdentifier = i?.customItem?.identifier ?: continue
-			if (CustomItems.getByIdentifier(customItemIdentifier) is Blaster<*>){
-				when((CustomItems.getByIdentifier(customItemIdentifier) as Blaster<*>).balancingSupplier.get().type){
+		for (item in inventory.contents){
+			val customItem = item?.customItem ?: continue
+			if (customItem is Blaster<*>){
+				if (customItem.getAmmunition(item)==0) continue
+				when(customItem.balancingSupplier.get().type){
 					PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.PRIMARY -> primaryCount++
 					PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.SECONDARY -> secondaryCount++
 					PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.TERTIARY -> tertiaryCount++
-				}
-			}
-			else if(CustomItems.getByIdentifier(customItemIdentifier) is EnergySword<*>){
-				when((CustomItems.getByIdentifier(customItemIdentifier) as EnergySword<*>).balancing.type){
-					PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.PRIMARY -> primaryCount++
-					PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.SECONDARY -> secondaryCount++
-					PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.TERTIARY -> tertiaryCount++
+					else -> {}
 				}
 			}
 			else continue
@@ -312,17 +304,29 @@ abstract class Blaster<T : GunBalancing>(
 		return true
 	}
 	private fun recoil(entity: LivingEntity, gunBalancing: GunBalancing){
-		val recoil = gunBalancing.recoil/gunBalancing.packetsPerShot
-		if ((entity as Player).isSneaking) return
-		for (i in 1..gunBalancing.packetsPerShot){
-			Tasks.syncDelay(i.toLong()) {
-				val loc = entity.location
-				loc.pitch -= recoil
-				(entity as? Player)?.teleport(
-					loc,
-					*TeleportFlag.Relative.values()
-				)
-			}
-		}
+		//Turned off for now, untill Essentials stops it shit with blocking damage
+		//val recoil = gunBalancing.recoil/gunBalancing.packetsPerShot
+		//if ((entity as Player).isSneaking) return
+		//for (i in 1..gunBalancing.packetsPerShot){
+		//	Tasks.syncDelay(i.toLong()) {
+		//		val loc = entity.location
+		//		loc.pitch -= recoil
+		//		val teleportFlags = arrayOf(
+		//			TeleportFlag.Relative.PITCH,
+		//			TeleportFlag.Relative.X,
+		//			TeleportFlag.Relative.Y,
+		//			TeleportFlag.Relative.Z,
+		//			TeleportFlag.Relative.YAW,
+		//			TeleportFlag.EntityState.RETAIN_OPEN_INVENTORY,
+		//			TeleportFlag.EntityState.RETAIN_PASSENGERS,
+		//			TeleportFlag.EntityState.RETAIN_VEHICLE,
+		//			)
+		//		(entity as? Player)?.teleport(
+		//			loc,
+		//			PlayerTeleportEvent.TeleportCause.PLUGIN,
+		//			*teleportFlags
+		//		)
+		//	}
+		//}
 	}
 }

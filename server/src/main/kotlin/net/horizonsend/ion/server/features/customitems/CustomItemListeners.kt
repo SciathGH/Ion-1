@@ -29,9 +29,8 @@ class CustomItemListeners : SLEventListener() {
 		when (event.action) {
 			Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK -> {
 				customItem.handleSecondaryInteract(event.player, event.player.inventory.itemInMainHand)
-				if (customItem !is CustomBlockItem || CustomItems.getByIdentifier(customItem.identifier) !is EnergySword<*>) {
-					event.isCancelled = true
-				}
+				if (customItem is CustomBlockItem || customItem is EnergySword<*>) return
+				event.isCancelled = true
 			}
 
 			Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK -> {

@@ -7,13 +7,13 @@ import net.horizonsend.ion.server.features.customitems.CustomItems.CHETHERITE
 import net.horizonsend.ion.server.features.customitems.CustomItems.TITANIUM_INGOT
 import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.BATTERY_LARGE
 import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.BATTERY_MEDIUM
-import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.ENERGY_SWORD_BLUE
-import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.ENERGY_SWORD_GREEN
-import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.ENERGY_SWORD_ORANGE
+import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.LEGACY_ENERGY_SWORD_BLUE
+import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.LEGACY_ENERGY_SWORD_GREEN
+import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.LEGACY_ENERGY_SWORD_ORANGE
+import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.LEGACY_ENERGY_SWORD_PURPLE
+import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.LEGACY_ENERGY_SWORD_RED
+import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.LEGACY_ENERGY_SWORD_YELLOW
 import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.ENERGY_SWORD_PINK
-import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.ENERGY_SWORD_PURPLE
-import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.ENERGY_SWORD_RED
-import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.ENERGY_SWORD_YELLOW
 import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.POWER_ARMOR_BOOTS
 import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.POWER_ARMOR_CHESTPLATE
 import net.horizonsend.ion.server.miscellaneous.registrations.legacy.CustomItems.POWER_ARMOR_HELMET
@@ -209,12 +209,12 @@ object CustomRecipes : IonServerComponent() {
 	}
 
 	private fun registerSwordRecipes() = mapOf(
-		ENERGY_SWORD_BLUE to materialChoice(DIAMOND),
-		ENERGY_SWORD_RED to materialChoice(REDSTONE),
-		ENERGY_SWORD_YELLOW to materialChoice(COAL),
-		ENERGY_SWORD_GREEN to materialChoice(EMERALD),
-		ENERGY_SWORD_PURPLE to customItemChoice(CHETHERITE),
-		ENERGY_SWORD_ORANGE to materialChoice(COPPER_INGOT),
+		LEGACY_ENERGY_SWORD_BLUE to materialChoice(DIAMOND),
+		LEGACY_ENERGY_SWORD_RED to materialChoice(REDSTONE),
+		LEGACY_ENERGY_SWORD_YELLOW to materialChoice(COAL),
+		LEGACY_ENERGY_SWORD_GREEN to materialChoice(EMERALD),
+		LEGACY_ENERGY_SWORD_PURPLE to customItemChoice(CHETHERITE),
+		LEGACY_ENERGY_SWORD_ORANGE to materialChoice(COPPER_INGOT),
 		ENERGY_SWORD_PINK to materialChoice(PINK_TULIP)
 	).forEach { (sword, specialItem) ->
 		createRecipe(

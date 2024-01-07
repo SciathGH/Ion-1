@@ -138,4 +138,35 @@ object ConvertCommand : SLCommand() { // I imagine we'll need more than blasters
 
 		return newVersion
 	}
+
+	@Subcommand("energysword")
+	fun onConvertEnergySword(sender: Player) {
+		val heldItem = sender.inventory.itemInMainHand
+
+		if (heldItem.type != Material.SHIELD ||
+			!heldItem.itemMeta.hasCustomModelData() ||
+			heldItem.itemMeta.customModelData == 0
+		) {
+			sender.userError("Not a valid custom item!")
+			return
+		}
+
+		val newVersion = when (heldItem.itemMeta.customModelData) {
+			1 -> CustomItems.BLUEENERGYSWORD
+			2 -> CustomItems.REDENERGYSWORD
+			3 -> CustomItems.YELLOWENERGYSWORD
+			4 -> CustomItems.GREENENERGYSWORD
+			5 -> CustomItems.PURPLEENERGYSWORD
+			6 -> CustomItems.ORANGEENERGYSWORD
+			else -> {
+				sender.information("Wtf do you have")
+				return
+			}
+		}.constructItemStack()
+
+		newVersion.amount = 1
+
+		sender.inventory.setItemInMainHand(newVersion)
+		sender.updateInventory()
+	}
 }

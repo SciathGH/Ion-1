@@ -53,7 +53,9 @@ data class PVPBalancingConfiguration(
 			shotDeviation = 0.0,
 			mobDamageMultiplier = 1.0,
 			consumesAmmo = false,
-			type = WeaponTypeEnum.TERTIARY
+			type = WeaponTypeEnum.TERTIARY,
+			blockbreakAmount = 0.3,
+			switchToTimeTicks = 0
 		),
 		val rifle: Singleshot = Singleshot(
 			damage = 5.5,
@@ -75,7 +77,9 @@ data class PVPBalancingConfiguration(
 			shotDeviation = 0.0,
 			mobDamageMultiplier = 2.0,
 			consumesAmmo = true,
-			type = WeaponTypeEnum.SECONDARY
+			type = WeaponTypeEnum.SECONDARY,
+			blockbreakAmount = 0.5,
+			switchToTimeTicks = 10
 		),
 		val submachineBlaster: Singleshot = Singleshot(
 			damage = 1.5,
@@ -97,7 +101,9 @@ data class PVPBalancingConfiguration(
 			shotDeviation = 0.025,
 			mobDamageMultiplier = 2.0,
 			consumesAmmo = true,
-			type = WeaponTypeEnum.SECONDARY
+			type = WeaponTypeEnum.SECONDARY,
+			blockbreakAmount = 1.0,
+			switchToTimeTicks = 0
 		),
 		val sniper: Singleshot = Singleshot(
 			damage = 12.0,
@@ -119,7 +125,9 @@ data class PVPBalancingConfiguration(
 			shotDeviation = 0.0,
 			mobDamageMultiplier = 2.0,
 			consumesAmmo = true,
-			type = WeaponTypeEnum.PRIMARY
+			type = WeaponTypeEnum.PRIMARY,
+			blockbreakAmount = 4.0,
+			switchToTimeTicks = 10
 		),
 		val shotgun: Multishot = Multishot(
 			damage = 1.75,
@@ -144,7 +152,9 @@ data class PVPBalancingConfiguration(
 			shotDeviation = 0.1,
 			mobDamageMultiplier = 2.0,
 			consumesAmmo = true,
-			type = WeaponTypeEnum.PRIMARY
+			type = WeaponTypeEnum.PRIMARY,
+			blockbreakAmount = 1.5,
+			switchToTimeTicks = 20
 		),
 
 		val cannon: Singleshot = Singleshot(
@@ -168,7 +178,9 @@ data class PVPBalancingConfiguration(
 			shotDeviation = 0.07,
 			mobDamageMultiplier = 2.0,
 			consumesAmmo = true,
-			type = WeaponTypeEnum.TERTIARY
+			type = WeaponTypeEnum.TERTIARY,
+			blockbreakAmount = 0.0,
+			switchToTimeTicks = 0
 		),
 
 		val standardMagazine: AmmoStorage = AmmoStorage(
@@ -183,9 +195,9 @@ data class PVPBalancingConfiguration(
 		),
 		val energySwordBalancing: EnergySwordBalancing = EnergySwordBalancing(
 			damage = 7.0, //This value is added to the damage of the shield currently, in this case 1
-			blockAmount = 20.0f,
-			blockRechargePerTick= 0.25f,
-			type = WeaponTypeEnum.TERTIARY
+			blockAmount = 20.0,
+			blockRechargePerTick= 0.1,
+			type = WeaponTypeEnum.MELEE
 		)
 	) {
 		@Serializable
@@ -210,7 +222,9 @@ data class PVPBalancingConfiguration(
 			override val shotDeviation: Double,
 			override val mobDamageMultiplier: Double,
 			override val consumesAmmo: Boolean,
-			override val type: WeaponTypeEnum
+			override val type: WeaponTypeEnum,
+			override val blockbreakAmount: Double,
+			override val switchToTimeTicks: Int
 		) : GunBalancing()
 
 		@Serializable
@@ -239,7 +253,9 @@ data class PVPBalancingConfiguration(
 			override val shotDeviation: Double,
 			override val mobDamageMultiplier: Double,
 			override val consumesAmmo: Boolean,
-			override val type: WeaponTypeEnum
+			override val type: WeaponTypeEnum,
+			override val blockbreakAmount: Double,
+			override val switchToTimeTicks: Int
 		) : GunBalancing()
 
 		@Serializable
@@ -259,6 +275,7 @@ data class PVPBalancingConfiguration(
 			abstract val shouldAkimbo: Boolean
 			abstract val timeBetweenShots: Int
 			abstract val consumesAmmo: Boolean
+			abstract val switchToTimeTicks: Int
 		}
 
 		interface ProjectileBalancing {
@@ -273,6 +290,7 @@ data class PVPBalancingConfiguration(
 			val shouldHeadshot: Boolean
 			val mobDamageMultiplier: Double
 			val shotDeviation: Double
+			val blockbreakAmount: Double
 		}
 
 		interface AmmoStorageBalancing {
@@ -284,8 +302,8 @@ data class PVPBalancingConfiguration(
 		@Serializable
 		data class EnergySwordBalancing(
 			val damage: Double,
-			val blockAmount: Float,
-			val blockRechargePerTick: Float,
+			val blockAmount: Double,
+			val blockRechargePerTick: Double,
 			override val type: WeaponTypeEnum
 		): WeaponType
 
@@ -296,7 +314,8 @@ data class PVPBalancingConfiguration(
 		enum class WeaponTypeEnum{
 			PRIMARY,
 			SECONDARY,
-			TERTIARY
+			TERTIARY,
+			MELEE
 		}
 	}
 }

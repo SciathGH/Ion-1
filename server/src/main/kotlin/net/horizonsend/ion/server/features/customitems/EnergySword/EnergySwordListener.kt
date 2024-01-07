@@ -8,17 +8,31 @@ import net.horizonsend.ion.server.features.customitems.CustomItems.customItem
 import net.horizonsend.ion.server.features.customitems.blasters.objects.Blaster
 import net.horizonsend.ion.server.listener.SLEventListener
 import net.horizonsend.ion.server.miscellaneous.utils.Notify
+import net.horizonsend.ion.server.miscellaneous.utils.Tasks
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.minecraft.util.TimeUtil
+import net.minecraft.world.item.ShieldItem
+import org.bukkit.Bukkit
+import org.bukkit.Material
+import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
+import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
+import org.bukkit.inventory.InventoryHolder
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.scheduler.BukkitTask
 
-class EnergySwordListener : SLEventListener() {
+object EnergySwordListener : SLEventListener() {
+	val peopleToLastParryTime = mutableMapOf<Player, Long>() //Player to time
 
 	@Suppress("Unused")
 	@EventHandler
@@ -33,7 +47,7 @@ class EnergySwordListener : SLEventListener() {
 			"<#555555>[<#ffff66>Arena<#555555>]<reset> "
 		else ""
 
-		val verb = when(randomInt(0, 33)){
+		val verb = when(randomInt(0, 34)){
 			0-> "cut down"
 			1-> "kebabed"
 			2-> "stabbed"
@@ -68,6 +82,7 @@ class EnergySwordListener : SLEventListener() {
 			31-> "smoked"
 			32-> "neutralised"
 			33-> "sliced in half"
+			34-> "caught lacking"
 			else -> "deezed" //should never happen
 		}
 
@@ -98,19 +113,42 @@ class EnergySwordListener : SLEventListener() {
 			if (IonServer.configuration.serverName == "survival") Notify.online(newMessage) else IonServer.server.sendMessage(newMessage)
 		}
 	}
-
 	@EventHandler
 	fun onPlayerItemHoldEvent(event: PlayerItemHeldEvent) {
-		val itemStack = event.player.inventory.getItem(event.player.inventory.heldItemSlot) ?: return
+		val itemStack =
+			if (event.player.inventory.getItem(event.newSlot)?.type == Material.AIR) event.player.inventory.itemInOffHand
+			else event.player.inventory.itemInMainHand
 		val customItem = itemStack.customItem as? EnergySword<*> ?: return
 
 		val block = customItem.getCurrentBlock(itemStack)
 
 		event.player.sendActionBar(
 			Component.text(
-				"block: $block / ${customItem.balancing.blockAmount}",
-				NamedTextColor.GREEN
+				"Block: $block / ${customItem.balancing.blockAmount}",
+				NamedTextColor.GREEN,
+				TextDecoration.BOLD,
+				TextDecoration.UNDERLINED
 			)
 		)
+	}
+
+	//When I wrote this function, only god and I knew what it did, now only god does. If he's fake im fucked
+	@EventHandler(priority = EventPriority.LOW)
+	fun onShieldHit(event: EntityDamageByEntityEvent){
+		val item = (event.entity as? Player)?.activeItem
+		val customItem = item?.customItem ?: return
+		if (customItem !is EnergySword<*>) return
+		val currentBlock = customItem.getCurrentBlock(item)
+		val damagedBlocked = -event.getDamage(EntityDamageEvent.DamageModifier.BLOCKING)
+		if (currentBlock <= 0.0) {
+			(event.entity as? Player)?.setCooldown(item.type, (customItem.balancing.blockAmount/customItem.balancing.blockRechargePerTick).toInt())
+			(event.entity as LivingEntity).clearActiveItem()
+			return
+		}
+		customItem.setCurrentBlock(item, currentBlock-damagedBlocked, event.entity as? LivingEntity)
+		val damageThatShouldHaveBeenDealt = damagedBlocked-currentBlock
+		if (damageThatShouldHaveBeenDealt < 0.0) return
+		event.setDamage(EntityDamageEvent.DamageModifier.BLOCKING, damagedBlocked-currentBlock)
+		if (event.getDamage(EntityDamageEvent.DamageModifier.BLOCKING) <=0.0) event.isCancelled = true
 	}
 }

@@ -25,7 +25,6 @@ import net.horizonsend.ion.server.listener.gear.DetonatorListener
 import net.horizonsend.ion.server.listener.gear.DoubleJumpListener
 import net.horizonsend.ion.server.listener.gear.PowerArmorListener
 import net.horizonsend.ion.server.listener.gear.PowerToolListener
-import net.horizonsend.ion.server.listener.gear.SwordListener
 import net.horizonsend.ion.server.listener.misc.BlockListener
 import net.horizonsend.ion.server.listener.misc.BowHitListener
 import net.horizonsend.ion.server.listener.misc.ChatListener
@@ -63,11 +62,10 @@ val listeners: List<Listener> = listOf(
 	DoubleJumpListener,
 	PowerArmorListener,
 	PowerToolListener,
-	SwordListener,
 
 	// Ion
 	BlasterListeners(),
-	EnergySwordListener(),
+	EnergySwordListener,
 	CancelListeners(),
 	CustomItemListeners(),
 	CustomBlockListeners(),

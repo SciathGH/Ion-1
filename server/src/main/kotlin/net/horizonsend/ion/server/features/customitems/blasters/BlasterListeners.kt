@@ -18,6 +18,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
+import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import kotlin.math.roundToInt
@@ -70,7 +71,7 @@ class BlasterListeners : SLEventListener() {
 
 	@EventHandler
 	fun onPlayerItemHoldEvent(event: PlayerItemHeldEvent) {
-		val itemStack = event.player.inventory.getItem(event.player.inventory.heldItemSlot) ?: return //cant use event.item as players could offhand a gun and spam saber fast
+		val itemStack = event.player.inventory.getItem(event.newSlot) ?: return //cant use event.item as players could offhand a gun and spam saber fast
 		val customItem = itemStack.customItem as? Blaster<*> ?: return
 
 		// adding a potion effect because it takes ages for that attack cooldown to come up
@@ -84,6 +85,8 @@ class BlasterListeners : SLEventListener() {
 				NamedTextColor.RED
 			)
 		)
+
+		event.player.setCooldown(itemStack.type, customItem.balancing.switchToTimeTicks) //add a cooldown for some weapons
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -109,7 +112,8 @@ class BlasterListeners : SLEventListener() {
 
 		// Only magazines of the same type accepted
 		if (craftedItems.isEmpty() ||
-			craftedItems.first().customItem?.identifier != craftedItems.last().customItem?.identifier) {
+			craftedItems.first().customItem?.identifier != craftedItems.last().customItem?.identifier
+		) {
 			event.inventory.result = null
 			return
 		}
@@ -120,5 +124,15 @@ class BlasterListeners : SLEventListener() {
 		resultItem.setAmmunition(resultItemStack, event.inventory, totalAmmo)
 
 		event.inventory.result = resultItemStack
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	fun onPlayerDeath(event: PlayerDeathEvent){
+		val drops =event.drops
+		if (event.keepInventory) return
+		val listOfBlasterItems = drops.filter { it.customItem is Blaster<*> }
+		val mapOfBlasters = mutableMapOf<Blaster<*>, ItemStack>()
+		listOfBlasterItems.forEach { mapOfBlasters[it.customItem as Blaster<*>] = it}
+		mapOfBlasters.forEach { it.key.setAmmunition(it.value, event.player.inventory, 0);} //Set ammunition of player to 0 for all guns
 	}
 }

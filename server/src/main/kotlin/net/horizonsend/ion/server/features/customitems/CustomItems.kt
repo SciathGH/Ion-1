@@ -1,6 +1,5 @@
 package net.horizonsend.ion.server.features.customitems
 
-import com.google.common.collect.Multimap
 import net.horizonsend.ion.server.IonServer
 import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration
 import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.EnergyWeapons.Multishot
@@ -14,8 +13,9 @@ import net.horizonsend.ion.server.features.customitems.throwables.ThrownDetonato
 import net.horizonsend.ion.server.features.customitems.throwables.ThrownPumpkinGrenade
 import net.horizonsend.ion.server.features.customitems.throwables.objects.ThrowableCustomItem
 import net.horizonsend.ion.server.features.customitems.throwables.objects.ThrownCustomItem
-import net.horizonsend.ion.server.miscellaneous.registrations.NamespacedKeys
+import net.horizonsend.ion.server.miscellaneous.registrations.NamespacedKeys.BLOCK
 import net.horizonsend.ion.server.miscellaneous.registrations.NamespacedKeys.CUSTOM_ITEM
+import net.horizonsend.ion.server.miscellaneous.registrations.NamespacedKeys.TIMELASTUSED
 import net.horizonsend.ion.server.miscellaneous.utils.Tasks
 import net.horizonsend.ion.server.miscellaneous.utils.multimapOf
 import net.horizonsend.ion.server.miscellaneous.utils.updateMeta
@@ -50,9 +50,9 @@ import org.bukkit.entity.Item
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
-import org.bukkit.persistence.PersistentDataType
+import org.bukkit.persistence.PersistentDataType.DOUBLE
+import org.bukkit.persistence.PersistentDataType.LONG
 import org.bukkit.persistence.PersistentDataType.STRING
-import org.litote.kmongo.mul
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -242,17 +242,25 @@ object CustomItems {
 		AttributeModifier.Operation.ADD_NUMBER,
 		EquipmentSlot.HAND
 	)
-	private val speedAttributeModifier = AttributeModifier(
+	private val attackSpeedAttributeModifier = AttributeModifier(
 		UUID.randomUUID(),
 		"Attack Speed",
 		-2.4,
 		AttributeModifier.Operation.ADD_NUMBER,
 		EquipmentSlot.HAND
 	)
+	private val speedAttributeModifier = AttributeModifier(
+		UUID.randomUUID(),
+		"Speed",
+		.2,
+		AttributeModifier.Operation.MULTIPLY_SCALAR_1,
+		EquipmentSlot.HAND
+	)
 	val map = multimapOf<Attribute, AttributeModifier>()
-	//I know what you'd say, and genuinely I could not find a better way
+	//I know what you'd say, and genuinely I could not find a better way, multimaps suck ass
 	val addtomap = map.put(Attribute.GENERIC_ATTACK_DAMAGE, attackAttributeModifier).also {
-		map.put(Attribute.GENERIC_ATTACK_SPEED, speedAttributeModifier)
+		map.put(Attribute.GENERIC_ATTACK_SPEED, attackSpeedAttributeModifier)
+		map.put(Attribute.GENERIC_MOVEMENT_SPEED, speedAttributeModifier)
 	}
 
 	val YELLOWENERGYSWORD = register(
@@ -268,8 +276,9 @@ object CustomItems {
 					item.editMeta {
 						it.setCustomModelData(customModelData)
 						it.displayName(displayName)
-						it.lore(listOf(MiniMessage.miniMessage().deserialize("<gray>You can get more colours by donating on the patreon")))
 						it.persistentDataContainer.set(CUSTOM_ITEM, STRING, identifier)
+						it.persistentDataContainer.set(BLOCK, DOUBLE, balancing.blockAmount)
+						it.persistentDataContainer.set(TIMELASTUSED, LONG, System.currentTimeMillis())
 						it.attributeModifiers = map
 					}
 					return item
@@ -290,6 +299,8 @@ object CustomItems {
 					it.setCustomModelData(customModelData)
 					it.displayName(displayName)
 					it.persistentDataContainer.set(CUSTOM_ITEM, STRING, identifier)
+					it.persistentDataContainer.set(BLOCK, DOUBLE, balancing.blockAmount)
+					it.persistentDataContainer.set(TIMELASTUSED, LONG, System.currentTimeMillis())
 					it.attributeModifiers = map
 				}
 				return item
@@ -310,6 +321,8 @@ object CustomItems {
 					it.setCustomModelData(customModelData)
 					it.displayName(displayName)
 					it.persistentDataContainer.set(CUSTOM_ITEM, STRING, identifier)
+					it.persistentDataContainer.set(BLOCK, DOUBLE, balancing.blockAmount)
+					it.persistentDataContainer.set(TIMELASTUSED, LONG, System.currentTimeMillis())
 					it.attributeModifiers = map
 				}
 				return item
@@ -330,6 +343,8 @@ object CustomItems {
 					it.setCustomModelData(customModelData)
 					it.displayName(displayName)
 					it.persistentDataContainer.set(CUSTOM_ITEM, STRING, identifier)
+					it.persistentDataContainer.set(BLOCK, DOUBLE, balancing.blockAmount)
+					it.persistentDataContainer.set(TIMELASTUSED, LONG, System.currentTimeMillis())
 					it.attributeModifiers = map
 				}
 				return item
@@ -350,6 +365,8 @@ object CustomItems {
 					it.setCustomModelData(customModelData)
 					it.displayName(displayName)
 					it.persistentDataContainer.set(CUSTOM_ITEM, STRING, identifier)
+					it.persistentDataContainer.set(BLOCK, DOUBLE, balancing.blockAmount)
+					it.persistentDataContainer.set(TIMELASTUSED, LONG, System.currentTimeMillis())
 					it.attributeModifiers = map
 				}
 				return item
@@ -370,6 +387,8 @@ object CustomItems {
 					it.setCustomModelData(customModelData)
 					it.displayName(displayName)
 					it.persistentDataContainer.set(CUSTOM_ITEM, STRING, identifier)
+					it.persistentDataContainer.set(BLOCK, DOUBLE, balancing.blockAmount)
+					it.persistentDataContainer.set(TIMELASTUSED, LONG, System.currentTimeMillis())
 					it.attributeModifiers = map
 				}
 				return item

@@ -18,6 +18,7 @@ import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityToggleGlideEvent
 import org.bukkit.event.inventory.PrepareItemCraftEvent
@@ -72,7 +73,7 @@ object PowerArmorListener : SLEventListener() {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	fun onEntityDamage(event: EntityDamageEvent) {
 		if (event.entity !is Player) return
 		val player = event.entity as Player
