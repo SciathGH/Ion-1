@@ -2,7 +2,7 @@ package net.horizonsend.ion.server.features.customitems
 
 import io.papermc.paper.event.block.BlockPreDispenseEvent
 import net.horizonsend.ion.server.features.customitems.CustomItems.customItem
-import net.horizonsend.ion.server.features.customitems.EnergySword.EnergySword
+import net.horizonsend.ion.server.features.customitems.energySword.EnergySword
 import net.horizonsend.ion.server.listener.SLEventListener
 import org.bukkit.Material
 import org.bukkit.block.Dispenser

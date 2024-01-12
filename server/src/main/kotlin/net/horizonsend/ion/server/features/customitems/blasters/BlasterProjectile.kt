@@ -8,8 +8,8 @@ import net.horizonsend.ion.common.utils.miscellaneous.randomDouble
 import net.horizonsend.ion.server.IonServer
 import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.EnergyWeapons.ProjectileBalancing
 import net.horizonsend.ion.server.features.customitems.CustomItems.customItem
-import net.horizonsend.ion.server.features.customitems.EnergySword.EnergySword
-import net.horizonsend.ion.server.features.customitems.EnergySword.EnergySwordListener
+import net.horizonsend.ion.server.features.customitems.energySword.EnergySword
+import net.horizonsend.ion.server.features.customitems.energySword.EnergySwordListener
 import net.horizonsend.ion.server.features.gear.powerarmor.PowerArmorManager
 import net.horizonsend.ion.server.features.space.SpaceWorlds
 import net.horizonsend.ion.server.features.starship.damager.addToDamagers

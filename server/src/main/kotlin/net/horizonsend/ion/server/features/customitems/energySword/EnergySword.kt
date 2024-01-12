@@ -1,25 +1,20 @@
-package net.horizonsend.ion.server.features.customitems.EnergySword
+package net.horizonsend.ion.server.features.customitems.energySword
 
 import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.EnergyWeapons.EnergySwordBalancing
 import net.horizonsend.ion.server.features.customitems.CustomItem
-import net.horizonsend.ion.server.features.nations.gui.item
 import net.horizonsend.ion.server.miscellaneous.registrations.NamespacedKeys.BLOCK
 import net.horizonsend.ion.server.miscellaneous.registrations.NamespacedKeys.TIMELASTUSED
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
-import net.kyori.adventure.text.minimessage.MiniMessage
-import net.minecraft.world.item.ShieldItem
 import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.Damageable
 import org.bukkit.persistence.PersistentDataType
 import java.util.concurrent.TimeUnit
 import java.util.function.Supplier
-import kotlin.math.roundToInt
 
 abstract class EnergySword<T : EnergySwordBalancing>(
 	identifier: String,
