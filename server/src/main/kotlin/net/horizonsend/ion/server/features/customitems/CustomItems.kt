@@ -505,6 +505,13 @@ object CustomItems {
 //	)
 
 	// Throwables end
+	// Ammunition start
+	val NUCLEAR_ROCKET = register(
+		identifier = "NUCLEAR_MISSILE",
+		customModelData = 1101,
+		displayName = text("Nuclear Missile ", RED).decoration(BOLD, false),
+	)
+	// Ammunition end
 
 	// This is just a convenient alias for items that don't do anything or are placeholders.
 	private fun register(identifier: String, customModelData: Int, displayName: Component): CustomItem {

@@ -383,7 +383,9 @@ data class AntiAirCannonBalancing(
 	override var volume: Int = 0,
 	override var pitch: Float = 2.0f,
 	override var soundName: String = "starship.weapon.turbolaser.tri.shoot",
-	override var maxDegrees: Double = 360.0
+	override var maxDegrees: Double = 360.0,
+	override var displayEntityCustomModelData: Int? = null,
+	override var displayEntitySize: Double? = null
 ) : StarshipWeapons.ProjectileBalancing
 
 @Serializable
@@ -578,6 +580,29 @@ class StarshipWeapons(
 		boostChargeSeconds = 7,
 		aimDistance = 0,
 		applyCooldownToAll = false
+	),
+
+	val arsenalMissile: StarshipWeapon = StarshipWeapon(
+		range = 700.0,
+		speed = 50.0,
+		areaShieldDamageMultiplier = 5.0,
+		starshipShieldDamageMultiplier = 1.0,
+		particleThickness = 0.5,
+		explosionPower = 3.0f,
+		volume = 10,
+		pitch = 1.0f,
+		soundName = "starship.weapon.rocket.shoot",
+		powerUsage = 8000,
+		length = 3,
+		angleRadians = 0.0,
+		convergeDistance = 0.0,
+		extraDistance = 0,
+		fireCooldownMillis = 250,
+		boostChargeSeconds = 7,
+		aimDistance = 0,
+		applyCooldownToAll = false,
+		displayEntityCustomModelData = 1101,
+		displayEntitySize = 1.0
 	),
 
 	// Auto Turret Stuff
@@ -926,7 +951,10 @@ class StarshipWeapons(
 		var boostChargeSeconds: Long = 0, // Seconds, should only be put for heavyWeapons
 		var aimDistance: Int, // should only be put if the weapon in question is target tracking
 		override var inaccuracyRadians: Double = 2.0,
-		override var maxDegrees: Double = 0.0
+		override var maxDegrees: Double = 0.0,
+
+		override var displayEntityCustomModelData: Int? = null,
+		override var displayEntitySize: Double? = null
 	) : ProjectileBalancing, SubSystem
 
 	@Serializable
@@ -943,6 +971,9 @@ class StarshipWeapons(
 		var pitch: Float
 		var soundName: String
 		var maxDegrees: Double
+
+		var displayEntityCustomModelData: Int?
+		var displayEntitySize: Double?
 	}
 
 	@Serializable

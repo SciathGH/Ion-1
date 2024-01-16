@@ -11,7 +11,10 @@ import net.horizonsend.ion.server.features.customitems.CustomItems.CHETHERITE_BL
 import net.horizonsend.ion.server.features.customitems.CustomItems.CIRCUITRY
 import net.horizonsend.ion.server.features.customitems.CustomItems.DETONATOR
 import net.horizonsend.ion.server.features.customitems.CustomItems.GAS_CANISTER_EMPTY
+import net.horizonsend.ion.server.features.customitems.CustomItems.GAS_CANISTER_HYDROGEN
+import net.horizonsend.ion.server.features.customitems.CustomItems.GAS_CANISTER_OXYGEN
 import net.horizonsend.ion.server.features.customitems.CustomItems.GUN_BARREL
+import net.horizonsend.ion.server.features.customitems.CustomItems.NUCLEAR_ROCKET
 import net.horizonsend.ion.server.features.customitems.CustomItems.PISTOL
 import net.horizonsend.ion.server.features.customitems.CustomItems.PISTOL_RECEIVER
 import net.horizonsend.ion.server.features.customitems.CustomItems.RIFLE
@@ -55,6 +58,7 @@ import org.bukkit.Material.LIGHT_BLUE_WOOL
 import org.bukkit.Material.LIGHT_GRAY_WOOL
 import org.bukkit.Material.LIME_WOOL
 import org.bukkit.Material.MAGENTA_WOOL
+import org.bukkit.Material.MAGMA_BLOCK
 import org.bukkit.Material.NETHER_WART
 import org.bukkit.Material.NETHER_WART_BLOCK
 import org.bukkit.Material.OAK_LOG
@@ -86,6 +90,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.RecipeChoice.ExactChoice
 import org.bukkit.inventory.ShapedRecipe
 import org.bukkit.inventory.ShapelessRecipe
+import org.litote.kmongo.set
 
 object Crafting : IonServerComponent() {
 	override fun onEnable() {
@@ -414,6 +419,29 @@ object Crafting : IonServerComponent() {
 		// Uranium Crafting
 		itemStackShapelessRecipe("uranium", URANIUM.constructItemStack().asQuantity(9)) {
 			addIngredient(URANIUM_BLOCK.constructItemStack())
+		}
+
+		//Nuclear Rocket 1
+		itemStackShapeRecipe("nuclearMissile1", NUCLEAR_ROCKET.constructItemStack().asQuantity(5)){
+			shape("tct", "huo", "tmt",)
+
+			setIngredient('t', TITANIUM_INGOT.constructItemStack())
+			setIngredient('c', CIRCUITRY.constructItemStack())
+			setIngredient('h', GAS_CANISTER_HYDROGEN.constructItemStack())
+			setIngredient('u', URANIUM_BLOCK.constructItemStack())
+			setIngredient('o', GAS_CANISTER_OXYGEN.constructItemStack())
+			setIngredient('m', MAGMA_BLOCK)
+		}
+		//Nuclear Rocket 2
+		itemStackShapeRecipe("nuclearMissile2", NUCLEAR_ROCKET.constructItemStack().asQuantity(5)){
+			shape("tct", "ouh", "tmt",)
+
+			setIngredient('t', TITANIUM_INGOT.constructItemStack())
+			setIngredient('c', CIRCUITRY.constructItemStack())
+			setIngredient('h', GAS_CANISTER_HYDROGEN.constructItemStack())
+			setIngredient('u', URANIUM_BLOCK.constructItemStack())
+			setIngredient('o', GAS_CANISTER_OXYGEN.constructItemStack())
+			setIngredient('m', MAGMA_BLOCK)
 		}
 	}
 
