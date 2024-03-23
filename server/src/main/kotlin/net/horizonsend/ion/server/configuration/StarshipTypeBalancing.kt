@@ -431,7 +431,7 @@ data class StarshipBalancing(
 class StarshipWeapons(
 	// Light Weapons
 	val plasmaCannon: StarshipWeapon = StarshipWeapon(
-		range = 160.0,
+		range = 120.0,
 		speed = 400.0,
 		areaShieldDamageMultiplier = 3.0,
 		starshipShieldDamageMultiplier = 3.0,
@@ -442,7 +442,7 @@ class StarshipWeapons(
 		soundName = "starship.weapon.plasma_cannon.shoot",
 		powerUsage = 2500,
 		length = 3,
-		angleRadiansHorizontal = 15.0,
+		angleRadiansHorizontal = 35.0,
 		angleRadiansVertical = 15.0,
 		convergeDistance = 10.0,
 		extraDistance = 1,

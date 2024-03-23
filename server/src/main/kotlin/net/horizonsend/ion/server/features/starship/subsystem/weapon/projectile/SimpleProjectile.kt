@@ -42,7 +42,7 @@ abstract class SimpleProjectile(
 	protected var firedAtNanos: Long = -1
 	protected var lastTick: Long = -1
 	protected var delta: Double = 0.0
-	private var hasHit: Boolean = false
+	protected var hasHit: Boolean = false
 
 	override fun fire() {
 		firedAtNanos = System.nanoTime()
@@ -180,7 +180,7 @@ abstract class SimpleProjectile(
 		}
 	}
 
-	private fun addToDamagers(world: World, block: Block, shooter: Damager) {
+	protected fun addToDamagers(world: World, block: Block, shooter: Damager) {
 		val x = block.x
 		val y = block.y
 		val z = block.z
