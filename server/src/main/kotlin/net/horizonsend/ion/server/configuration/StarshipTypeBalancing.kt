@@ -629,7 +629,6 @@ class StarshipWeapons(
 		soundName = "starship.weapon.rocket.shoot",
 		powerUsage = 8000,
 		length = 3,
-		angleRadians = 0.0,
 		convergeDistance = 0.0,
 		extraDistance = 0,
 		fireCooldownMillis = 250,
@@ -637,7 +636,9 @@ class StarshipWeapons(
 		aimDistance = 0,
 		applyCooldownToAll = false,
 		displayEntityCustomModelData = 1101,
-		displayEntitySize = 1.0
+		displayEntitySize = 1.0,
+		angleRadiansHorizontal = 100.0,
+		angleRadiansVertical = 100.0
 	),
 
 	// Auto Turret Stuff
