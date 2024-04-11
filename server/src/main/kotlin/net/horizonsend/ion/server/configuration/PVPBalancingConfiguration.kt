@@ -5,7 +5,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PVPBalancingConfiguration(
 	val energyWeapons: EnergyWeapons = EnergyWeapons(),
-	val throwables: Throwables = Throwables()
+	val throwables: Throwables = Throwables(),
+	val armour: Armours = Armours(),
+	val modules: Modules = Modules()
 ) {
 	@Serializable
 	data class Throwables(
@@ -317,5 +319,82 @@ data class PVPBalancingConfiguration(
 			TERTIARY,
 			MELEE
 		}
+	}
+
+	@Serializable
+	data class Armours(
+		val lightPowerArmourBalancing: PowerArmourBalancing = PowerArmourBalancing(
+			1.0,
+			3.0,
+			2.0,
+			1.0,
+			20.0,
+			1,
+			1,
+			30000
+		),
+		val mediumPowerArmourBalancing: PowerArmourBalancing = PowerArmourBalancing(
+			2.0,
+			6.0,
+			5.0,
+			2.0,
+			35.0,
+			1,
+			2,
+			50000
+		),
+		val heavyPowerArmourBalancing: PowerArmourBalancing = PowerArmourBalancing(
+			3.0,
+			8.0,
+			6.0,
+			3.0,
+			60.0,
+			1,
+			3,
+			70000
+
+		)
+	){
+		@Serializable
+		data class PowerArmourBalancing(
+			val baseHelmetArmour: Double,
+			val baseChestArmour: Double,
+			val baseLegArmour: Double,
+			val baseBootArmour: Double,
+			val baseWeight: Double,
+			val primaryModuleCount: Int,
+			val secondaryModuleCount: Int,
+			val basePower: Int
+		)
+	}
+
+	@Serializable
+	data class Modules(
+		val speedModule: ModulesBalancing = ModulesBalancing(
+			1.0,
+			0.0,
+			0.0,
+			5.0,
+			0,
+			1,
+			true,
+			leggings = true
+		)
+	){
+		@Serializable
+		data class ModulesBalancing(
+			val powerPerTick: Double,
+			val powerPerPrimaryInteraction: Double,
+			val powerPerSecondaryInteraction: Double,
+			val moduleWeight: Double,
+			val addedPower: Int,
+			val id: Int,
+			val primary: Boolean,
+			val helmet: Boolean = false,
+			val chestPlate: Boolean = false,
+			val leggings: Boolean = false,
+			val boots: Boolean = false
+
+		)
 	}
 }

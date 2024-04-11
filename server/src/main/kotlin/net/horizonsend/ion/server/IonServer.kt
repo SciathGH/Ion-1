@@ -17,7 +17,6 @@ import net.horizonsend.ion.server.configuration.ServerConfiguration
 import net.horizonsend.ion.server.configuration.StarshipTypeBalancing
 import net.horizonsend.ion.server.configuration.TradeConfiguration
 import net.horizonsend.ion.server.features.client.networking.packets.ShipData
-import net.horizonsend.ion.server.features.customitems.EnergySword.EnergySwordListener
 import net.horizonsend.ion.server.features.space.generation.generators.SpaceBiomeProvider
 import net.horizonsend.ion.server.features.space.generation.generators.SpaceChunkGenerator
 import net.horizonsend.ion.server.listener.SLEventListener
