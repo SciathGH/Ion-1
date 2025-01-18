@@ -46,7 +46,7 @@ data class PVPBalancingConfiguration(
 	@Serializable
 	data class EnergyWeapons(
 		val pistol: Singleshot = Singleshot(
-			damage = 3.0,
+			damage = 9.375,
 			damageFalloffMultiplier = 0.0,
 			capacity = 10,
 			ammoPerRefill = 20,
@@ -74,9 +74,12 @@ data class PVPBalancingConfiguration(
 			soundRange = 50.0,
 			magazineIdentifier = "STANDARD_MAGAZINE",
 			refillType = "minecraft:lapis_lazuli",
+			type = WeaponTypeEnum.TERTIARY,
+			blockbreakAmount = 0.3,
+			switchToTimeTicks = 0
 		),
 		val rifle: Singleshot = Singleshot(
-			damage = 5.5,
+			damage = 17.2,
 			damageFalloffMultiplier = 0.0,
 			capacity = 20,
 			ammoPerRefill = 20,
@@ -104,9 +107,12 @@ data class PVPBalancingConfiguration(
 			soundRange = 50.0,
 			magazineIdentifier = "STANDARD_MAGAZINE",
 			refillType = "minecraft:lapis_lazuli",
+			type = WeaponTypeEnum.SECONDARY,
+			blockbreakAmount = 0.5,
+			switchToTimeTicks = 0
 		),
 		val submachineBlaster: Singleshot = Singleshot(
-			damage = 1.5,
+			damage = 9.375,
 			damageFalloffMultiplier = 0.0,
 			capacity = 45,
 			ammoPerRefill = 20,
@@ -134,9 +140,12 @@ data class PVPBalancingConfiguration(
 			soundRange = 50.0,
 			magazineIdentifier = "STANDARD_MAGAZINE",
 			refillType = "minecraft:lapis_lazuli",
+			type = WeaponTypeEnum.SECONDARY,
+			blockbreakAmount = 1.0,
+			switchToTimeTicks = 0
 		),
 		val sniper: Singleshot = Singleshot(
-			damage = 12.0,
+			damage = 37.5,
 			damageFalloffMultiplier = 30.0,
 			capacity = 5,
 			ammoPerRefill = 20,
@@ -164,9 +173,12 @@ data class PVPBalancingConfiguration(
 			soundRange = 100.0,
 			magazineIdentifier = "SPECIAL_MAGAZINE",
 			refillType = "minecraft:emerald",
+			type = WeaponTypeEnum.PRIMARY,
+			blockbreakAmount = 4.0,
+			switchToTimeTicks = 5
 		),
 		val shotgun: Multishot = Multishot(
-			damage = 1.75,
+			damage = 11.0,
 			damageFalloffMultiplier = 0.25,
 			delay = 0,
 			capacity = 4,
@@ -197,10 +209,13 @@ data class PVPBalancingConfiguration(
 			soundRange = 50.0,
 			magazineIdentifier = "SPECIAL_MAGAZINE",
 			refillType = "minecraft:emerald",
+			type = WeaponTypeEnum.PRIMARY,
+			blockbreakAmount = 1.5,
+			switchToTimeTicks = 5
 		),
 
 		val cannon: Singleshot = Singleshot(
-			damage = 0.5,
+			damage = 1.4,
 			explosionPower = 4.0f,
 			damageFalloffMultiplier = 0.0,
 			capacity = 60,
@@ -230,6 +245,9 @@ data class PVPBalancingConfiguration(
 			magazineIdentifier = "STANDARD_MAGAZINE",
 			explosiveShot = true,
 			refillType = "minecraft:lapis_lazuli",
+			type = WeaponTypeEnum.TERTIARY,
+			blockbreakAmount = 0.0,
+			switchToTimeTicks = 0
 		),
 
 		val standardMagazine: AmmoStorage = AmmoStorage(
@@ -241,6 +259,12 @@ data class PVPBalancingConfiguration(
 			capacity = 20,
 			refillType = "minecraft:emerald",
 			ammoPerRefill = 20
+		),
+		val energySwordBalancing: EnergySwordBalancing = EnergySwordBalancing(
+			damage = 7.0, //This value is added to the damage of the shield currently, in this case 1
+			blockAmount = 200,
+			blockRechargePerTick= 1.0,
+			type = WeaponTypeEnum.MELEE
 		)
 	) {
 		@Serializable
@@ -269,6 +293,8 @@ data class PVPBalancingConfiguration(
 			override val displayDurability: Boolean = true,
 			override val magazineIdentifier: String,
 			override val refillType: String,
+			override val blockbreakAmount: Double,
+			override val switchToTimeTicks: Int,
 
 			override val soundRange: Double,
 			override val soundReloadStart: SoundInfo,
@@ -277,8 +303,9 @@ data class PVPBalancingConfiguration(
 			override val soundWhizz: SoundInfo,
 			override val soundShell: SoundInfo,
 
-			override val explosiveShot: Boolean = false
-		) : Balancing()
+			override val explosiveShot: Boolean = false,
+			override val type: WeaponTypeEnum,
+			) : Balancing()
 
 		@Serializable
 		data class Multishot(
@@ -310,6 +337,8 @@ data class PVPBalancingConfiguration(
 			override val displayDurability: Boolean = true,
 			override val magazineIdentifier: String,
 			override val refillType: String,
+			override val blockbreakAmount: Double,
+			override val switchToTimeTicks: Int,
 
 			override val soundRange: Double,
 			override val soundReloadStart: SoundInfo,
@@ -318,8 +347,9 @@ data class PVPBalancingConfiguration(
 			override val soundWhizz: SoundInfo,
 			override val soundShell: SoundInfo,
 
-			override val explosiveShot: Boolean = false
-		) : Balancing()
+			override val explosiveShot: Boolean = false,
+			override val type: WeaponTypeEnum,
+			) : Balancing()
 
 		@Serializable
 		data class AmmoStorage(
@@ -329,7 +359,7 @@ data class PVPBalancingConfiguration(
 			override val displayDurability: Boolean = true
 		) : AmmoStorageBalancing, AmmoLoaderUsable
 
-		abstract class Balancing : ProjectileBalancing, AmmoStorageBalancing {
+		abstract class Balancing : ProjectileBalancing, AmmoStorageBalancing, WeaponType {
 			abstract val magazineIdentifier: String
 			abstract val packetsPerShot: Int
 			abstract val pitch: Float
@@ -338,6 +368,7 @@ data class PVPBalancingConfiguration(
 			abstract val shouldAkimbo: Boolean
 			abstract val timeBetweenShots: Int
 			abstract val consumesAmmo: Boolean
+			abstract val switchToTimeTicks: Int
 
 			abstract val soundRange: Double
 			abstract val soundFire: SoundInfo
@@ -361,7 +392,16 @@ data class PVPBalancingConfiguration(
 			val shotDeviation: Double
 			val explosiveShot: Boolean
 			val particleSize: Float
+			val blockbreakAmount: Double
 		}
+
+		@Serializable
+		data class EnergySwordBalancing(
+			val damage: Double,
+			val blockAmount: Int,
+			val blockRechargePerTick: Double,
+			override val type: WeaponTypeEnum
+		): WeaponType
 
 		interface AmmoStorageBalancing : AmmoLoaderUsable {
 			val capacity: Int
@@ -371,6 +411,17 @@ data class PVPBalancingConfiguration(
 		interface AmmoLoaderUsable {
 			val refillType: String
 			val ammoPerRefill: Int
+		}
+
+		interface WeaponType{
+			val type: WeaponTypeEnum
+		}
+
+		enum class WeaponTypeEnum{
+			PRIMARY,
+			SECONDARY,
+			TERTIARY,
+			MELEE
 		}
 	}
 }

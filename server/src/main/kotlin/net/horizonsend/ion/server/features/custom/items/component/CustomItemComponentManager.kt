@@ -10,6 +10,7 @@ class CustomItemComponentManager(val serializationManager: SerializationManager)
 		data.registerSerializers(serializationManager)
 	}
 
+
 	fun hasComponent(type: CustomComponentTypes<*, *>): Boolean = components.containsKey(type)
 
 	fun <T : CustomItemComponent> getComponent(type: CustomComponentTypes<T, ComponentTypeData.OnlyOne<T>>): T {

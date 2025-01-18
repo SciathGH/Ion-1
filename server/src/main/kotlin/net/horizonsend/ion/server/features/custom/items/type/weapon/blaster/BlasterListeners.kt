@@ -18,6 +18,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
+import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import kotlin.math.roundToInt
@@ -74,6 +75,9 @@ class BlasterListeners : SLEventListener() {
 				NamedTextColor.RED
 			)
 		)
+		if (event.player.hasCooldown(itemStack.type) && event.player.getCooldown(itemStack) < customItem.balancing.switchToTimeTicks){
+		event.player.setCooldown(itemStack.type, customItem.balancing.switchToTimeTicks) //add a cooldown for some weapons
+			}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -110,5 +114,15 @@ class BlasterListeners : SLEventListener() {
 		resultItem.getComponent(CustomComponentTypes.AMMUNITION_STORAGE).setAmmo(resultItemStack, resultItem, totalAmmo)
 
 		event.inventory.result = resultItemStack
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	fun onPlayerDeath(event: PlayerDeathEvent){
+		val drops =event.drops
+		if (event.keepInventory) return
+		val listOfBlasterItems = drops.filter { it.customItem is Blaster<*> }
+		val mapOfBlasters = mutableMapOf<Blaster<*>, ItemStack>()
+		listOfBlasterItems.forEach { mapOfBlasters[it.customItem as Blaster<*>] = it}
+		mapOfBlasters.forEach { it.key.ammoComponent.setAmmo(it.value, it.key, 0)} //Set ammunition of player to 0 for all guns
 	}
 }

@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerSwapHandItemsEvent
 
 class CustomComponentTypes<T : CustomItemComponent, Z : ComponentTypeData<T>> private constructor(val storageType: ComponentType, val componentName: String) {
@@ -45,6 +46,12 @@ class CustomComponentTypes<T : CustomItemComponent, Z : ComponentTypeData<T>> pr
 		 * Allows an item to store gas
 		 **/
 		val GAS_STORAGE = newComponentType<GasStorage, OnlyOne<GasStorage>>(ComponentType.ONLY_ONE)
+
+		/**
+		 * Allows an item to contain a "block" amount, e.g. Block amount on an energy sword
+		 */
+
+		val ENERGY_SWORD_BLOCK_AMOUNT = newComponentType<BlockAmountComponent, OnlyOne<BlockAmountComponent>>(ComponentType.ONLY_ONE)
 
 		/**
 		 * Allows an item to have / store item modifications
@@ -95,5 +102,7 @@ class CustomComponentTypes<T : CustomItemComponent, Z : ComponentTypeData<T>> pr
 		 * Recieves ticks, idk what else to say
 		 **/
 		val TICK_RECIEVER = newComponentType<TickReceiverModule, AllowMultiple<TickReceiverModule>>(ComponentType.ALLOW_MULTIPLE)
+
+		val LISTENER_HOLDING = newComponentType<Listener<PlayerItemHeldEvent, *>, AllowMultiple<Listener<PlayerItemHeldEvent, *>>>(ComponentType.ALLOW_MULTIPLE)
 	}
 }

@@ -5,8 +5,10 @@ import io.papermc.paper.datacomponent.item.ItemAttributeModifiers
 import net.horizonsend.ion.common.database.cache.nations.NationCache
 import net.horizonsend.ion.common.database.schema.misc.SLPlayer
 import net.horizonsend.ion.common.extensions.alert
+import net.horizonsend.ion.common.extensions.userError
 import net.horizonsend.ion.common.utils.miscellaneous.randomDouble
 import net.horizonsend.ion.common.utils.text.template
+import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration
 import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.EnergyWeapons.Balancing
 import net.horizonsend.ion.server.features.custom.items.CustomItem
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry
@@ -36,6 +38,7 @@ import org.bukkit.Particle.DUST
 import org.bukkit.Particle.DustOptions
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 import java.util.function.Supplier
@@ -65,7 +68,41 @@ open class Blaster<T : Balancing>(
 		addComponent(CustomComponentTypes.AMMUNITION_STORAGE, ammoComponent)
 		addComponent(CustomComponentTypes.MAGAZINE_TYPE, magazineComponent)
 
-		addComponent(CustomComponentTypes.LISTENER_PLAYER_INTERACT, rightClickListener(this@Blaster) { event, _, item -> fire(event.player, item) })
+		addComponent(CustomComponentTypes.LISTENER_PLAYER_INTERACT, rightClickListener(this@Blaster) { event, _, item ->
+			val livingEntity = event.player
+			var primaryCount = 0
+			var secondaryCount = 0
+			var tertiaryCount = 0
+			val inventory = (livingEntity as? InventoryHolder)?.inventory ?: return@rightClickListener
+			for (i in inventory.contents){
+				val customItem = i?.customItem ?: continue
+				if (customItem is Blaster<*>){
+					if (customItem.ammoComponent.getAmmo(i)==0) continue
+					when(customItem.balancingSupplier.get().type){
+						PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.PRIMARY -> primaryCount++
+						PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.SECONDARY -> secondaryCount++
+						PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.TERTIARY -> tertiaryCount++
+						else -> {}
+					}
+				}
+				else continue
+			}
+			if (primaryCount > 1){
+				livingEntity.userError("Over Primary weapon limit, limit is 1 but you have $primaryCount weapons ")
+				return@rightClickListener
+			}
+			else if (secondaryCount > 1){
+				livingEntity.userError("Over Secondary weapon limit, limit is 1 but you have $secondaryCount weapons")
+				return@rightClickListener
+			}
+			else if (tertiaryCount > 1){
+				livingEntity.userError("Over Tertiary weapon limit, limit is 1 but you have $tertiaryCount weapons")
+				return@rightClickListener
+			}
+			else{
+				fire(event.player, item)
+			}
+		})
 		addComponent(CustomComponentTypes.LISTENER_PLAYER_SWAP_HANDS, playerSwapHandsListener(this@Blaster) { event, _, item -> reload(event.player, item) })
 	}
 

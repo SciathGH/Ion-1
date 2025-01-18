@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.inventory.ItemStack
 import kotlin.reflect.KClass
@@ -114,6 +115,23 @@ class Listener<E: Event, T: CustomItem>(
 				val itemInOffHand = damaged.equipment?.itemInOffHand
 				val offHandcustomItem = itemInOffHand?.customItem
 
+				(itemInOffHand != null && offHandcustomItem != null) || (itemInMainHand != null && mainHandcustomItem != null)
+			},
+			eventReceiver =  handleEvent
+		)
+
+		inline fun <reified T: CustomItem> holdingListener(
+			customItem: T,
+			noinline handleEvent: (PlayerItemHeldEvent, T, ItemStack) -> Unit
+		): Listener<PlayerItemHeldEvent, T> = Listener(
+			customItem,
+			PlayerItemHeldEvent::class,
+			preCheck = { event, customItem, itemStack ->
+				val itemInOffHand = event.player.inventory.itemInOffHand
+				val offHandcustomItem = itemInOffHand.customItem
+
+				val itemInMainHand = event.player.inventory.itemInMainHand
+				val mainHandcustomItem = itemInMainHand.customItem
 				(itemInOffHand != null && offHandcustomItem != null) || (itemInMainHand != null && mainHandcustomItem != null)
 			},
 			eventReceiver =  handleEvent
