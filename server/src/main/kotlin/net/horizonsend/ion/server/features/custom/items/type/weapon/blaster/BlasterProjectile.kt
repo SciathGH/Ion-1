@@ -39,6 +39,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.RayTraceResult
 import org.bukkit.util.Vector
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -59,6 +60,16 @@ class RayTracedParticleProjectile(
 	private val hitEntities: MutableList<Entity> = mutableListOf()
 	private val nearMissPlayers: MutableList<Player?> = mutableListOf(shooter as? Player)
 
+	private val offsets = listOf(
+		Vector(0.0, 0.0, 0.0),
+		Vector(-1.0, 0.0, 0.0),
+		Vector(+1.0, 0.0, 0.0),
+		Vector(0.0, -1.0, 0.0),
+		Vector(0.0, +1.0, 0.0),
+		Vector(0.0, 0.0, -1.0),
+		Vector(0.0, 0.0, +1.0)
+	).map { it.multiply(balancing.shotSize) }
+
 	fun fire() {
 		object : BukkitRunnable() {
 			override fun run() {
@@ -72,28 +83,26 @@ class RayTracedParticleProjectile(
 		if (ticks * balancing.speed > balancing.range) return true // Out of range
 		if (!location.isChunkLoaded) return true // Unloaded chunks
 
+		var rayTraceResult: RayTraceResult? = null
+		var flyingRayTraceResult: RayTraceResult? = null
+		val velocity = 	location.direction.clone().multiply(balancing.speed).normalize()
 		for (loc in location.alongVector(directionVector, balancing.speed.roundToInt())) {
 			location.world.spawnParticle(particle, loc, 1, 0.0, 0.0, 0.0, 0.0, dustOptions, true)
+			rayTraceResult = offsets.mapNotNull { offset ->
+				val start = location.clone().add(offset)
+				val world = loc.world
+				world.rayTrace(start, velocity, balancing.speed, FluidCollisionMode.NEVER, true, 0.0)
+				{ it != shooter && (it as? Player)?.isGliding != true }
+			}.minByOrNull { it.hitPosition.distanceSquared(location.toVector()) }
+			flyingRayTraceResult = offsets.mapNotNull { offset ->
+				val start = location.clone().add(offset)
+				val world = loc.world
+				world.rayTrace(start, velocity, balancing.speed, FluidCollisionMode.NEVER, true, 0.5)
+				{ it != shooter && (it as? Player)?.isGliding == true }
+			}.minByOrNull { it.hitPosition.distanceSquared(location.toVector()) }
+
+			if (rayTraceResult != null|| flyingRayTraceResult !=null) break
 		}
-
-		// 2 ray traces are used, one for flying, one for ground
-		val rayTraceResult = location.world.rayTrace(
-			location,
-			location.direction.clone().multiply(balancing.speed).normalize(),
-			location.world.viewDistance.toDouble(),
-			FluidCollisionMode.NEVER,
-			true,
-			balancing.shotSize
-		) { it != shooter && (it as? Player)?.isGliding != true }
-
-		val flyingRayTraceResult = location.world.rayTrace(
-			location,
-			location.direction.clone().multiply(balancing.speed),
-			location.world.viewDistance.toDouble(),
-			FluidCollisionMode.NEVER,
-			true,
-			balancing.shotSize * 2
-		) { it != shooter && (it as? Player)?.isGliding == true }
 
 		// Block Check
 		val hitBlock = rayTraceResult?.hitBlock
@@ -118,11 +127,10 @@ class RayTracedParticleProjectile(
 
 			return true
 		}
-
 		// Entity Check
 		val hitEntity = rayTraceResult?.hitEntity
 		if (hitEntity != null && hitEntity is Damageable && hitEntity !in hitEntities) {
-			val hitLocation = rayTraceResult.hitPosition.toLocation(hitEntity.world)
+			val hitLocation = rayTraceResult!!.hitPosition.toLocation(hitEntity.world)
 			val hitPosition = rayTraceResult.hitPosition
 			var hasHeadshot = false
 

@@ -34,6 +34,7 @@ import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.CIRCU
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.CRATE_PLACER
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.CRUISER_REACTOR_CORE
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.DETONATOR
+import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.EMPTY_SYRINGE
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.ENERGY_SWORD_BLUE
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.ENERGY_SWORD_GREEN
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.ENERGY_SWORD_ORANGE
@@ -56,6 +57,7 @@ import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.GAS_C
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.GAS_CANISTER_HYDROGEN
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.GAS_CANISTER_OXYGEN
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.GUN_BARREL
+import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.HEALTH_STIM
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.MOTHERBOARD
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.NETHERITE_CASING
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.PISTOL_RECEIVER
@@ -152,6 +154,7 @@ import org.bukkit.Material.FIREWORK_ROCKET
 import org.bukkit.Material.GILDED_BLACKSTONE
 import org.bukkit.Material.GLASS
 import org.bukkit.Material.GLASS_PANE
+import org.bukkit.Material.GLISTERING_MELON_SLICE
 import org.bukkit.Material.GLOWSTONE_DUST
 import org.bukkit.Material.GOLD_BLOCK
 import org.bukkit.Material.GOLD_INGOT
@@ -181,6 +184,7 @@ import org.bukkit.Material.PEARLESCENT_FROGLIGHT
 import org.bukkit.Material.PINK_PETALS
 import org.bukkit.Material.PINK_TULIP
 import org.bukkit.Material.PISTON
+import org.bukkit.Material.POTION
 import org.bukkit.Material.PRISMARINE
 import org.bukkit.Material.PRISMARINE_BRICKS
 import org.bukkit.Material.PRISMARINE_CRYSTALS
@@ -537,6 +541,22 @@ object Crafting : IonServerComponent() {
 			setIngredient('t', TITANIUM_INGOT.constructItemStack())
 			setIngredient('c', COAL)
 		}
+		//Consumables
+		shaped("EMPTY_SYRINGE", EMPTY_SYRINGE.constructItemStack()) {
+			shape("aga", "aga", "tdt")
+
+			setIngredient('a', ExactChoice(ALUMINUM_INGOT.constructItemStack()))
+			setIngredient('g', GLASS)
+			setIngredient('t', ExactChoice(TITANIUM_INGOT.constructItemStack()))
+			setIngredient('d', DIAMOND)
+		}
+		shapeless("HEALTH_STIM", HEALTH_STIM.constructItemStack()){
+			addIngredient(GLISTERING_MELON_SLICE)
+			addIngredient(REDSTONE)
+			addIngredient(POTION)
+			addIngredient(ExactChoice(EMPTY_SYRINGE.constructItemStack()))
+		}
+
 		materialBlockRecipes(ALUMINUM_BLOCK, ALUMINUM_INGOT)
 		materialBlockRecipes(RAW_ALUMINUM_BLOCK, RAW_ALUMINUM)
 		materialBlockRecipes(CHETHERITE_BLOCK, CHETHERITE)

@@ -19,6 +19,7 @@ import net.horizonsend.ion.server.features.custom.items.type.GasCanister
 import net.horizonsend.ion.server.features.custom.items.type.PersonalTransporter
 import net.horizonsend.ion.server.features.custom.items.type.ProgressHolder
 import net.horizonsend.ion.server.features.custom.items.type.armor.PowerArmorItem
+import net.horizonsend.ion.server.features.custom.items.type.consumable.HealthStim
 import net.horizonsend.ion.server.features.custom.items.type.throwables.ThrowableCustomItem
 import net.horizonsend.ion.server.features.custom.items.type.throwables.ThrownCustomItem
 import net.horizonsend.ion.server.features.custom.items.type.throwables.ThrownPumpkinGrenade
@@ -40,12 +41,14 @@ import net.horizonsend.ion.server.features.custom.items.util.ItemFactory.Preset.
 import net.horizonsend.ion.server.features.custom.items.util.withComponent
 import net.horizonsend.ion.server.features.gas.Gasses
 import net.horizonsend.ion.server.features.machine.PowerMachines
+import net.horizonsend.ion.server.features.nations.gui.item
 import net.horizonsend.ion.server.miscellaneous.registrations.NamespacedKeys.CUSTOM_ITEM
 import net.horizonsend.ion.server.miscellaneous.utils.Tasks
 import net.horizonsend.ion.server.miscellaneous.utils.map
 import net.horizonsend.ion.server.miscellaneous.utils.text.itemName
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.text
+import net.kyori.adventure.text.format.NamedTextColor.AQUA
 import net.kyori.adventure.text.format.NamedTextColor.BLACK
 import net.kyori.adventure.text.format.NamedTextColor.BLUE
 import net.kyori.adventure.text.format.NamedTextColor.DARK_GREEN
@@ -60,15 +63,19 @@ import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextColor.fromHexString
 import net.kyori.adventure.text.format.TextDecoration.BOLD
 import net.kyori.adventure.text.format.TextDecoration.ITALIC
+import org.bukkit.Color
 import org.bukkit.Material.DIAMOND_HOE
 import org.bukkit.Material.GOLDEN_HOE
 import org.bukkit.Material.IRON_HOE
+import org.bukkit.Material.POTION
 import org.bukkit.Material.PUMPKIN
+import org.bukkit.Material.WARPED_FUNGUS_ON_A_STICK
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Item
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.persistence.PersistentDataType.STRING
 import java.util.function.Supplier
 import kotlin.math.roundToInt
@@ -198,6 +205,20 @@ object CustomItemRegistry : IonServerComponent() {
 		itemFactory = ItemFactory.builder().setMaterial(IRON_HOE).setCustomModel("weapon/blaster/cannon").build(),
 		balancingSupplier = ConfigurationFiles.pvpBalancing().energyWeapons::cannon
 	)
+	)
+	val EMPTY_SYRINGE = unStackable("EMPTY_SYRINGE", model = "consumable/empty_syringe", displayName = text("Empty Syringe"))
+
+	//Consumables
+	val HEALTH_STIM = register(
+		HealthStim(
+			identifier = "HEALTH_STIM",
+			displayName = text("Health Stim", AQUA, BOLD).decoration(ITALIC, false),
+			baseItemFactory = ItemFactory.builder().setMaterial(POTION).setCustomModel("consumable/syringe").addModifier{it.editMeta {meta->
+				val potionMeta = meta as PotionMeta
+				potionMeta.color = Color.RED
+			}}.build(),
+			balancingSupplier = ConfigurationFiles.pvpBalancing().consumables::healthStim
+		)
 	)
 
 	val GUN_BARREL = register("GUN_BARREL", text("Gun Barrel"), unStackableCustomItem("industry/gun_barrel"))

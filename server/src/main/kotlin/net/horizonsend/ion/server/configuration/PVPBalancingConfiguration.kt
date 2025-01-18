@@ -7,7 +7,8 @@ import net.kyori.adventure.sound.Sound
 @Serializable
 data class PVPBalancingConfiguration(
 	val energyWeapons: EnergyWeapons = EnergyWeapons(),
-	val throwables: Throwables = Throwables()
+	val throwables: Throwables = Throwables(),
+	val consumables: Consumables = Consumables()
 ) {
 	@Serializable
 	data class Throwables(
@@ -40,6 +41,19 @@ data class PVPBalancingConfiguration(
 			val maxTicks: Int,
 			val tickInterval: Long,
 			val throwCooldownTicks: Int,
+		)
+	}
+	@Serializable
+	data class Consumables(
+		val healthStim: ConsumableBalancing = ConsumableBalancing(
+			modifierValue = 3.0,
+			cooldownTicks = 40
+		)
+	){
+		@Serializable
+		data class ConsumableBalancing(
+			val modifierValue: Double,
+			val cooldownTicks: Int,
 		)
 	}
 

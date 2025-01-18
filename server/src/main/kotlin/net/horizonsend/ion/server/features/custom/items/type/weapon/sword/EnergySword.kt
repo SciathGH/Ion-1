@@ -83,11 +83,19 @@ class EnergySword(type: String, color: TextColor) : CustomItem(
 			event.isCancelled = false //Uncancel the event, the precheck unfortunately cancels it
 			val player = event.player
 			if (player.isBlocking) {
-				blockComponent.getBlock(item, player)
+				val block = blockComponent.getBlock(item, player)
+				blockComponent.setBlock(item, block-5, player)
 			}
 		})
 
-
+		addComponent(CustomComponentTypes.LISTENER_HOLDING, holdingListener(this@EnergySword) { event, _, item ->
+			event.isCancelled = false
+			val player = event.player
+			if (player.isBlocking) {
+				val block = blockComponent.getBlock(item, player)
+				blockComponent.setBlock(item, block-5, player)
+			}
+		})
 
 		addComponent(CustomComponentTypes.LISTENER_PREPARE_CRAFT, prepareCraftListener(this@EnergySword) { event, customItem, item ->
 			val permission = "gear.energysword." + customItem.identifier.lowercase().removePrefix("energy_sword_")
@@ -106,6 +114,7 @@ class EnergySword(type: String, color: TextColor) : CustomItem(
 			//A 'parry' rebounds an incoming projectile perfectly to where the player is looking
 			val player = event.player
 			if ((player).hasCooldown(item))return@playerSwapHandsListener
+			if (player.hasCooldown(item)) return@playerSwapHandsListener
 			peopleToParryTime[player] = System.currentTimeMillis()
 			player.setCooldown(item.type, 20) //Add a cooldown, so players don't spam it
 			player.sendActionBar(Component.text("Tried to parry!", TextColor.color(0, 0, 255)))

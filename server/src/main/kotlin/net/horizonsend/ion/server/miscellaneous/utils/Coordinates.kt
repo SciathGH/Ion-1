@@ -17,14 +17,17 @@ import org.joml.Vector3f
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.acos
 import kotlin.math.atan
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.math.sqrt
+
 
 val Block.coordinates: Vec3i get() = Vec3i(x, y, z)
 
@@ -182,6 +185,41 @@ fun Location.alongVector(vector: Vector, points: Int): List<Location> {
 	}
 
 	return locationList
+}
+
+fun Location.getLocationsBetween(endLoc: Location): List<Location> {
+	val locations: MutableList<Location> = ArrayList()
+	val world = this.world
+
+	val x1 = this.x
+	val y1 = this.y
+	val z1 = this.z
+
+	val x2 = endLoc.x
+	val y2 = endLoc.y
+	val z2 = endLoc.z
+
+	val dx = x2 - x1
+	val dy = y2 - y1
+	val dz = z2 - z1
+
+	val maxDistance = max(abs(dx), max(abs(dy), abs(dz)))
+
+	val stepX = dx / maxDistance
+	val stepY = dy / maxDistance
+	val stepZ = dz / maxDistance
+
+	var i = 0
+	while (i <= maxDistance) {
+		val x = x1 + (stepX * i)
+		val y = y1 + (stepY * i)
+		val z = z1 + (stepZ * i)
+
+		locations.add(Location(world, x, y, z))
+		i++
+	}
+
+	return locations
 }
 
 /**
