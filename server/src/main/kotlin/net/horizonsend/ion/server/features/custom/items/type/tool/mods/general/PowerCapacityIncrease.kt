@@ -35,6 +35,7 @@ class PowerCapacityIncrease(
 		ApplicationPredicate.ClassPredicate(PowerChainsaw::class)
 	)
 	override val incompatibleWithMods: Array<KClass<out ItemModification>> = arrayOf()
+	override val primaryOrSecondary: ItemModification.PrimaryOrSecondary = ItemModification.PrimaryOrSecondary.PRIMARY
 
 	override val displayName: Component = ofChildren(
 		text("Power Storage ", RED),

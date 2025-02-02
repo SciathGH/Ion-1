@@ -51,7 +51,7 @@ class PowerDrill(identifier: String, displayName: Component, modLimit: Int, base
 
 		val modManger = getComponent(CustomComponentTypes.MOD_MANAGER)
 		val powerManager = getComponent(CustomComponentTypes.POWER_STORAGE)
-		val mods = modManger.getMods(itemStack)
+		val mods = modManger.getPrimaryMods(itemStack)
 
 		mods.filterNot { it.crouchingDisables && player.isSneaking }
 			.filterIsInstance<net.horizonsend.ion.server.features.custom.items.type.tool.mods.tool.BlockListModifier>()

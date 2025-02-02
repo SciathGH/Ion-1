@@ -6,10 +6,10 @@ import net.horizonsend.ion.common.extensions.alert
 import net.horizonsend.ion.common.extensions.information
 import net.horizonsend.ion.common.utils.miscellaneous.randomDouble
 import net.horizonsend.ion.server.IonServer
-import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.EnergyWeapons.ProjectileBalancing
+import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.BlasterWeapons.ProjectileBalancing
 import net.horizonsend.ion.server.configuration.StarshipSounds
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.customItem
-import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.RocketBoostingMod.glideDisabledPlayers
+import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.RocketBoostingMod.glideDisabledPlayers
 import net.horizonsend.ion.server.features.custom.items.type.weapon.sword.EnergySword
 import net.horizonsend.ion.server.features.starship.damager.addToDamagers
 import net.horizonsend.ion.server.features.world.IonWorld.Companion.hasFlag
@@ -54,7 +54,6 @@ class RayTracedParticleProjectile(
 	private val soundWhizz: StarshipSounds.SoundInfo,
 	var damage: Double = balancing.damage
 ) {
-	//todo stop this passing through players
 	private var directionVector = location.direction.clone().multiply(balancing.speed)
 	var ticks: Int = 0
 	private val hitEntities: MutableList<Entity> = mutableListOf()

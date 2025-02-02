@@ -40,6 +40,7 @@ class FortuneModifier(
 	override val shouldDropXP: Boolean = true
 
 	override val displayName: Component = text("Fortune $level", TextColor.fromHexString(color)!!, BOLD).decoration(TextDecoration.ITALIC, false)
+	override val primaryOrSecondary: ItemModification.PrimaryOrSecondary = ItemModification.PrimaryOrSecondary.PRIMARY
 
 	override fun getDrop(block: Block): Collection<ItemStack> {
 		return block.getDrops(fortunePick)

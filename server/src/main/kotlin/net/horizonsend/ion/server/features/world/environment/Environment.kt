@@ -37,7 +37,7 @@ enum class Environment {
 			val customItem = helmet.customItem ?: return false
 
 			if (!customItem.hasComponent(CustomComponentTypes.MOD_MANAGER)) return false
-			val mods = customItem.getComponent(CustomComponentTypes.MOD_MANAGER).getMods(helmet)
+			val mods = customItem.getComponent(CustomComponentTypes.MOD_MANAGER).getPrimaryMods(helmet)
 			if (!mods.contains(ItemModRegistry.PRESSURE_FIELD)) return false
 
 			val powerUsage = 10

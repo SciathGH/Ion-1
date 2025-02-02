@@ -2,12 +2,13 @@ package net.horizonsend.ion.server.features.custom.items.type.tool.mods
 
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry
 import net.horizonsend.ion.server.features.custom.items.type.tool.PowerHoe
-import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.EnvironmentMod
-import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.NightVisionMod
-import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.PressureFieldMod
-import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.RocketBoostingMod
-import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.ShockAbsorbingMod
-import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.SpeedBoostingMod
+import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.EnvironmentMod
+import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.NightVisionMod
+import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.PressureFieldMod
+import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.RocketBoostingMod
+import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.ShockAbsorbingMod
+import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.SpeedBoostingMod
+import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.secondary.ArmourBoostMod
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.drops.AutoSmeltModifier
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.drops.FortuneModifier
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.drops.SilkTouchSource
@@ -57,12 +58,16 @@ object ItemModRegistry {
 	// Dispenses bonemeal on crops
 	val FERTILIZER_DISPENSER = registerMod(net.horizonsend.ion.server.features.custom.items.type.tool.mods.tool.hoe.FertilizerDispenser)
 
+	//Armor Primary
 	val ENVIRONMENT = registerMod(EnvironmentMod)
 	val NIGHT_VISION = registerMod(NightVisionMod)
 	val PRESSURE_FIELD = registerMod(PressureFieldMod)
 	val ROCKET_BOOSTING = registerMod(RocketBoostingMod)
 	val SHOCK_ABSORBING = registerMod(ShockAbsorbingMod)
 	val SPEED_BOOSTING = registerMod(SpeedBoostingMod)
+	//Armor Secondary
+	val ARMOR_BOOST = registerMod(ArmourBoostMod)
+
 
 	private fun <T: ItemModification> registerMod(mod: T): T {
 		mods[mod.identifier] = mod

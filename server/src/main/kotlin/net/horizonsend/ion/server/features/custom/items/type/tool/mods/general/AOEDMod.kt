@@ -44,6 +44,7 @@ class AOEDMod(
 	)
 
 	override val priority: Int = 1
+	override val primaryOrSecondary: ItemModification.PrimaryOrSecondary = ItemModification.PrimaryOrSecondary.PRIMARY
 
 	override fun modifyBlockList(interactedSide: BlockFace, origin: Block, list: MutableList<Block>) {
 		list.clear()

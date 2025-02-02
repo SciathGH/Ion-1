@@ -7,7 +7,6 @@ import net.horizonsend.ion.server.features.custom.items.attribute.CustomItemAttr
 import net.horizonsend.ion.server.features.custom.items.util.StoredValues
 import net.horizonsend.ion.server.features.custom.items.util.serialization.SerializationManager
 import net.horizonsend.ion.server.features.custom.items.util.serialization.token.IntegerToken
-import net.horizonsend.ion.server.features.custom.items.util.updateDurability
 import net.horizonsend.ion.server.miscellaneous.utils.text.itemLore
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -18,7 +17,7 @@ import org.bukkit.inventory.ItemStack
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
-class BlockAmountComponent(val balancingSupplier: PVPBalancingConfiguration.EnergyWeapons.EnergySwordBalancing) : CustomItemComponent, LoreManager {
+class BlockAmountComponent(val balancingSupplier: PVPBalancingConfiguration.MeleeWeapons.EnergySwordBalancing) : CustomItemComponent, LoreManager {
 
 	override fun decorateBase(baseItem: ItemStack, customItem: CustomItem) {
 		StoredValues.ENERGYSWORDBLOCK.setAmount(baseItem, balancingSupplier.blockAmount)

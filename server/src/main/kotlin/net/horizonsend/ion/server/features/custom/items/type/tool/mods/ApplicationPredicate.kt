@@ -1,6 +1,9 @@
 package net.horizonsend.ion.server.features.custom.items.type.tool.mods
 
 import net.horizonsend.ion.server.features.custom.items.CustomItem
+import net.horizonsend.ion.server.features.custom.items.type.SlotItem
+import net.horizonsend.ion.server.features.custom.items.type.armor.PowerArmorItem
+import org.bukkit.inventory.EquipmentSlot
 import kotlin.reflect.KClass
 
 interface ApplicationPredicate {
@@ -15,6 +18,12 @@ interface ApplicationPredicate {
 	class SpecificPredicate(val customItem: CustomItem) : ApplicationPredicate {
 		override fun canApplyTo(customItem: CustomItem): Boolean {
 			return customItem.identifier == this.customItem.identifier
+		}
+	}
+
+	class EquipmentSlotPredicate(val slot: EquipmentSlot) : ApplicationPredicate {
+		override fun canApplyTo(customItem: CustomItem): Boolean {
+			return (customItem as? SlotItem)?.slot == this.slot
 		}
 	}
 }

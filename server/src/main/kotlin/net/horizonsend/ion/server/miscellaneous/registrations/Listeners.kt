@@ -8,6 +8,8 @@ import net.horizonsend.ion.server.features.custom.items.type.PersonalTransporter
 import net.horizonsend.ion.server.features.custom.items.type.weapon.blaster.BlasterListeners
 import net.horizonsend.ion.server.features.machine.CryoPods
 import net.horizonsend.ion.server.features.multiblock.type.misc.AbstractTractorBeam
+import net.horizonsend.ion.server.features.player.PlayerTempValueManager
+import net.horizonsend.ion.server.features.player.PlayerTempValues
 import net.horizonsend.ion.server.features.progression.achievements.AchievementListeners
 import net.horizonsend.ion.server.features.space.encounters.EncounterManager
 import net.horizonsend.ion.server.features.starship.control.controllers.player.ActivePlayerController
@@ -81,6 +83,7 @@ val listeners: List<Listener> = listOf(
 	RecipeModifications,
 	ActivePlayerController.Companion,
 	PersonalTransporterManager,
+	PlayerTempValueManager,
 
 	// Achievement Listeners
 	AchievementListeners(),

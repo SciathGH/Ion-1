@@ -6,9 +6,11 @@ import net.kyori.adventure.sound.Sound
 
 @Serializable
 data class PVPBalancingConfiguration(
-	val energyWeapons: EnergyWeapons = EnergyWeapons(),
+	val blasterWeapons: BlasterWeapons = BlasterWeapons(),
+	val meleeWeapons: MeleeWeapons = MeleeWeapons(),
 	val throwables: Throwables = Throwables(),
-	val consumables: Consumables = Consumables()
+	val consumables: Consumables = Consumables(),
+	val armour: Armour = Armour()
 ) {
 	@Serializable
 	data class Throwables(
@@ -58,7 +60,71 @@ data class PVPBalancingConfiguration(
 	}
 
 	@Serializable
-	data class EnergyWeapons(
+	data class MeleeWeapons(
+		val energySwordBalancing: EnergySwordBalancing = EnergySwordBalancing(
+			damage = 7.0, //This value is added to the damage of the shield currently, in this case 1
+			blockAmount = 200,
+			blockRechargePerTick= 1.0,
+			type = WeaponTypeEnum.MELEE
+		)
+	){
+		@Serializable
+		data class EnergySwordBalancing(
+			val damage: Double,
+			val blockAmount: Int,
+			val blockRechargePerTick: Double,
+			override val type: WeaponTypeEnum
+		): BlasterWeapons.WeaponType
+	}
+
+	@Serializable
+	data class Armour(
+		val heavyPowerArmour: AttributeHolder = AttributeHolder(
+			speed = -0.05,
+			sneakSpeed = 0.0,
+			scale = 0.06,
+			entityReach = 0.0,
+			blockReach = 0.0,
+			armour = 6.0,
+			toughness = 2.0,
+			knockBackResistance = .2,
+			power = 100000.0,
+			stepHeight = .1,
+			maxHealth = 2.5,
+			jumpStrength = -.05,
+			flyingSpeed = 0.0,
+			canDoubleJump = false,
+			canRocketBoot = true,
+			gravity = 0.0,
+			oxygenBonus = 0.0,
+			waterMovementEfficiency = 0.0,
+		)
+	){
+		@Serializable
+		data class AttributeHolder(
+			val speed: Double, //Percentage increase or decrease
+			val sneakSpeed: Double, //Percentage increase or decrease
+			val scale: Double, //Scalar add
+			val entityReach: Double, //Scalar add
+			val blockReach: Double, //Scalar add
+			val armour: Double, //Scalar add
+			val toughness: Double, //Scalar add
+			val knockBackResistance: Double, //Scalar add x10, 0.2 here is 2 ingame
+			val power: Double, //Pure number
+			val stepHeight: Double,//Scalar add
+			val maxHealth: Double,//Scalar add
+			val jumpStrength: Double,//Scalar add
+			val flyingSpeed: Double,//Scalar add
+			val canDoubleJump: Boolean,//Boolean
+			val canRocketBoot: Boolean,//Boolean
+			val gravity: Double,//Scalar add
+			val oxygenBonus: Double,//Scalar add
+			val waterMovementEfficiency: Double,//Scalar add
+		)
+	}
+
+	@Serializable
+	data class BlasterWeapons(
 		val pistol: Singleshot = Singleshot(
 			damage = 9.375,
 			damageFalloffMultiplier = 0.0,
@@ -274,12 +340,6 @@ data class PVPBalancingConfiguration(
 			refillType = "minecraft:emerald",
 			ammoPerRefill = 20
 		),
-		val energySwordBalancing: EnergySwordBalancing = EnergySwordBalancing(
-			damage = 7.0, //This value is added to the damage of the shield currently, in this case 1
-			blockAmount = 200,
-			blockRechargePerTick= 1.0,
-			type = WeaponTypeEnum.MELEE
-		)
 	) {
 		@Serializable
 		data class Singleshot(
@@ -409,14 +469,6 @@ data class PVPBalancingConfiguration(
 			val blockbreakAmount: Double
 		}
 
-		@Serializable
-		data class EnergySwordBalancing(
-			val damage: Double,
-			val blockAmount: Int,
-			val blockRechargePerTick: Double,
-			override val type: WeaponTypeEnum
-		): WeaponType
-
 		interface AmmoStorageBalancing : AmmoLoaderUsable {
 			val capacity: Int
 			val displayDurability: Boolean
@@ -430,12 +482,12 @@ data class PVPBalancingConfiguration(
 		interface WeaponType{
 			val type: WeaponTypeEnum
 		}
+	}
 
-		enum class WeaponTypeEnum{
-			PRIMARY,
-			SECONDARY,
-			TERTIARY,
-			MELEE
-		}
+	enum class WeaponTypeEnum{
+		PRIMARY,
+		SECONDARY,
+		TERTIARY,
+		MELEE
 	}
 }

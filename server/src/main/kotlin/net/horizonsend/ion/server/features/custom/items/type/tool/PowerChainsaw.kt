@@ -46,7 +46,7 @@ class PowerChainsaw(
 		if (event.player.gameMode != GameMode.SURVIVAL) return
 		val origin = event.clickedBlock ?: return
 
-		val mods = getComponent(CustomComponentTypes.MOD_MANAGER).getMods(itemStack)
+		val mods = getComponent(CustomComponentTypes.MOD_MANAGER).getPrimaryMods(itemStack)
 
 		val maxDepth = if (mods.contains(ExtendedBar)) initialBlocksBroken + 100 else initialBlocksBroken
 

@@ -7,8 +7,8 @@ import net.horizonsend.ion.common.utils.text.text
 import net.horizonsend.ion.server.IonServerComponent
 import net.horizonsend.ion.server.configuration.ConfigurationFiles
 import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration
-import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.EnergyWeapons.Multishot
-import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.EnergyWeapons.Singleshot
+import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.BlasterWeapons.Multishot
+import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.BlasterWeapons.Singleshot
 import net.horizonsend.ion.server.features.custom.blocks.CustomBlock
 import net.horizonsend.ion.server.features.custom.blocks.CustomBlocks
 import net.horizonsend.ion.server.features.custom.items.CustomItemListeners.sortCustomItemListeners
@@ -18,7 +18,7 @@ import net.horizonsend.ion.server.features.custom.items.type.CustomBlockItem
 import net.horizonsend.ion.server.features.custom.items.type.GasCanister
 import net.horizonsend.ion.server.features.custom.items.type.PersonalTransporter
 import net.horizonsend.ion.server.features.custom.items.type.ProgressHolder
-import net.horizonsend.ion.server.features.custom.items.type.armor.PowerArmorItem
+import net.horizonsend.ion.server.features.custom.items.type.armor.HeavyPowerArmourItem
 import net.horizonsend.ion.server.features.custom.items.type.consumable.HealthStim
 import net.horizonsend.ion.server.features.custom.items.type.throwables.ThrowableCustomItem
 import net.horizonsend.ion.server.features.custom.items.type.throwables.ThrownCustomItem
@@ -41,7 +41,6 @@ import net.horizonsend.ion.server.features.custom.items.util.ItemFactory.Preset.
 import net.horizonsend.ion.server.features.custom.items.util.withComponent
 import net.horizonsend.ion.server.features.gas.Gasses
 import net.horizonsend.ion.server.features.machine.PowerMachines
-import net.horizonsend.ion.server.features.nations.gui.item
 import net.horizonsend.ion.server.miscellaneous.registrations.NamespacedKeys.CUSTOM_ITEM
 import net.horizonsend.ion.server.miscellaneous.utils.Tasks
 import net.horizonsend.ion.server.miscellaneous.utils.map
@@ -69,7 +68,6 @@ import org.bukkit.Material.GOLDEN_HOE
 import org.bukkit.Material.IRON_HOE
 import org.bukkit.Material.POTION
 import org.bukkit.Material.PUMPKIN
-import org.bukkit.Material.WARPED_FUNGUS_ON_A_STICK
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Item
 import org.bukkit.entity.LivingEntity
@@ -135,7 +133,7 @@ object CustomItemRegistry : IonServerComponent() {
 		identifier = "STANDARD_MAGAZINE",
 		displayName = text("Standard Magazine").decoration(ITALIC, false),
 		itemFactory = unStackableCustomItem("weapon/blaster/standard_magazine"),
-		balancingSupplier = ConfigurationFiles.pvpBalancing().energyWeapons::standardMagazine
+		balancingSupplier = ConfigurationFiles.pvpBalancing().blasterWeapons::standardMagazine
 	)
 	)
 	val SPECIAL_MAGAZINE = register(
@@ -143,7 +141,7 @@ object CustomItemRegistry : IonServerComponent() {
 		identifier = "SPECIAL_MAGAZINE",
 		displayName = text("Special Magazine").decoration(ITALIC, false),
 		itemFactory = unStackableCustomItem("weapon/blaster/special_magazine"),
-		balancingSupplier = ConfigurationFiles.pvpBalancing().energyWeapons::specialMagazine
+		balancingSupplier = ConfigurationFiles.pvpBalancing().blasterWeapons::specialMagazine
 	)
 	)
 
@@ -152,7 +150,7 @@ object CustomItemRegistry : IonServerComponent() {
 		identifier = "BLASTER_PISTOL",
 		displayName = text("Blaster Pistol", RED, BOLD),
 		itemFactory = ItemFactory.builder().setMaterial(DIAMOND_HOE).setCustomModel("weapon/blaster/pistol").build(),
-		balancingSupplier = ConfigurationFiles.pvpBalancing().energyWeapons::pistol
+		balancingSupplier = ConfigurationFiles.pvpBalancing().blasterWeapons::pistol
 	)
 	)
 	val BLASTER_RIFLE = register(
@@ -160,14 +158,14 @@ object CustomItemRegistry : IonServerComponent() {
 		identifier = "BLASTER_RIFLE",
 		displayName = text("Blaster Rifle", RED, BOLD),
 		itemFactory = ItemFactory.builder().setMaterial(IRON_HOE).setCustomModel("weapon/blaster/rifle").build(),
-		balancingSupplier = ConfigurationFiles.pvpBalancing().energyWeapons::rifle
+		balancingSupplier = ConfigurationFiles.pvpBalancing().blasterWeapons::rifle
 	)
 	)
 	val SUBMACHINE_BLASTER = register(object : Blaster<Singleshot>(
 		identifier = "SUBMACHINE_BLASTER",
 		itemFactory = ItemFactory.builder().setMaterial(IRON_HOE).setCustomModel("weapon/blaster/submachine_blaster").build(),
 		displayName = text("Submachine Blaster", RED, BOLD).decoration(ITALIC, false),
-		balancingSupplier = ConfigurationFiles.pvpBalancing().energyWeapons::submachineBlaster
+		balancingSupplier = ConfigurationFiles.pvpBalancing().blasterWeapons::submachineBlaster
 	) {
 		// Allows fire above 300 rpm
 		override fun fire(shooter: LivingEntity, blasterItem: ItemStack) {
@@ -184,7 +182,7 @@ object CustomItemRegistry : IonServerComponent() {
 		identifier = "BLASTER_SHOTGUN",
 		displayName = text("Blaster Shotgun", RED, BOLD).decoration(ITALIC, false),
 		itemFactory = ItemFactory.builder().setMaterial(GOLDEN_HOE).setCustomModel("weapon/blaster/shotgun").build(),
-		balancingSupplier = ConfigurationFiles.pvpBalancing().energyWeapons::shotgun
+		balancingSupplier = ConfigurationFiles.pvpBalancing().blasterWeapons::shotgun
 	) {
 		override fun fireProjectiles(livingEntity: LivingEntity) {
 			repeat(balancing.shotCount) { super.fireProjectiles(livingEntity) }
@@ -195,7 +193,7 @@ object CustomItemRegistry : IonServerComponent() {
 		identifier = "BLASTER_SNIPER",
 		displayName = text("Blaster Sniper", RED, BOLD).decoration(ITALIC, false),
 		itemFactory = ItemFactory.builder().setMaterial(GOLDEN_HOE).setCustomModel("weapon/blaster/sniper").build(),
-		balancingSupplier = ConfigurationFiles.pvpBalancing().energyWeapons::sniper
+		balancingSupplier = ConfigurationFiles.pvpBalancing().blasterWeapons::sniper
 	)
 	)
 	val BLASTER_CANNON = register(
@@ -203,7 +201,7 @@ object CustomItemRegistry : IonServerComponent() {
 		identifier = "BLASTER_CANNON",
 		displayName = text("Blaster Cannon", RED, BOLD).decoration(ITALIC, false),
 		itemFactory = ItemFactory.builder().setMaterial(IRON_HOE).setCustomModel("weapon/blaster/cannon").build(),
-		balancingSupplier = ConfigurationFiles.pvpBalancing().energyWeapons::cannon
+		balancingSupplier = ConfigurationFiles.pvpBalancing().blasterWeapons::cannon
 	)
 	)
 	val EMPTY_SYRINGE = unStackable("EMPTY_SYRINGE", model = "consumable/empty_syringe", displayName = text("Empty Syringe"))
@@ -412,29 +410,68 @@ object CustomItemRegistry : IonServerComponent() {
 		model = "tool/power_hoe_advanced"
 	))
 
-	val POWER_ARMOR_HELMET = register(PowerArmorItem(
-		"POWER_ARMOR_HELMET",
-		ofChildren(text("Power ", GOLD), text("Helmet", GRAY)),
+	//Power Armours
+	//val POWER_ARMOR_HELMET = register(PowerArmorItem(
+	//	"POWER_ARMOR_HELMET",
+	//	ofChildren(text("Power ", GOLD), text("Helmet", GRAY)),
+	//	"power_armor/power_armor_helmet",
+	//	EquipmentSlot.HEAD
+	//))
+	//val POWER_ARMOR_CHESTPLATE = register(PowerArmorItem(
+	//	"POWER_ARMOR_CHESTPLATE",
+	//	ofChildren(text("Power ", GOLD), text("Chestplate", GRAY)),
+	//	"power_armor/power_armor_chestplate",
+	//	EquipmentSlot.CHEST
+	//))
+	//val POWER_ARMOR_LEGGINGS = register(PowerArmorItem(
+	//	"POWER_ARMOR_LEGGINGS",
+	//	ofChildren(text("Power ", GOLD), text("Leggings", GRAY)),
+	//	"power_armor/power_armor_leggings",
+	//	EquipmentSlot.LEGS
+	//))
+	//val POWER_ARMOR_BOOTS = register(PowerArmorItem(
+	//	"POWER_ARMOR_BOOTS",
+	//	ofChildren(text("Power ", GOLD), text("Boots", GRAY)),
+	//	"power_armor/power_armor_boots",
+	//	EquipmentSlot.FEET
+	//))
+
+	//Heavy Power Armour
+	val HEAVY_POWER_ARMOUR_HELMET = register(HeavyPowerArmourItem(
+		"HEAVY_POWER_ARMOR_HELMET",
+		ofChildren(text("Heavy Power ", RED), text("Helmet", GRAY)),
 		"power_armor/power_armor_helmet",
-		EquipmentSlot.HEAD
+		EquipmentSlot.HEAD,
+		2,
+		1,
+		balancingSupplier = ConfigurationFiles.pvpBalancing().armour::heavyPowerArmour.get()
 	))
-	val POWER_ARMOR_CHESTPLATE = register(PowerArmorItem(
-		"POWER_ARMOR_CHESTPLATE",
-		ofChildren(text("Power ", GOLD), text("Chestplate", GRAY)),
+	val HEAVY_POWER_ARMOUR_CHEST = register(HeavyPowerArmourItem(
+		"HEAVY_POWER_ARMOR_CHEST",
+		ofChildren(text("Heavy Power ", RED), text("Chest", GRAY)),
 		"power_armor/power_armor_chestplate",
-		EquipmentSlot.CHEST
+		EquipmentSlot.CHEST,
+		2,
+		1,
+		balancingSupplier = ConfigurationFiles.pvpBalancing().armour::heavyPowerArmour.get()
 	))
-	val POWER_ARMOR_LEGGINGS = register(PowerArmorItem(
-		"POWER_ARMOR_LEGGINGS",
-		ofChildren(text("Power ", GOLD), text("Leggings", GRAY)),
+	val HEAVY_POWER_ARMOUR_LEGGINGS = register(HeavyPowerArmourItem(
+		"HEAVY_POWER_ARMOR_LEGGINGS",
+		ofChildren(text("Heavy Power ", RED), text("Leggings", GRAY)),
 		"power_armor/power_armor_leggings",
-		EquipmentSlot.LEGS
+		EquipmentSlot.LEGS,
+		2,
+		1,
+		balancingSupplier = ConfigurationFiles.pvpBalancing().armour::heavyPowerArmour.get()
 	))
-	val POWER_ARMOR_BOOTS = register(PowerArmorItem(
-		"POWER_ARMOR_BOOTS",
-		ofChildren(text("Power ", GOLD), text("Boots", GRAY)),
+	val HEAVY_POWER_ARMOUR_BOOTS = register(HeavyPowerArmourItem(
+		"HEAVY_POWER_ARMOR_BOOTS",
+		ofChildren(text("Heavy Power ", RED), text("Boots", GRAY)),
 		"power_armor/power_armor_boots",
-		EquipmentSlot.FEET
+		EquipmentSlot.FEET,
+		2,
+		1,
+		balancingSupplier = ConfigurationFiles.pvpBalancing().armour::heavyPowerArmour.get()
 	))
 
 	val ENERGY_SWORD_BLUE = register(EnergySword("BLUE", BLUE))
@@ -482,6 +519,14 @@ object CustomItemRegistry : IonServerComponent() {
 		ofChildren(Component.text("Speed Boosting", GRAY), Component.text(" Module", GOLD)),
 		text("Boosts the user's running speed.")
 	) { ItemModRegistry.SPEED_BOOSTING })
+
+	//Secondary Armor Modifacations
+	val ARMOR_MODIFICATION_ARMOR_BOOST: ModificationItem = register(ModificationItem(
+		"ARMOR_MODIFICATION_ARMOR_BOOST",
+		"power_armor/module/armor_boost",
+		ofChildren(Component.text("Armor Boost", GRAY), Component.text(" Module", GOLD)),
+		ofChildren(text("Allows the user to survive inhospitable planetary enviornments."), text(" Secondary Module", GRAY))
+	) { ItemModRegistry.ARMOR_BOOST })
 
 	val RANGE_1: ModificationItem = register(ModificationItem(
 		"TOOL_MODIFICATION_RANGE_1",

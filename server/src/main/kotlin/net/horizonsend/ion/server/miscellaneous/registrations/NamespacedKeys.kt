@@ -78,6 +78,7 @@ object NamespacedKeys {
 	val HYPERSPACE_BLOCKS_TRAVELED = key("hyperspace_blocks_traveled")
 
 	val TOOL_MODIFICATIONS = key("tool_modifications")
+	val SECONDARY_TOOL_MODIFICATIONS = key("secondary_tool_modifications")
 
 	val FORBIDDEN_BLOCKS = key("forbidden_blocks")
 	val CARGO_CRATE = key("cargo_crate")

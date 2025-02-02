@@ -55,7 +55,7 @@ object ItemDebugCommand : SLCommand() {
 		failIf(!customItem.hasComponent(MOD_MANAGER)) { "${item.customItem?.identifier} is not moddable" }
 		val modManger = customItem.getComponent(MOD_MANAGER)
 
-		sender.information("MODS: " + modManger.getMods(item).joinToString { it.identifier })
+		sender.information("MODS: " + modManger.getAllMods(item).joinToString { it.identifier })
 	}
 
 	@Subcommand("addmod")

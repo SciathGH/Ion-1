@@ -33,7 +33,11 @@ object SilkTouchSource : ItemModification, DropSource {
 	override val applicationPredicates: Array<ApplicationPredicate> = arrayOf(
 		ApplicationPredicate.ClassPredicate(PowerDrill::class),
 		ApplicationPredicate.ClassPredicate(PowerChainsaw::class)
+
 	)
+
+	override val primaryOrSecondary: ItemModification.PrimaryOrSecondary = ItemModification.PrimaryOrSecondary.PRIMARY
+
 
 	override val incompatibleWithMods: Array<KClass<out ItemModification>> = arrayOf(FortuneModifier::class, SilkTouchSource::class)
 	override val shouldDropXP: Boolean = false

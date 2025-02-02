@@ -8,8 +8,8 @@ import net.horizonsend.ion.server.features.custom.items.component.CustomComponen
 import net.horizonsend.ion.server.features.custom.items.type.armor.PowerArmorItem
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.ItemModRegistry
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.ItemModification
-import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.RocketBoostingMod.glideDisabledPlayers
-import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.RocketBoostingMod.setGliding
+import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.RocketBoostingMod.glideDisabledPlayers
+import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.RocketBoostingMod.setGliding
 import net.horizonsend.ion.server.features.starship.active.ActiveStarships
 import net.horizonsend.ion.server.features.world.IonWorld.Companion.hasFlag
 import net.horizonsend.ion.server.features.world.WorldFlag
@@ -95,7 +95,7 @@ object PowerArmorListener : SLEventListener() {
 				powerStorage.removePower(item, customItem, 100)
 			}
 
-			for (module in customItem.getComponent(CustomComponentTypes.MOD_MANAGER).getMods(item)) {
+			for (module in customItem.getComponent(CustomComponentTypes.MOD_MANAGER).getPrimaryMods(item)) {
 				modules[module] = item
 			}
 		}
@@ -135,7 +135,7 @@ object PowerArmorListener : SLEventListener() {
 		val customItem = boots.customItem
 		if (customItem !is PowerArmorItem) return
 
-		val mods = customItem.getComponent(CustomComponentTypes.MOD_MANAGER).getMods(boots)
+		val mods = customItem.getComponent(CustomComponentTypes.MOD_MANAGER).getPrimaryMods(boots)
 		if (!mods.contains(ItemModRegistry.ROCKET_BOOSTING)) return
 
 		val power = customItem.getComponent(POWER_STORAGE).getPower(boots)
@@ -152,7 +152,7 @@ object PowerArmorListener : SLEventListener() {
 			val customItem = item?.customItem ?: continue
 
 			if (customItem.hasComponent(CustomComponentTypes.MOD_MANAGER)) return continue
-			val mods = customItem.getComponent(CustomComponentTypes.MOD_MANAGER).getMods(item)
+			val mods = customItem.getComponent(CustomComponentTypes.MOD_MANAGER).getPrimaryMods(item)
 
 			if (!mods.contains(ItemModRegistry.SHOCK_ABSORBING)) return continue
 

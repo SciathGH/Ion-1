@@ -2,6 +2,7 @@ package net.horizonsend.ion.server.features.custom.items.type.weapon.blaster
 
 import io.papermc.paper.datacomponent.DataComponentTypes
 import io.papermc.paper.datacomponent.item.ItemAttributeModifiers
+import io.papermc.paper.entity.LookAnchor
 import net.horizonsend.ion.common.database.cache.nations.NationCache
 import net.horizonsend.ion.common.database.schema.misc.SLPlayer
 import net.horizonsend.ion.common.extensions.alert
@@ -9,7 +10,7 @@ import net.horizonsend.ion.common.extensions.userError
 import net.horizonsend.ion.common.utils.miscellaneous.randomDouble
 import net.horizonsend.ion.common.utils.text.template
 import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration
-import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.EnergyWeapons.Balancing
+import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration.BlasterWeapons.Balancing
 import net.horizonsend.ion.server.features.custom.items.CustomItem
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.customItem
@@ -24,6 +25,7 @@ import net.horizonsend.ion.server.features.world.IonWorld.Companion.hasFlag
 import net.horizonsend.ion.server.features.world.IonWorld.Companion.ion
 import net.horizonsend.ion.server.features.world.WorldFlag
 import net.horizonsend.ion.server.miscellaneous.utils.Tasks
+import net.horizonsend.ion.server.miscellaneous.utils.alongVector
 import net.horizonsend.ion.server.miscellaneous.utils.updateData
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.key.Key.key
@@ -36,12 +38,15 @@ import org.bukkit.Color
 import org.bukkit.Color.fromRGB
 import org.bukkit.Particle.DUST
 import org.bukkit.Particle.DustOptions
+import org.bukkit.craftbukkit.entity.CraftPlayer
+import org.bukkit.entity.Flying
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 import java.util.function.Supplier
+
 
 open class Blaster<T : Balancing>(
 	identifier: String,
@@ -53,6 +58,7 @@ open class Blaster<T : Balancing>(
 	displayName,
 	itemFactory,
 ) {
+	//todo add zoom in for Snipers
 	val balancing get() = balancingSupplier.get()
 
 	val ammoComponent = AmmunitionStorage(balancingSupplier)
@@ -79,9 +85,9 @@ open class Blaster<T : Balancing>(
 				if (customItem is Blaster<*>){
 					if (customItem.ammoComponent.getAmmo(i)==0) continue
 					when(customItem.balancingSupplier.get().type){
-						PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.PRIMARY -> primaryCount++
-						PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.SECONDARY -> secondaryCount++
-						PVPBalancingConfiguration.EnergyWeapons.WeaponTypeEnum.TERTIARY -> tertiaryCount++
+						PVPBalancingConfiguration.WeaponTypeEnum.PRIMARY -> primaryCount++
+						PVPBalancingConfiguration.WeaponTypeEnum.SECONDARY -> secondaryCount++
+						PVPBalancingConfiguration.WeaponTypeEnum.TERTIARY -> tertiaryCount++
 						else -> {}
 					}
 				}
@@ -164,6 +170,7 @@ open class Blaster<T : Balancing>(
 		}
 
 		fireProjectiles(shooter)
+		recoil(shooter)
 	}
 
 	open fun fireProjectiles(livingEntity: LivingEntity) {
@@ -274,5 +281,26 @@ open class Blaster<T : Balancing>(
 
 	fun sendActionBarAmmo(audience: Audience, count: Int) {
 		audience.sendActionBar(template(text("Ammo: {0} / {1}", RED), count.coerceIn(0, balancing.capacity), balancing.capacity))
+	}
+
+	fun recoil(livingEntity: LivingEntity){
+		val recoil = balancing.recoil / balancing.packetsPerShot
+
+		for (iteration in 1..balancing.packetsPerShot) {
+			if (livingEntity is Flying) return
+
+			Tasks.asyncDelay(iteration.toLong()) {
+				val loc = livingEntity.location
+				loc.pitch -= recoil
+				sendLookPacket(livingEntity, loc.pitch)
+			}
+		}
+	}
+	private fun sendLookPacket(player: LivingEntity, pitch: Float) {
+		val location2InFront = player.eyeLocation.alongVector(player.eyeLocation.direction.multiply(100), 1).last()
+		val x = location2InFront.x
+		val y = location2InFront.y + balancing.recoil
+		val z = location2InFront.z
+		player.lookAt(x, y, z, LookAnchor.EYES)
 	}
 }

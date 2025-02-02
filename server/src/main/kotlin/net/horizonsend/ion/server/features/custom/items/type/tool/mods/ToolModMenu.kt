@@ -31,7 +31,7 @@ class ToolModMenu(
 	private val customItem: CustomItem,
 	private val modManager: ModManager
 ) : InventoryHolder {
-	private val inventorySize = (ceil((modManager.getMods(itemStack).size + 1).toDouble() / 9.0) * 9).toInt()
+	private val inventorySize = (ceil((modManager.getAllMods(itemStack).size + 1).toDouble() / 9.0) * 9).toInt()
 	private val internalInventory = IonServer.server.createInventory(this, inventorySize)
 
 	override fun getInventory(): Inventory = internalInventory
@@ -52,7 +52,7 @@ class ToolModMenu(
 	}
 
 	private fun populateMods() {
-		val mods = modManager.getMods(itemStack)
+		val mods = modManager.getAllMods(itemStack)
 
 		var index = 0
 		for (mod in mods) {
@@ -68,10 +68,10 @@ class ToolModMenu(
 	}
 
 	private fun rebuildFromContents(contents: Collection<ItemStack?>) {
-		val existingMods = modManager.getMods(itemStack).toMutableList()
+		val existingMods = modManager.getAllMods(itemStack).toMutableList()
 
 		val nonItemMods = modManager
-			.getMods(itemStack)
+			.getAllMods(itemStack)
 			.filter { it.modItem.get() == null }
 
 		val mods = contents
@@ -89,8 +89,10 @@ class ToolModMenu(
 		// Remove all the mods that still are present
 		existingMods.removeAll(mods.toSet())
 
-		modManager.setMods(itemStack, customItem, mods)
-
+		val primaryMods = mods.filter { it.primaryOrSecondary == ItemModification.PrimaryOrSecondary.PRIMARY }.toTypedArray()
+		val secondaryMods = mods.filter { it.primaryOrSecondary == ItemModification.PrimaryOrSecondary.SECONDARY }.toTypedArray()
+		modManager.setPrimaryMods(itemStack, customItem, primaryMods)
+		modManager.setSecondaryMods(itemStack, customItem, secondaryMods)
 		// Handle the removal / addition of mods
 		existingMods.forEach { it.onRemove(itemStack) }
 		newMods.forEach { it.onAdd(itemStack) }
@@ -204,12 +206,17 @@ class ToolModMenu(
 			return false
 		}
 
-		if (this.modManager.getMods(this.itemStack).size >= this.modManager.maxMods) {
-			player.userError("Mod limit reached!")
+		if (this.modManager.getPrimaryMods(this.itemStack).size >= this.modManager.maxPrimaryMods && customItem.modification.primaryOrSecondary == ItemModification.PrimaryOrSecondary.PRIMARY){
+			player.userError("Primary Mod limit reached!")
 			return false
 		}
 
-		return this.modManager.getMods(this.itemStack).none { existingMod ->
+		if (this.modManager.getSecondaryMods(this.itemStack).size >= (this.modManager.maxSecondaryMods ?: 0) && customItem.modification.primaryOrSecondary == ItemModification.PrimaryOrSecondary.SECONDARY) {
+			player.userError("Secondary Mod limit reached!")
+			return false
+		}
+
+		return this.modManager.getAllMods(this.itemStack).none { existingMod ->
 			val incompatible = existingMod.incompatibleWithMods.contains(mod::class)
 
 			if (incompatible) {

@@ -49,7 +49,7 @@ class PowerHoe(identifier: String, displayName: Component, modLimit: Int, basePo
 		val block = event.clickedBlock ?: return
 
 		val modManager = getComponent(CustomComponentTypes.MOD_MANAGER)
-		val mods = modManager.getMods(itemStack)
+		val mods = modManager.getPrimaryMods(itemStack)
 
 		// If targeting a crop, harvest it
 		if (Crop[block.type] != null) return tryHarvest(player, mods, itemStack, block)
@@ -63,7 +63,7 @@ class PowerHoe(identifier: String, displayName: Component, modLimit: Int, basePo
 		val block = event.clickedBlock ?: return
 
 		val modManager = getComponent(CustomComponentTypes.MOD_MANAGER)
-		val mods = modManager.getMods(itemStack)
+		val mods = modManager.getPrimaryMods(itemStack)
 
 		tryHarvest(livingEntity, mods, itemStack, block)
 	}
@@ -223,7 +223,7 @@ class PowerHoe(identifier: String, displayName: Component, modLimit: Int, basePo
 		val blockList = mutableListOf(origin)
 		val modManager = getComponent(CustomComponentTypes.MOD_MANAGER)
 
-		val mods = modManager.getMods(itemStack)
+		val mods = modManager.getPrimaryMods(itemStack)
 
 		mods.filterNot { it.crouchingDisables && player.isSneaking }
 			.filterIsInstance<net.horizonsend.ion.server.features.custom.items.type.tool.mods.tool.BlockListModifier>()

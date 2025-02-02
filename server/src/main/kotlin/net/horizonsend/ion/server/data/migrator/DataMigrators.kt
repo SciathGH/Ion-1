@@ -211,90 +211,91 @@ object DataMigrators : IonServerComponent() {
 				},
 				converter = { MigratorResult.Replacement(CustomItemRegistry.BATTERY_G.constructItemStack(it.amount)) }
 			))
-			.addMigrator(LegacyCustomItemMigrator(
-				predicate = {
-					it.type == Material.LEATHER_HELMET
-						&& it.itemMeta.hasCustomModelData()
-						&& it.itemMeta.customModelData == 1
-						&& it.customItem == null
-				},
-				converter = { old ->
-					@Suppress("DEPRECATION")
-					val oldMods = old.lore
-						?.filter { it.startsWith("Module: ") }
-						?.mapNotNull { LegacyPowerArmorModule[it.split(" ")[1]]?.modern?.get() }
-						?.toSet()
-						?: setOf()
-
-					val new = CustomItemRegistry.POWER_ARMOR_HELMET.constructItemStack()
-					CustomItemRegistry.POWER_ARMOR_HELMET.getComponent(MOD_MANAGER).setMods(new, CustomItemRegistry.POWER_ARMOR_HELMET, oldMods.toTypedArray())
-					old.getData(DataComponentTypes.DYED_COLOR)?.let { color -> new.setData(DataComponentTypes.DYED_COLOR, color) }
-					MigratorResult.Replacement(new)
-				}
-			))
-			.addMigrator(LegacyCustomItemMigrator(
-				predicate = {
-					it.type == Material.LEATHER_CHESTPLATE
-						&& it.itemMeta.hasCustomModelData()
-						&& it.itemMeta.customModelData == 1
-						&& it.customItem == null
-				},
-				converter = { old ->
-					@Suppress("DEPRECATION")
-					val oldMods = old.lore
-						?.filter { it.startsWith("Module: ") }
-						?.mapNotNull { LegacyPowerArmorModule[it.split(" ")[1]]?.modern?.get() }
-						?.toSet()
-						?: setOf()
-
-					val new = CustomItemRegistry.POWER_ARMOR_CHESTPLATE.constructItemStack()
-					CustomItemRegistry.POWER_ARMOR_CHESTPLATE.getComponent(MOD_MANAGER).setMods(new, CustomItemRegistry.POWER_ARMOR_CHESTPLATE, oldMods.toTypedArray())
-					old.getData(DataComponentTypes.DYED_COLOR)?.let { color -> new.setData(DataComponentTypes.DYED_COLOR, color) }
-					MigratorResult.Replacement(new)
-				}
-			))
-			.addMigrator(LegacyCustomItemMigrator(
-				predicate = {
-					it.type == Material.LEATHER_LEGGINGS
-						&& it.itemMeta.hasCustomModelData()
-						&& it.itemMeta.customModelData == 1
-						&& it.customItem == null
-				},
-				converter = { old ->
-					@Suppress("DEPRECATION")
-					val oldMods = old.lore
-						?.filter { it.startsWith("Module: ") }
-						?.mapNotNull { LegacyPowerArmorModule[it.split(" ")[1]]?.modern?.get() }
-						?.toSet()
-						?: setOf()
-
-					val new = CustomItemRegistry.POWER_ARMOR_LEGGINGS.constructItemStack()
-					CustomItemRegistry.POWER_ARMOR_LEGGINGS.getComponent(MOD_MANAGER).setMods(new, CustomItemRegistry.POWER_ARMOR_LEGGINGS, oldMods.toTypedArray())
-					old.getData(DataComponentTypes.DYED_COLOR)?.let { color -> new.setData(DataComponentTypes.DYED_COLOR, color) }
-					MigratorResult.Replacement(new)
-				}
-			))
-			.addMigrator(LegacyCustomItemMigrator(
-				predicate = {
-					it.type == Material.LEATHER_BOOTS
-						&& it.itemMeta.hasCustomModelData()
-						&& it.itemMeta.customModelData == 1
-						&& it.customItem == null
-				},
-				converter = { old ->
-					@Suppress("DEPRECATION")
-					val oldMods = old.lore
-						?.filter { it.startsWith("Module: ") }
-						?.mapNotNull { LegacyPowerArmorModule[it.split(" ")[1]]?.modern?.get() }
-						?.toSet()
-						?: setOf()
-
-					val new = CustomItemRegistry.POWER_ARMOR_BOOTS.constructItemStack()
-					CustomItemRegistry.POWER_ARMOR_BOOTS.getComponent(MOD_MANAGER).setMods(new, CustomItemRegistry.POWER_ARMOR_BOOTS, oldMods.toTypedArray())
-					old.getData(DataComponentTypes.DYED_COLOR)?.let { color -> new.setData(DataComponentTypes.DYED_COLOR, color) }
-					MigratorResult.Replacement(new)
-				}
-			))
+			//todo add new migrators for power armour
+			//.addMigrator(LegacyCustomItemMigrator(
+			//	predicate = {
+			//		it.type == Material.LEATHER_HELMET
+			//			&& it.itemMeta.hasCustomModelData()
+			//			&& it.itemMeta.customModelData == 1
+			//			&& it.customItem == null
+			//	},
+			//	converter = { old ->
+			//		@Suppress("DEPRECATION")
+			//		val oldMods = old.lore
+			//			?.filter { it.startsWith("Module: ") }
+			//			?.mapNotNull { LegacyPowerArmorModule[it.split(" ")[1]]?.modern?.get() }
+			//			?.toSet()
+			//			?: setOf()
+//
+			//		val new = CustomItemRegistry.POWER_ARMOR_HELMET.constructItemStack()
+			//		CustomItemRegistry.POWER_ARMOR_HELMET.getComponent(MOD_MANAGER).setMods(new, CustomItemRegistry.POWER_ARMOR_HELMET, oldMods.toTypedArray())
+			//		old.getData(DataComponentTypes.DYED_COLOR)?.let { color -> new.setData(DataComponentTypes.DYED_COLOR, color) }
+			//		MigratorResult.Replacement(new)
+			//	}
+			//))
+			//.addMigrator(LegacyCustomItemMigrator(
+			//	predicate = {
+			//		it.type == Material.LEATHER_CHESTPLATE
+			//			&& it.itemMeta.hasCustomModelData()
+			//			&& it.itemMeta.customModelData == 1
+			//			&& it.customItem == null
+			//	},
+			//	converter = { old ->
+			//		@Suppress("DEPRECATION")
+			//		val oldMods = old.lore
+			//			?.filter { it.startsWith("Module: ") }
+			//			?.mapNotNull { LegacyPowerArmorModule[it.split(" ")[1]]?.modern?.get() }
+			//			?.toSet()
+			//			?: setOf()
+//
+			//		val new = CustomItemRegistry.POWER_ARMOR_CHESTPLATE.constructItemStack()
+			//		CustomItemRegistry.POWER_ARMOR_CHESTPLATE.getComponent(MOD_MANAGER).setMods(new, CustomItemRegistry.POWER_ARMOR_CHESTPLATE, oldMods.toTypedArray())
+			//		old.getData(DataComponentTypes.DYED_COLOR)?.let { color -> new.setData(DataComponentTypes.DYED_COLOR, color) }
+			//		MigratorResult.Replacement(new)
+			//	}
+			//))
+			//.addMigrator(LegacyCustomItemMigrator(
+			//	predicate = {
+			//		it.type == Material.LEATHER_LEGGINGS
+			//			&& it.itemMeta.hasCustomModelData()
+			//			&& it.itemMeta.customModelData == 1
+			//			&& it.customItem == null
+			//	},
+			//	converter = { old ->
+			//		@Suppress("DEPRECATION")
+			//		val oldMods = old.lore
+			//			?.filter { it.startsWith("Module: ") }
+			//			?.mapNotNull { LegacyPowerArmorModule[it.split(" ")[1]]?.modern?.get() }
+			//			?.toSet()
+			//			?: setOf()
+//
+			//		val new = CustomItemRegistry.POWER_ARMOR_LEGGINGS.constructItemStack()
+			//		CustomItemRegistry.POWER_ARMOR_LEGGINGS.getComponent(MOD_MANAGER).setMods(new, CustomItemRegistry.POWER_ARMOR_LEGGINGS, oldMods.toTypedArray())
+			//		old.getData(DataComponentTypes.DYED_COLOR)?.let { color -> new.setData(DataComponentTypes.DYED_COLOR, color) }
+			//		MigratorResult.Replacement(new)
+			//	}
+			//))
+			//.addMigrator(LegacyCustomItemMigrator(
+			//	predicate = {
+			//		it.type == Material.LEATHER_BOOTS
+			//			&& it.itemMeta.hasCustomModelData()
+			//			&& it.itemMeta.customModelData == 1
+			//			&& it.customItem == null
+			//	},
+			//	converter = { old ->
+			//		@Suppress("DEPRECATION")
+			//		val oldMods = old.lore
+			//			?.filter { it.startsWith("Module: ") }
+			//			?.mapNotNull { LegacyPowerArmorModule[it.split(" ")[1]]?.modern?.get() }
+			//			?.toSet()
+			//			?: setOf()
+//
+			//		val new = CustomItemRegistry.POWER_ARMOR_BOOTS.constructItemStack()
+			//		CustomItemRegistry.POWER_ARMOR_BOOTS.getComponent(MOD_MANAGER).setMods(new, CustomItemRegistry.POWER_ARMOR_BOOTS, oldMods.toTypedArray())
+			//		old.getData(DataComponentTypes.DYED_COLOR)?.let { color -> new.setData(DataComponentTypes.DYED_COLOR, color) }
+			//		MigratorResult.Replacement(new)
+			//	}
+			//))
 			.addMigrator(LegacyCustomItemMigrator(
 				predicate = {
 					(it.type == Material.FLINT_AND_STEEL)

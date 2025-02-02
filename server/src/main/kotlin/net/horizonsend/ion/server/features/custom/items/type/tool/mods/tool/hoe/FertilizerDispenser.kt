@@ -28,6 +28,7 @@ object FertilizerDispenser : ItemModification {
 	override val modItem: Supplier<ModificationItem?> = Supplier { CustomItemRegistry.FERTILIZER_DISPENSER }
 
 	override val crouchingDisables: Boolean = true
+	override val primaryOrSecondary: ItemModification.PrimaryOrSecondary = ItemModification.PrimaryOrSecondary.PRIMARY
 
 	fun fertilizeCrop(player: Player, block: Block): Boolean {
 		if (!player.inventory.contains(Material.BONE_MEAL)) return false

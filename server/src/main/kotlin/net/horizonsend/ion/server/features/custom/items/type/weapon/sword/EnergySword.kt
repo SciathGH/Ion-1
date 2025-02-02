@@ -10,7 +10,6 @@ import net.horizonsend.ion.server.features.custom.items.component.BlockAmountCom
 import net.horizonsend.ion.server.features.custom.items.component.CustomComponentTypes
 import net.horizonsend.ion.server.features.custom.items.component.CustomItemComponentManager
 import net.horizonsend.ion.server.features.custom.items.component.Listener.Companion.damageEntityListener
-import net.horizonsend.ion.server.features.custom.items.component.Listener.Companion.damagedHoldingListener
 import net.horizonsend.ion.server.features.custom.items.component.Listener.Companion.holdingListener
 import net.horizonsend.ion.server.features.custom.items.component.Listener.Companion.leftClickListener
 import net.horizonsend.ion.server.features.custom.items.component.Listener.Companion.playerSwapHandsListener
@@ -19,28 +18,19 @@ import net.horizonsend.ion.server.features.custom.items.component.Listener.Compa
 import net.horizonsend.ion.server.features.custom.items.util.ItemFactory
 import net.horizonsend.ion.server.features.custom.items.util.StoredValues
 import net.horizonsend.ion.server.miscellaneous.registrations.NamespacedKeys
-import net.horizonsend.ion.server.miscellaneous.utils.Tasks
 import net.kyori.adventure.key.Key.key
 import net.kyori.adventure.sound.Sound
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.NamedTextColor.YELLOW
 import net.kyori.adventure.text.format.TextColor
-import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.GameMode
-import org.bukkit.Material
 import org.bukkit.Material.SHIELD
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
-import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.inventory.EquipmentSlotGroup
 import org.bukkit.inventory.ItemStack
-import org.bukkit.persistence.PersistentDataType
-import java.util.concurrent.TimeUnit
-import kotlin.math.roundToInt
 
 class EnergySword(type: String, color: TextColor) : CustomItem(
 	"ENERGY_SWORD_${type.uppercase()}",
@@ -56,7 +46,7 @@ class EnergySword(type: String, color: TextColor) : CustomItem(
 			.build())
 		.build()
 ) {
-	val balancing = ConfigurationFiles.pvpBalancing().energyWeapons::energySwordBalancing.get()
+	val balancing = ConfigurationFiles.pvpBalancing().meleeWeapons::energySwordBalancing.get()
 
 	val blockComponent = BlockAmountComponent(balancing)
 

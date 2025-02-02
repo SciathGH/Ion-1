@@ -61,10 +61,6 @@ import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.HEALT
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.MOTHERBOARD
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.NETHERITE_CASING
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.PISTOL_RECEIVER
-import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.POWER_ARMOR_BOOTS
-import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.POWER_ARMOR_CHESTPLATE
-import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.POWER_ARMOR_HELMET
-import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.POWER_ARMOR_LEGGINGS
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.POWER_CAPACITY_25
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.POWER_CAPACITY_50
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.POWER_CHAINSAW_ADVANCED
@@ -763,10 +759,11 @@ object Crafting : IonServerComponent() {
 			setIngredient('*', TITANIUM_INGOT)
 			setIngredient('b', BATTERY_G)
 		}
-		registerArmorRecipe(POWER_ARMOR_HELMET, "*b*", "* *")
-		registerArmorRecipe(POWER_ARMOR_CHESTPLATE, "* *", "*b*", "***")
-		registerArmorRecipe(POWER_ARMOR_LEGGINGS, "*b*", "* *", "* *")
-		registerArmorRecipe(POWER_ARMOR_BOOTS, "* *", "*b*")
+		//todo re-add crafting recipes
+		//registerArmorRecipe(POWER_ARMOR_HELMET, "*b*", "* *")
+		//registerArmorRecipe(POWER_ARMOR_CHESTPLATE, "* *", "*b*", "***")
+		//registerArmorRecipe(POWER_ARMOR_LEGGINGS, "*b*", "* *", "* *")
+		//registerArmorRecipe(POWER_ARMOR_BOOTS, "* *", "*b*")
 
 		fun registerPowerArmorModule(result: ModificationItem, center: RecipeChoice) = shaped(result.identifier.lowercase(), result.constructItemStack()) {
 			shape("aga", "g*g", "aga")

@@ -15,6 +15,8 @@ interface ItemModification {
 
 	val crouchingDisables: Boolean
 
+	val primaryOrSecondary: PrimaryOrSecondary
+
 	/** Logic to be run when this mod is added to a tool */
 	fun onAdd(itemStack: ItemStack) {}
 
@@ -22,4 +24,9 @@ interface ItemModification {
 	fun onRemove(itemStack: ItemStack) {}
 
 	fun getAttributes(): List<CustomItemAttribute>
+
+	enum class PrimaryOrSecondary{
+		PRIMARY,
+		SECONDARY
+	}
 }

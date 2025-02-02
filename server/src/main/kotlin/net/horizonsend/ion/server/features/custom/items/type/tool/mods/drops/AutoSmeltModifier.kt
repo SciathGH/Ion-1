@@ -46,6 +46,8 @@ object AutoSmeltModifier : ItemModification, DropModifier {
 	override val modItem: Supplier<ModificationItem?> = Supplier { CustomItemRegistry.AUTO_SMELT }
 
 	override val priority: Int = 1
+	override val primaryOrSecondary: ItemModification.PrimaryOrSecondary = ItemModification.PrimaryOrSecondary.PRIMARY
+
 
 	override fun modifyDrop(itemStack: ItemStack): Boolean {
 		val customItem = itemStack.customItem

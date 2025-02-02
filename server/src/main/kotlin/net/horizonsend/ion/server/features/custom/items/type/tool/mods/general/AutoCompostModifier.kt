@@ -34,6 +34,7 @@ object AutoCompostModifier : ItemModification, DropModifier {
 	override val crouchingDisables: Boolean = false
 
 	override val priority: Int = 1
+	override val primaryOrSecondary: ItemModification.PrimaryOrSecondary = ItemModification.PrimaryOrSecondary.PRIMARY
 
 	override fun modifyDrop(itemStack: ItemStack): Boolean {
 		val nms = CraftItemStack.asNMSCopy(itemStack)
