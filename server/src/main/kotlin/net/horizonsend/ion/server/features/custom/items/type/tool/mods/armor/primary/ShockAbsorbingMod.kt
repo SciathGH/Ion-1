@@ -21,7 +21,7 @@ object ShockAbsorbingMod : ItemModification {
 	override val modItem: Supplier<ModificationItem?> = Supplier { CustomItemRegistry.ARMOR_MODIFICATION_SHOCK_ABSORBING }
 	override val crouchingDisables: Boolean = false
 	override val identifier: String = "SHOCK_ABSORBING"
-	override val displayName: Component = ofChildren(Component.text("Shock Absorbing", GRAY), Component.text(" Module", GOLD), Component.newline(), Component.text(" Primary Module", NamedTextColor.DARK_GRAY))
+	override val displayName: Component = ofChildren(Component.text("Shock Absorbing", GRAY), Component.text(" Module", GOLD), Component.text(" Primary Module", NamedTextColor.DARK_GRAY))
 	override val primaryOrSecondary: ItemModification.PrimaryOrSecondary = ItemModification.PrimaryOrSecondary.PRIMARY
 
 	override fun getAttributes(): List<CustomItemAttribute> = listOf()

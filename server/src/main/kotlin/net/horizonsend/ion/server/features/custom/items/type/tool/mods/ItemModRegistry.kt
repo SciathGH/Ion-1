@@ -7,8 +7,8 @@ import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.pri
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.PressureFieldMod
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.RocketBoostingMod
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.ShockAbsorbingMod
-import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.SpeedBoostingMod
-import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.secondary.ArmourBoostMod
+import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.secondary.SpeedBoostingMod
+import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.secondary.ArmorBoostMod
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.drops.AutoSmeltModifier
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.drops.FortuneModifier
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.drops.SilkTouchSource
@@ -66,7 +66,7 @@ object ItemModRegistry {
 	val SHOCK_ABSORBING = registerMod(ShockAbsorbingMod)
 	val SPEED_BOOSTING = registerMod(SpeedBoostingMod)
 	//Armor Secondary
-	val ARMOR_BOOST = registerMod(ArmourBoostMod)
+	val ARMOR_BOOST = registerMod(ArmorBoostMod)
 
 
 	private fun <T: ItemModification> registerMod(mod: T): T {

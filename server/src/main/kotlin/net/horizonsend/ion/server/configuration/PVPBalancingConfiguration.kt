@@ -95,7 +95,7 @@ data class PVPBalancingConfiguration(
 			flyingSpeed = 0.0,
 			canDoubleJump = false,
 			canRocketBoot = true,
-			gravity = 0.0,
+			gravity = -0.005,
 			oxygenBonus = 0.0,
 			waterMovementEfficiency = 0.0,
 		)
@@ -156,7 +156,10 @@ data class PVPBalancingConfiguration(
 			refillType = "minecraft:lapis_lazuli",
 			type = WeaponTypeEnum.TERTIARY,
 			blockbreakAmount = 0.3,
-			switchToTimeTicks = 0
+			switchToTimeTicks = 0,
+			shouldHaveCameraOverlay = false,
+			cameraOverlay = "",
+			zoomEffect = 0.0
 		),
 		val rifle: Singleshot = Singleshot(
 			damage = 17.2,
@@ -189,7 +192,10 @@ data class PVPBalancingConfiguration(
 			refillType = "minecraft:lapis_lazuli",
 			type = WeaponTypeEnum.SECONDARY,
 			blockbreakAmount = 0.5,
-			switchToTimeTicks = 0
+			switchToTimeTicks = 0,
+			shouldHaveCameraOverlay = false,
+			cameraOverlay = "",
+			zoomEffect = 0.0
 		),
 		val submachineBlaster: Singleshot = Singleshot(
 			damage = 9.375,
@@ -222,17 +228,20 @@ data class PVPBalancingConfiguration(
 			refillType = "minecraft:lapis_lazuli",
 			type = WeaponTypeEnum.SECONDARY,
 			blockbreakAmount = 1.0,
-			switchToTimeTicks = 0
+			switchToTimeTicks = 0,
+			shouldHaveCameraOverlay = false,
+			cameraOverlay = "",
+			zoomEffect = 0.0
 		),
 		val sniper: Singleshot = Singleshot(
 			damage = 37.5,
 			damageFalloffMultiplier = 30.0,
 			capacity = 5,
 			ammoPerRefill = 20,
-			packetsPerShot = 5,
+			packetsPerShot = 3,
 			pitch = 0f,
 			range = 160.0,
-			recoil = 10.0f,
+			recoil = 2.5f,
 			reload = 120,
 			shotSize = 0.0625,
 			shouldAkimbo = false,
@@ -255,7 +264,10 @@ data class PVPBalancingConfiguration(
 			refillType = "minecraft:emerald",
 			type = WeaponTypeEnum.PRIMARY,
 			blockbreakAmount = 4.0,
-			switchToTimeTicks = 5
+			switchToTimeTicks = 5,
+			shouldHaveCameraOverlay = true,
+			cameraOverlay = "misc/spyglass_scope",
+			zoomEffect = -4.0
 		),
 		val shotgun: Multishot = Multishot(
 			damage = 11.0,
@@ -291,7 +303,10 @@ data class PVPBalancingConfiguration(
 			refillType = "minecraft:emerald",
 			type = WeaponTypeEnum.PRIMARY,
 			blockbreakAmount = 1.5,
-			switchToTimeTicks = 5
+			switchToTimeTicks = 5,
+			shouldHaveCameraOverlay = false,
+			cameraOverlay = "",
+			zoomEffect = 0.0
 		),
 
 		val cannon: Singleshot = Singleshot(
@@ -327,7 +342,10 @@ data class PVPBalancingConfiguration(
 			refillType = "minecraft:lapis_lazuli",
 			type = WeaponTypeEnum.TERTIARY,
 			blockbreakAmount = 0.0,
-			switchToTimeTicks = 0
+			switchToTimeTicks = 0,
+			shouldHaveCameraOverlay = false,
+			cameraOverlay = "",
+			zoomEffect = 0.0
 		),
 
 		val standardMagazine: AmmoStorage = AmmoStorage(
@@ -379,6 +397,11 @@ data class PVPBalancingConfiguration(
 
 			override val explosiveShot: Boolean = false,
 			override val type: WeaponTypeEnum,
+
+
+			override val shouldHaveCameraOverlay: Boolean,
+			override val cameraOverlay: String,
+			override val zoomEffect: Double,
 			) : Balancing()
 
 		@Serializable
@@ -423,6 +446,10 @@ data class PVPBalancingConfiguration(
 
 			override val explosiveShot: Boolean = false,
 			override val type: WeaponTypeEnum,
+
+			override val shouldHaveCameraOverlay: Boolean,
+			override val cameraOverlay: String,
+			override val zoomEffect: Double,
 			) : Balancing()
 
 		@Serializable
@@ -443,6 +470,10 @@ data class PVPBalancingConfiguration(
 			abstract val timeBetweenShots: Int
 			abstract val consumesAmmo: Boolean
 			abstract val switchToTimeTicks: Int
+
+			abstract val shouldHaveCameraOverlay: Boolean
+			abstract val cameraOverlay: String
+			abstract val zoomEffect: Double
 
 			abstract val soundRange: Double
 			abstract val soundFire: SoundInfo

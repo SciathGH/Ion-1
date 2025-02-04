@@ -23,7 +23,7 @@ object RocketBoostingMod : ItemModification {
 	override val modItem: Supplier<ModificationItem?> = Supplier { CustomItemRegistry.ARMOR_MODIFICATION_ROCKET_BOOSTING }
 	override val crouchingDisables: Boolean = false
 	override val identifier: String = "ROCKET_BOOSTING"
-	override val displayName: Component = ofChildren(Component.text("Rocket Boosting", GRAY), Component.text(" Module", GOLD),Component.newline(), Component.text(" Primary Module", NamedTextColor.DARK_GRAY))
+	override val displayName: Component = ofChildren(Component.text("Rocket Boosting", GRAY), Component.text(" Module", GOLD), Component.text(" Primary Module", NamedTextColor.DARK_GRAY))
 	override val primaryOrSecondary: ItemModification.PrimaryOrSecondary = ItemModification.PrimaryOrSecondary.PRIMARY
 
 	override fun getAttributes(): List<CustomItemAttribute> = listOf()

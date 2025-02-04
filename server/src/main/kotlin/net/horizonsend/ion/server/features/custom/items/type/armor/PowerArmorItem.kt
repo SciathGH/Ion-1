@@ -33,6 +33,7 @@ import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import kotlin.math.roundToInt
 
+@Suppress("UnstableApiUsage")
 abstract class PowerArmorItem(
 	identifier: String, displayName: Component, baseItemFactory: ItemFactory, override val slot: EquipmentSlot, maxPrimaryMods: Int, maxSecondaryMods: Int, val balancing: PVPBalancingConfiguration.Armour.AttributeHolder
 ) : CustomItem(identifier, displayName, baseItemFactory), SlotItem {
@@ -50,6 +51,7 @@ abstract class PowerArmorItem(
 
 		//Put Tick Receiving Modules here
 		val tickRecieverModule = mutableListOf(
+			//interval in case it is not obvious is in ticks
 			TickReceiverModule(20) { entity, itemStack, _, _ -> tickPowerMods(entity, itemStack)},
 			TickReceiverModule(1) { entity, itemStack, _, equipmentSlot -> tickRocketBoots(entity, itemStack, equipmentSlot) },
 			TickReceiverModule(45){ entity, itemStack, _, _ -> refreshModifiersFromBalancing(itemStack, entity)} //this does not need to be updated often
@@ -65,13 +67,13 @@ abstract class PowerArmorItem(
 			attributeList().forEach {
 				itemMeta.addAttributeModifier(it.key, it.value)
 			}
-			//itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ) todo add this back after testing
+			//itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ) //todo add this back after testing
 		}
 
 	}
 
 	fun attributeList() : MutableMap<Attribute, AttributeModifier> {
-		return mutableMapOf<Attribute, AttributeModifier>(
+		return mutableMapOf(
 			Attribute.MOVEMENT_SPEED to AttributeModifier(NamespacedKeys.key(identifier), balancing.speed , AttributeModifier.Operation.MULTIPLY_SCALAR_1, slot.group),
 			Attribute.SNEAKING_SPEED to AttributeModifier(NamespacedKeys.key(identifier), balancing.sneakSpeed , AttributeModifier.Operation.MULTIPLY_SCALAR_1, slot.group),
 			Attribute.SCALE to AttributeModifier(NamespacedKeys.key(identifier), balancing.scale , AttributeModifier.Operation.ADD_NUMBER, slot.group),
@@ -99,7 +101,7 @@ abstract class PowerArmorItem(
 					itemMeta.addAttributeModifier(it.key, it.value)
 				}
 			}
-			entity.sendActionBar(Component.text("Updated PowerArmour with new Balancing Values"))
+			entity.sendActionBar(Component.text("Updated PowerArmor with new Balancing Values"))
 		}
 		getComponent(POWER_STORAGE).setMaxPower(itemStack.customItem ?: return, itemStack, balancing.power.roundToInt())
 	}

@@ -25,7 +25,6 @@ object EnvironmentMod : ItemModification {
 	override val identifier: String = "environment"
 	override val displayName: Component = ofChildren(Component.text("Environment", GRAY),
 		Component.text(" Module", GOLD),
-		Component.newline(),
 		Component.text(" Primary Module", DARK_GRAY)
 	)
 	override val primaryOrSecondary: ItemModification.PrimaryOrSecondary = ItemModification.PrimaryOrSecondary.PRIMARY

@@ -32,6 +32,7 @@ import org.bukkit.event.block.Action
 import org.bukkit.inventory.EquipmentSlotGroup
 import org.bukkit.inventory.ItemStack
 
+//todo redo this ENTIRE feature when mohang adds its cool shit
 class EnergySword(type: String, color: TextColor) : CustomItem(
 	"ENERGY_SWORD_${type.uppercase()}",
 	displayName = ofChildren(Component.text(type.lowercase().replaceFirstChar { it.uppercase() }, color), Component.text(" Energy Sword", YELLOW)),

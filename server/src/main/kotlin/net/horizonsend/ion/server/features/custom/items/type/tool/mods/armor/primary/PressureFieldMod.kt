@@ -21,7 +21,7 @@ object PressureFieldMod : ItemModification {
 	override val modItem: Supplier<ModificationItem?> = Supplier { CustomItemRegistry.ARMOR_MODIFICATION_PRESSURE_FIELD }
 	override val crouchingDisables: Boolean = false
 	override val identifier: String = "PRESSURE_FIELD"
-	override val displayName: Component = ofChildren(Component.text("Pressure Field", GRAY), Component.text(" Module", GOLD),Component.newline(),Component.text("\n Primary Module",NamedTextColor.DARK_GRAY))
+	override val displayName: Component = ofChildren(Component.text("Pressure Field", GRAY), Component.text(" Module", GOLD),Component.text("\n Primary Module",NamedTextColor.DARK_GRAY))
 	override val primaryOrSecondary: ItemModification.PrimaryOrSecondary = ItemModification.PrimaryOrSecondary.PRIMARY
 
 	override fun getAttributes(): List<CustomItemAttribute> = listOf()

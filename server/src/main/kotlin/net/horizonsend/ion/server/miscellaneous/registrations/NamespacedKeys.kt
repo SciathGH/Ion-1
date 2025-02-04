@@ -41,6 +41,7 @@ object NamespacedKeys {
 	val CUSTOM_ITEM = key("CustomItem")
 	val ENERGY_BLOCK_AMOUNT = key("energy_sword_block")
 	val TIME_LAST_USED = key("time_last_used")
+	val SCOPE_ZOOM = key("scope_zoom")
 
 	val EDEN_FIX = key("EdenFix")
 	val BIOME_FIX = key("BiomeFix")

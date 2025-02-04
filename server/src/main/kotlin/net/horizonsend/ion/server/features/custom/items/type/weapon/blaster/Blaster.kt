@@ -1,6 +1,7 @@
 package net.horizonsend.ion.server.features.custom.items.type.weapon.blaster
 
 import io.papermc.paper.datacomponent.DataComponentTypes
+import io.papermc.paper.datacomponent.item.Equippable
 import io.papermc.paper.datacomponent.item.ItemAttributeModifiers
 import io.papermc.paper.entity.LookAnchor
 import net.horizonsend.ion.common.database.cache.nations.NationCache
@@ -17,6 +18,7 @@ import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.custo
 import net.horizonsend.ion.server.features.custom.items.component.AmmunitionStorage
 import net.horizonsend.ion.server.features.custom.items.component.CustomComponentTypes
 import net.horizonsend.ion.server.features.custom.items.component.CustomItemComponentManager
+import net.horizonsend.ion.server.features.custom.items.component.Listener.Companion.leftClickListener
 import net.horizonsend.ion.server.features.custom.items.component.Listener.Companion.playerSwapHandsListener
 import net.horizonsend.ion.server.features.custom.items.component.Listener.Companion.rightClickListener
 import net.horizonsend.ion.server.features.custom.items.component.MagazineType
@@ -24,6 +26,7 @@ import net.horizonsend.ion.server.features.custom.items.util.ItemFactory
 import net.horizonsend.ion.server.features.world.IonWorld.Companion.hasFlag
 import net.horizonsend.ion.server.features.world.IonWorld.Companion.ion
 import net.horizonsend.ion.server.features.world.WorldFlag
+import net.horizonsend.ion.server.miscellaneous.registrations.NamespacedKeys
 import net.horizonsend.ion.server.miscellaneous.utils.Tasks
 import net.horizonsend.ion.server.miscellaneous.utils.alongVector
 import net.horizonsend.ion.server.miscellaneous.utils.updateData
@@ -36,18 +39,24 @@ import net.kyori.adventure.text.Component.text
 import net.kyori.adventure.text.format.NamedTextColor.RED
 import org.bukkit.Color
 import org.bukkit.Color.fromRGB
+import org.bukkit.NamespacedKey
 import org.bukkit.Particle.DUST
 import org.bukkit.Particle.DustOptions
+import org.bukkit.attribute.Attribute
+import org.bukkit.attribute.AttributeModifier
 import org.bukkit.craftbukkit.entity.CraftPlayer
 import org.bukkit.entity.Flying
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.inventory.EquipmentSlotGroup
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 import java.util.function.Supplier
 
 
+@Suppress("UnstableApiUsage")
 open class Blaster<T : Balancing>(
 	identifier: String,
 	displayName: Component,
@@ -58,7 +67,8 @@ open class Blaster<T : Balancing>(
 	displayName,
 	itemFactory,
 ) {
-	//todo add zoom in for Snipers
+	//todo: lie to player and tell them their gun's model is invisible when they scope in to avoid immersion being broken
+
 	val balancing get() = balancingSupplier.get()
 
 	val ammoComponent = AmmunitionStorage(balancingSupplier)
@@ -109,6 +119,13 @@ open class Blaster<T : Balancing>(
 				fire(event.player, item)
 			}
 		})
+
+		addComponent(CustomComponentTypes.LISTENER_PLAYER_INTERACT, leftClickListener(this@Blaster) { event, _, item ->
+			if (balancing.shouldHaveCameraOverlay){
+				if (!zoomIn(item)) zoomOut(item)
+			}
+		})
+
 		addComponent(CustomComponentTypes.LISTENER_PLAYER_SWAP_HANDS, playerSwapHandsListener(this@Blaster) { event, _, item -> reload(event.player, item) })
 	}
 
@@ -302,5 +319,44 @@ open class Blaster<T : Balancing>(
 		val y = location2InFront.y + balancing.recoil
 		val z = location2InFront.z
 		player.lookAt(x, y, z, LookAnchor.EYES)
+	}
+
+	/**
+	 * Zoom in
+	 * returns false if it scoped in
+	 * @param item
+	 * @return
+	 */
+	fun zoomIn(item: ItemStack) : Boolean{
+		//if we're zoomed in already then we do not need to continue
+		if (item.getData(DataComponentTypes.EQUIPPABLE)?.cameraOverlay() == null) {
+			item.setData(
+				DataComponentTypes.EQUIPPABLE, Equippable.equippable(EquipmentSlot.HAND)
+					.cameraOverlay(key(balancing.cameraOverlay))
+					.build()
+			)
+			item.editMeta {
+				it.addAttributeModifier(
+					Attribute.MOVEMENT_SPEED,
+					AttributeModifier(
+						NamespacedKeys.SCOPE_ZOOM,
+						balancing.zoomEffect,
+						AttributeModifier.Operation.ADD_SCALAR,
+						EquipmentSlotGroup.MAINHAND
+					)
+				)
+			}
+			return  true
+		}
+		return false
+	}
+
+	fun zoomOut(item: ItemStack){
+		item.setData(
+			DataComponentTypes.EQUIPPABLE, Equippable.equippable(EquipmentSlot.HAND)
+				.cameraOverlay(null)
+				.build()
+		)
+		item.editMeta { it.removeAttributeModifier(Attribute.MOVEMENT_SPEED, AttributeModifier(NamespacedKeys.SCOPE_ZOOM, balancing.zoomEffect, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlotGroup.MAINHAND)) }
 	}
 }

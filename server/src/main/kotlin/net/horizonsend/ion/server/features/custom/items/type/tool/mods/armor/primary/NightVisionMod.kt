@@ -23,7 +23,7 @@ object NightVisionMod : ItemModification {
 	override val modItem: Supplier<ModificationItem?> = Supplier { CustomItemRegistry.ARMOR_MODIFICATION_NIGHT_VISION }
 	override val crouchingDisables: Boolean = false
 	override val identifier: String = "NIGHT_VISION"
-	override val displayName: Component = ofChildren(Component.text("Night Vision", GRAY), Component.text(" Module", GOLD),	Component.newline(), Component.text(" Primary Module", NamedTextColor.DARK_GRAY))
+	override val displayName: Component = ofChildren(Component.text("Night Vision", GRAY), Component.text(" Module", GOLD), Component.text(" Primary Module", NamedTextColor.DARK_GRAY))
 	override val primaryOrSecondary: ItemModification.PrimaryOrSecondary = ItemModification.PrimaryOrSecondary.PRIMARY
 
 	override fun getAttributes(): List<CustomItemAttribute> = listOf(PotionEffectAttribute(NIGHT_VISION, 1000, 1, 0) { _, _, _ -> false })

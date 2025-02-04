@@ -18,7 +18,7 @@ import net.horizonsend.ion.server.features.custom.items.type.CustomBlockItem
 import net.horizonsend.ion.server.features.custom.items.type.GasCanister
 import net.horizonsend.ion.server.features.custom.items.type.PersonalTransporter
 import net.horizonsend.ion.server.features.custom.items.type.ProgressHolder
-import net.horizonsend.ion.server.features.custom.items.type.armor.HeavyPowerArmourItem
+import net.horizonsend.ion.server.features.custom.items.type.armor.HeavyPowerArmorItem
 import net.horizonsend.ion.server.features.custom.items.type.consumable.HealthStim
 import net.horizonsend.ion.server.features.custom.items.type.throwables.ThrowableCustomItem
 import net.horizonsend.ion.server.features.custom.items.type.throwables.ThrownCustomItem
@@ -437,7 +437,7 @@ object CustomItemRegistry : IonServerComponent() {
 	//))
 
 	//Heavy Power Armour
-	val HEAVY_POWER_ARMOUR_HELMET = register(HeavyPowerArmourItem(
+	val HEAVY_POWER_ARMOUR_HELMET = register(HeavyPowerArmorItem(
 		"HEAVY_POWER_ARMOR_HELMET",
 		ofChildren(text("Heavy Power ", RED), text("Helmet", GRAY)),
 		"power_armor/power_armor_helmet",
@@ -446,7 +446,7 @@ object CustomItemRegistry : IonServerComponent() {
 		1,
 		balancingSupplier = ConfigurationFiles.pvpBalancing().armour::heavyPowerArmour.get()
 	))
-	val HEAVY_POWER_ARMOUR_CHEST = register(HeavyPowerArmourItem(
+	val HEAVY_POWER_ARMOUR_CHEST = register(HeavyPowerArmorItem(
 		"HEAVY_POWER_ARMOR_CHEST",
 		ofChildren(text("Heavy Power ", RED), text("Chest", GRAY)),
 		"power_armor/power_armor_chestplate",
@@ -455,7 +455,7 @@ object CustomItemRegistry : IonServerComponent() {
 		1,
 		balancingSupplier = ConfigurationFiles.pvpBalancing().armour::heavyPowerArmour.get()
 	))
-	val HEAVY_POWER_ARMOUR_LEGGINGS = register(HeavyPowerArmourItem(
+	val HEAVY_POWER_ARMOUR_LEGGINGS = register(HeavyPowerArmorItem(
 		"HEAVY_POWER_ARMOR_LEGGINGS",
 		ofChildren(text("Heavy Power ", RED), text("Leggings", GRAY)),
 		"power_armor/power_armor_leggings",
@@ -464,7 +464,7 @@ object CustomItemRegistry : IonServerComponent() {
 		1,
 		balancingSupplier = ConfigurationFiles.pvpBalancing().armour::heavyPowerArmour.get()
 	))
-	val HEAVY_POWER_ARMOUR_BOOTS = register(HeavyPowerArmourItem(
+	val HEAVY_POWER_ARMOUR_BOOTS = register(HeavyPowerArmorItem(
 		"HEAVY_POWER_ARMOR_BOOTS",
 		ofChildren(text("Heavy Power ", RED), text("Boots", GRAY)),
 		"power_armor/power_armor_boots",
@@ -525,7 +525,7 @@ object CustomItemRegistry : IonServerComponent() {
 		"ARMOR_MODIFICATION_ARMOR_BOOST",
 		"power_armor/module/armor_boost",
 		ofChildren(Component.text("Armor Boost", GRAY), Component.text(" Module", GOLD)),
-		ofChildren(text("Allows the user to survive inhospitable planetary enviornments."), text(" Secondary Module", GRAY))
+		ofChildren(text("Improves the total armour by a % amount"), text(" Secondary Module", GRAY))
 	) { ItemModRegistry.ARMOR_BOOST })
 
 	val RANGE_1: ModificationItem = register(ModificationItem(

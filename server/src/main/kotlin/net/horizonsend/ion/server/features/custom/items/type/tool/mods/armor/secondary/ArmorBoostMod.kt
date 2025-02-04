@@ -13,24 +13,24 @@ import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.inventory.ItemStack
-import java.util.UUID
 import java.util.function.Supplier
 import kotlin.reflect.KClass
 
-object ArmourBoostMod : ItemModification {
+object ArmorBoostMod : ItemModification {
 	override val applicationPredicates: Array<ApplicationPredicate> = arrayOf(ApplicationPredicate.ClassPredicate(PowerArmorItem::class))
 	override val incompatibleWithMods: Array<KClass<out ItemModification>> = arrayOf()
 	override val modItem: Supplier<ModificationItem?> = Supplier { CustomItemRegistry.ARMOR_MODIFICATION_ARMOR_BOOST }
 	override val crouchingDisables: Boolean = false
 	override val identifier: String = "ARMOUR_BOOST"
 	override val displayName: Component = ofChildren(Component.text("Armour Boost", NamedTextColor.GRAY),
-		Component.text(" Module, ", NamedTextColor.GOLD),
-		Component.text("Secondary Module", NamedTextColor.GRAY)
+		Component.text(" Module", NamedTextColor.GOLD),
+		Component.text(", Secondary Module", NamedTextColor.GRAY)
 	)
 	override val primaryOrSecondary: ItemModification.PrimaryOrSecondary = ItemModification.PrimaryOrSecondary.SECONDARY
+
 	private val namedSpaceKey = NamespacedKeys.key(identifier)
-	val armor = Pair(Attribute.ARMOR, AttributeModifier(namedSpaceKey, 0.5, AttributeModifier.Operation.ADD_SCALAR))
-	val movementSpeed = Pair(Attribute.MOVEMENT_SPEED,AttributeModifier(namedSpaceKey, -0.05, AttributeModifier.Operation.ADD_SCALAR))
+	val armor = Pair(Attribute.ARMOR, AttributeModifier(namedSpaceKey, 0.2, AttributeModifier.Operation.ADD_SCALAR))
+	val movementSpeed = Pair(Attribute.MOVEMENT_SPEED,AttributeModifier(namedSpaceKey, -0.1, AttributeModifier.Operation.ADD_SCALAR))
 	override fun onAdd(itemStack: ItemStack) {
 			itemStack.editMeta {
 				it.addAttributeModifier(

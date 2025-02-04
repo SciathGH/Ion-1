@@ -1,5 +1,7 @@
 package net.horizonsend.ion.server.features.custom.items.type.weapon.blaster
 
+import io.papermc.paper.datacomponent.DataComponentTypes
+import io.papermc.paper.datacomponent.item.Equippable
 import net.horizonsend.ion.common.database.schema.nations.Nation
 import net.horizonsend.ion.server.features.cache.PlayerCache
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry
@@ -18,6 +20,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -78,6 +81,13 @@ class BlasterListeners : SLEventListener() {
 		if (event.player.hasCooldown(itemStack.type) && event.player.getCooldown(itemStack) < customItem.balancing.switchToTimeTicks){
 		event.player.setCooldown(itemStack.type, customItem.balancing.switchToTimeTicks) //add a cooldown for some weapons
 			}
+	}
+
+	@EventHandler
+	fun onPlayerItemHoldEvent1(event: PlayerItemHeldEvent) {
+		val itemStack = event.player.inventory.getItem(event.previousSlot) ?: return
+		val customItem = itemStack.customItem as? Blaster<*> ?: return
+		customItem.zoomOut(itemStack)
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
