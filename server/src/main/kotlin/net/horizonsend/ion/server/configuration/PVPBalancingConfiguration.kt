@@ -266,8 +266,8 @@ data class PVPBalancingConfiguration(
 			blockbreakAmount = 4.0,
 			switchToTimeTicks = 5,
 			shouldHaveCameraOverlay = true,
-			cameraOverlay = "misc/spyglass_scope",
-			zoomEffect = -4.0
+			cameraOverlay = "horizonsend:overlays/sniper_scope",
+			zoomEffect = -0.9
 		),
 		val shotgun: Multishot = Multishot(
 			damage = 11.0,
@@ -402,6 +402,7 @@ data class PVPBalancingConfiguration(
 			override val shouldHaveCameraOverlay: Boolean,
 			override val cameraOverlay: String,
 			override val zoomEffect: Double,
+			override val scopedInItemModel: String = "empty"
 			) : Balancing()
 
 		@Serializable
@@ -450,6 +451,7 @@ data class PVPBalancingConfiguration(
 			override val shouldHaveCameraOverlay: Boolean,
 			override val cameraOverlay: String,
 			override val zoomEffect: Double,
+			override val scopedInItemModel: String = "empty"
 			) : Balancing()
 
 		@Serializable
@@ -473,7 +475,8 @@ data class PVPBalancingConfiguration(
 
 			abstract val shouldHaveCameraOverlay: Boolean
 			abstract val cameraOverlay: String
-			abstract val zoomEffect: Double
+			abstract val zoomEffect: Double //NOTE any speed value change lower then -0.9 will make the player unable to move!
+			abstract val scopedInItemModel: String
 
 			abstract val soundRange: Double
 			abstract val soundFire: SoundInfo

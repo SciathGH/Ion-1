@@ -29,6 +29,7 @@ import net.horizonsend.ion.server.features.world.WorldFlag
 import net.horizonsend.ion.server.miscellaneous.registrations.NamespacedKeys
 import net.horizonsend.ion.server.miscellaneous.utils.Tasks
 import net.horizonsend.ion.server.miscellaneous.utils.alongVector
+import net.horizonsend.ion.server.miscellaneous.utils.setModel
 import net.horizonsend.ion.server.miscellaneous.utils.updateData
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.key.Key.key
@@ -37,14 +38,15 @@ import net.kyori.adventure.sound.Sound.sound
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.text
 import net.kyori.adventure.text.format.NamedTextColor.RED
+import net.minecraft.network.protocol.game.ClientboundSetPlayerInventoryPacket
 import org.bukkit.Color
 import org.bukkit.Color.fromRGB
-import org.bukkit.NamespacedKey
 import org.bukkit.Particle.DUST
 import org.bukkit.Particle.DustOptions
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.craftbukkit.entity.CraftPlayer
+import org.bukkit.craftbukkit.inventory.CraftItemStack
 import org.bukkit.entity.Flying
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -67,13 +69,12 @@ open class Blaster<T : Balancing>(
 	displayName,
 	itemFactory,
 ) {
-	//todo: lie to player and tell them their gun's model is invisible when they scope in to avoid immersion being broken
-
 	val balancing get() = balancingSupplier.get()
 
 	val ammoComponent = AmmunitionStorage(balancingSupplier)
 	val magazineComponent = MagazineType(balancingSupplier) { CustomItemRegistry.getByIdentifier(balancing.magazineIdentifier)!! }
 
+	val model = itemFactory.customModel ?: ""
 	override fun decorateItemStack(base: ItemStack) {
 		// Clear base item attributes
 		base.updateData(DataComponentTypes.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.itemAttributes().build())
@@ -122,7 +123,7 @@ open class Blaster<T : Balancing>(
 
 		addComponent(CustomComponentTypes.LISTENER_PLAYER_INTERACT, leftClickListener(this@Blaster) { event, _, item ->
 			if (balancing.shouldHaveCameraOverlay){
-				if (!zoomIn(item)) zoomOut(item)
+				if (!zoomIn(item, event.player)) zoomOut(item)
 			}
 		})
 
@@ -301,24 +302,18 @@ open class Blaster<T : Balancing>(
 	}
 
 	fun recoil(livingEntity: LivingEntity){
-		val recoil = balancing.recoil / balancing.packetsPerShot
 
 		for (iteration in 1..balancing.packetsPerShot) {
 			if (livingEntity is Flying) return
 
 			Tasks.asyncDelay(iteration.toLong()) {
-				val loc = livingEntity.location
-				loc.pitch -= recoil
-				sendLookPacket(livingEntity, loc.pitch)
+				val location100InFront = livingEntity.eyeLocation.alongVector(livingEntity.eyeLocation.direction.multiply(100), 1).last()
+				val x = location100InFront.x
+				val y = location100InFront.y + balancing.recoil
+				val z = location100InFront.z
+				livingEntity.lookAt(x, y, z, LookAnchor.EYES)
 			}
 		}
-	}
-	private fun sendLookPacket(player: LivingEntity, pitch: Float) {
-		val location2InFront = player.eyeLocation.alongVector(player.eyeLocation.direction.multiply(100), 1).last()
-		val x = location2InFront.x
-		val y = location2InFront.y + balancing.recoil
-		val z = location2InFront.z
-		player.lookAt(x, y, z, LookAnchor.EYES)
 	}
 
 	/**
@@ -327,7 +322,7 @@ open class Blaster<T : Balancing>(
 	 * @param item
 	 * @return
 	 */
-	fun zoomIn(item: ItemStack) : Boolean{
+	fun zoomIn(item: ItemStack, playerHoldingIt: Player) : Boolean{
 		//if we're zoomed in already then we do not need to continue
 		if (item.getData(DataComponentTypes.EQUIPPABLE)?.cameraOverlay() == null) {
 			item.setData(
@@ -346,6 +341,11 @@ open class Blaster<T : Balancing>(
 					)
 				)
 			}
+			val nmsItem = CraftItemStack.asNMSCopy(item.clone().setModel(balancing.scopedInItemModel))
+			val slot = playerHoldingIt.inventory.first(item)
+			val itemModelPacket = ClientboundSetPlayerInventoryPacket(slot, nmsItem)
+			(playerHoldingIt as CraftPlayer).handle.connection.send(itemModelPacket)
+			item.setModel("empty")
 			return  true
 		}
 		return false
@@ -358,5 +358,6 @@ open class Blaster<T : Balancing>(
 				.build()
 		)
 		item.editMeta { it.removeAttributeModifier(Attribute.MOVEMENT_SPEED, AttributeModifier(NamespacedKeys.SCOPE_ZOOM, balancing.zoomEffect, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlotGroup.MAINHAND)) }
+		item.setModel(model)
 	}
 }
