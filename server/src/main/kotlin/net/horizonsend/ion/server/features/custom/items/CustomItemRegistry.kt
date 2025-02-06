@@ -18,7 +18,7 @@ import net.horizonsend.ion.server.features.custom.items.type.CustomBlockItem
 import net.horizonsend.ion.server.features.custom.items.type.GasCanister
 import net.horizonsend.ion.server.features.custom.items.type.PersonalTransporter
 import net.horizonsend.ion.server.features.custom.items.type.ProgressHolder
-import net.horizonsend.ion.server.features.custom.items.type.armor.HeavyPowerArmorItem
+import net.horizonsend.ion.server.features.custom.items.type.armor.PowerArmorItem
 import net.horizonsend.ion.server.features.custom.items.type.consumable.HealthStim
 import net.horizonsend.ion.server.features.custom.items.type.throwables.ThrowableCustomItem
 import net.horizonsend.ion.server.features.custom.items.type.throwables.ThrownCustomItem
@@ -437,41 +437,33 @@ object CustomItemRegistry : IonServerComponent() {
 	//))
 
 	//Heavy Power Armour
-	val HEAVY_POWER_ARMOUR_HELMET = register(HeavyPowerArmorItem(
+	val HEAVY_POWER_ARMOUR_HELMET = register(PowerArmorItem(
 		"HEAVY_POWER_ARMOR_HELMET",
 		ofChildren(text("Heavy Power ", RED), text("Helmet", GRAY)),
 		"power_armor/power_armor_helmet",
 		EquipmentSlot.HEAD,
-		2,
-		1,
-		balancingSupplier = ConfigurationFiles.pvpBalancing().armour::heavyPowerArmour.get()
+		ConfigurationFiles.pvpBalancing().armour::heavyPowerArmor.get()
 	))
-	val HEAVY_POWER_ARMOUR_CHEST = register(HeavyPowerArmorItem(
+	val HEAVY_POWER_ARMOUR_CHEST = register(PowerArmorItem(
 		"HEAVY_POWER_ARMOR_CHEST",
 		ofChildren(text("Heavy Power ", RED), text("Chest", GRAY)),
 		"power_armor/power_armor_chestplate",
 		EquipmentSlot.CHEST,
-		2,
-		1,
-		balancingSupplier = ConfigurationFiles.pvpBalancing().armour::heavyPowerArmour.get()
+		ConfigurationFiles.pvpBalancing().armour::heavyPowerArmor.get()
 	))
-	val HEAVY_POWER_ARMOUR_LEGGINGS = register(HeavyPowerArmorItem(
+	val HEAVY_POWER_ARMOUR_LEGGINGS = register(PowerArmorItem(
 		"HEAVY_POWER_ARMOR_LEGGINGS",
 		ofChildren(text("Heavy Power ", RED), text("Leggings", GRAY)),
 		"power_armor/power_armor_leggings",
 		EquipmentSlot.LEGS,
-		2,
-		1,
-		balancingSupplier = ConfigurationFiles.pvpBalancing().armour::heavyPowerArmour.get()
+		 ConfigurationFiles.pvpBalancing().armour::heavyPowerArmor.get()
 	))
-	val HEAVY_POWER_ARMOUR_BOOTS = register(HeavyPowerArmorItem(
+	val HEAVY_POWER_ARMOUR_BOOTS = register(PowerArmorItem(
 		"HEAVY_POWER_ARMOR_BOOTS",
 		ofChildren(text("Heavy Power ", RED), text("Boots", GRAY)),
 		"power_armor/power_armor_boots",
 		EquipmentSlot.FEET,
-		2,
-		1,
-		balancingSupplier = ConfigurationFiles.pvpBalancing().armour::heavyPowerArmour.get()
+		ConfigurationFiles.pvpBalancing().armour::heavyPowerArmor.get()
 	))
 
 	val ENERGY_SWORD_BLUE = register(EnergySword("BLUE", BLUE))
@@ -513,12 +505,12 @@ object CustomItemRegistry : IonServerComponent() {
 		ofChildren(Component.text("Shock Absorbing", GRAY), Component.text(" Module", GOLD)),
 		text("Reduces knockback.")
 	) { ItemModRegistry.SHOCK_ABSORBING })
-	val ARMOR_MODIFICATION_SPEED_BOOSTING: ModificationItem = register(ModificationItem(
-		"ARMOR_MODIFICATION_SPEED_BOOSTING",
-		"power_armor/module/speed_boosting",
-		ofChildren(Component.text("Speed Boosting", GRAY), Component.text(" Module", GOLD)),
-		text("Boosts the user's running speed.")
-	) { ItemModRegistry.SPEED_BOOSTING })
+	val ARMOR_MODIFICATION_MINI_NUKE: ModificationItem = register(ModificationItem(
+		"ARMOR_MODIFICATION_MINI_NUKE",
+		"power_armor/module/mini_nuke",
+		ofChildren(Component.text("Mini Nuke", GRAY), Component.text(" Module", GOLD)),
+		text("Explodes Violently upon Player Death.")
+	) { ItemModRegistry.ARMOR_BOOST })
 
 	//Secondary Armor Modifacations
 	val ARMOR_MODIFICATION_ARMOR_BOOST: ModificationItem = register(ModificationItem(
@@ -527,6 +519,12 @@ object CustomItemRegistry : IonServerComponent() {
 		ofChildren(Component.text("Armor Boost", GRAY), Component.text(" Module", GOLD)),
 		ofChildren(text("Improves the total armour by a % amount"), text(" Secondary Module", GRAY))
 	) { ItemModRegistry.ARMOR_BOOST })
+	val ARMOR_MODIFICATION_SPEED_BOOSTING: ModificationItem = register(ModificationItem(
+		"ARMOR_MODIFICATION_SPEED_BOOSTING",
+		"power_armor/module/speed_boosting",
+		ofChildren(Component.text("Speed Boosting", GRAY), Component.text(" Module", GOLD)),
+		text("Boosts the user's running speed."), text(" Secondary Module", GRAY)
+	) { ItemModRegistry.SPEED_BOOSTING })
 
 	val RANGE_1: ModificationItem = register(ModificationItem(
 		"TOOL_MODIFICATION_RANGE_1",

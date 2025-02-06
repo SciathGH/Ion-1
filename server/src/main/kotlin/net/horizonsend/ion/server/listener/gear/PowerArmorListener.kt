@@ -16,11 +16,14 @@ import net.horizonsend.ion.server.features.world.WorldFlag
 import net.horizonsend.ion.server.listener.SLEventListener
 import net.horizonsend.ion.server.listener.misc.ProtectionListener
 import net.horizonsend.ion.server.miscellaneous.utils.Tasks
+import org.bukkit.EntityEffect
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityToggleGlideEvent
+import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.inventory.ItemStack
@@ -180,5 +183,25 @@ object PowerArmorListener : SLEventListener() {
 		if (event.cause != EntityDamageEvent.DamageCause.FLY_INTO_WALL) return
 
 		event.isCancelled = true
+	}
+
+	@EventHandler
+	fun onPlayerDeath(event: EntityDeathEvent) {
+		if (event.entity !is Player) return
+		for (item in (event.entity as Player).inventory.armorContents) {
+			val customItem = item?.customItem ?: continue
+
+			if (!customItem.hasComponent(CustomComponentTypes.MOD_MANAGER)) continue
+			val mods = customItem.getComponent(CustomComponentTypes.MOD_MANAGER).getAllMods(item)
+
+			if (!mods.contains(ItemModRegistry.MINI_NUKE)) continue
+
+			if (customItem.hasComponent(POWER_STORAGE)) continue
+			val power = customItem.getComponent(POWER_STORAGE).getPower(item)
+
+			if (power <= 0) continue
+			
+			return
+		}
 	}
 }

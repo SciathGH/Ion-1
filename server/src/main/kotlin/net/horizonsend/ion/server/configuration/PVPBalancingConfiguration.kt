@@ -3,6 +3,7 @@ package net.horizonsend.ion.server.configuration
 import kotlinx.serialization.Serializable
 import net.horizonsend.ion.server.configuration.StarshipSounds.SoundInfo
 import net.kyori.adventure.sound.Sound
+import org.litote.kmongo.popLast
 
 @Serializable
 data class PVPBalancingConfiguration(
@@ -10,7 +11,7 @@ data class PVPBalancingConfiguration(
 	val meleeWeapons: MeleeWeapons = MeleeWeapons(),
 	val throwables: Throwables = Throwables(),
 	val consumables: Consumables = Consumables(),
-	val armour: Armour = Armour()
+	val armour: Armor = Armor()
 ) {
 	@Serializable
 	data class Throwables(
@@ -78,17 +79,18 @@ data class PVPBalancingConfiguration(
 	}
 
 	@Serializable
-	data class Armour(
-		val heavyPowerArmour: AttributeHolder = AttributeHolder(
+	data class Armor(
+		val heavyPowerArmor: AttributeHolder = AttributeHolder(
 			speed = -0.05,
 			sneakSpeed = 0.0,
 			scale = 0.06,
 			entityReach = 0.0,
 			blockReach = 0.0,
-			armour = 6.0,
+			armor = 6.0,
 			toughness = 2.0,
 			knockBackResistance = .2,
-			power = 100000.0,
+			power = 100000,
+			powerConsumedPerSecond = 3,
 			stepHeight = .1,
 			maxHealth = 2.5,
 			jumpStrength = -.05,
@@ -98,6 +100,54 @@ data class PVPBalancingConfiguration(
 			gravity = -0.005,
 			oxygenBonus = 0.0,
 			waterMovementEfficiency = 0.0,
+			maxPrimaryModules = 1,
+			maxSecondaryModules = 2
+		),
+		val lightPowerArmor: AttributeHolder = AttributeHolder(
+			speed = 0.1,
+			sneakSpeed = 0.1,
+			scale = 0.0,
+			entityReach = 0.0,
+			blockReach = 0.0,
+			armor = 4.0,
+			toughness = 2.0,
+			knockBackResistance = 0.0,
+			power = 50000,
+			powerConsumedPerSecond = 1,
+			stepHeight = .1,
+			maxHealth = 0.0,
+			jumpStrength = 0.0,
+			flyingSpeed = 0.2,
+			canDoubleJump = true,
+			canRocketBoot = true,
+			gravity = 0.0,
+			oxygenBonus = 0.0,
+			waterMovementEfficiency = 0.2,
+			maxPrimaryModules = 1,
+			maxSecondaryModules = 1
+		),
+		val mediumPowerArmor: AttributeHolder = AttributeHolder(
+			speed = 0.0,
+			sneakSpeed = 0.0,
+			scale = 0.0,
+			entityReach = 0.0,
+			blockReach = 0.0,
+			armor = 6.0,
+			toughness = 2.0,
+			knockBackResistance = 0.1,
+			power = 75000,
+			powerConsumedPerSecond = 2,
+			stepHeight = 0.0,
+			maxHealth = 0.0,
+			jumpStrength = 0.0,
+			flyingSpeed = 0.0,
+			canDoubleJump = true,
+			canRocketBoot = true,
+			gravity = 0.0,
+			oxygenBonus = 0.0,
+			waterMovementEfficiency = 0.0,
+			maxPrimaryModules = 1,
+			maxSecondaryModules = 1
 		)
 	){
 		@Serializable
@@ -107,10 +157,11 @@ data class PVPBalancingConfiguration(
 			val scale: Double, //Scalar add
 			val entityReach: Double, //Scalar add
 			val blockReach: Double, //Scalar add
-			val armour: Double, //Scalar add
+			val armor: Double, //Scalar add
 			val toughness: Double, //Scalar add
 			val knockBackResistance: Double, //Scalar add x10, 0.2 here is 2 ingame
-			val power: Double, //Pure number
+			val power: Int, //Pure number
+			val powerConsumedPerSecond: Int,
 			val stepHeight: Double,//Scalar add
 			val maxHealth: Double,//Scalar add
 			val jumpStrength: Double,//Scalar add
@@ -120,6 +171,8 @@ data class PVPBalancingConfiguration(
 			val gravity: Double,//Scalar add
 			val oxygenBonus: Double,//Scalar add
 			val waterMovementEfficiency: Double,//Scalar add
+			val maxPrimaryModules: Int,
+			val maxSecondaryModules: Int
 		)
 	}
 

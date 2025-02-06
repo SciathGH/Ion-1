@@ -1,5 +1,8 @@
 package net.horizonsend.ion.server.features.custom.items.type.armor
 
+import io.papermc.paper.datacomponent.DataComponentTypes
+import io.papermc.paper.datacomponent.item.Equippable
+import io.papermc.paper.datacomponent.item.Unbreakable
 import net.horizonsend.ion.server.configuration.PVPBalancingConfiguration
 import net.horizonsend.ion.server.features.custom.items.CustomItem
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry.customItem
@@ -9,6 +12,8 @@ import net.horizonsend.ion.server.features.custom.items.component.CustomComponen
 import net.horizonsend.ion.server.features.custom.items.component.CustomComponentTypes.Companion.POWER_STORAGE
 import net.horizonsend.ion.server.features.custom.items.component.CustomItemComponentManager
 import net.horizonsend.ion.server.features.custom.items.component.Listener.Companion.rightClickListener
+import net.horizonsend.ion.server.features.custom.items.component.ModManager
+import net.horizonsend.ion.server.features.custom.items.component.PowerStorage
 import net.horizonsend.ion.server.features.custom.items.component.TickReceiverModule
 import net.horizonsend.ion.server.features.custom.items.type.SlotItem
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.ItemModRegistry
@@ -21,6 +26,7 @@ import net.horizonsend.ion.server.features.world.IonWorld.Companion.hasFlag
 import net.horizonsend.ion.server.features.world.WorldFlag
 import net.horizonsend.ion.server.miscellaneous.registrations.NamespacedKeys
 import net.horizonsend.ion.server.miscellaneous.utils.Tasks
+import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.Particle
@@ -34,8 +40,24 @@ import org.bukkit.inventory.ItemStack
 import kotlin.math.roundToInt
 
 @Suppress("UnstableApiUsage")
-abstract class PowerArmorItem(
-	identifier: String, displayName: Component, baseItemFactory: ItemFactory, override val slot: EquipmentSlot, maxPrimaryMods: Int, maxSecondaryMods: Int, val balancing: PVPBalancingConfiguration.Armour.AttributeHolder
+class PowerArmorItem(
+	identifier: String, displayName: Component, itemModel: String, override val slot: EquipmentSlot, val balancing: PVPBalancingConfiguration.Armor.AttributeHolder,
+	baseItemFactory: ItemFactory = ItemFactory
+		.builder()
+		.setMaterial(Material.WARPED_FUNGUS_ON_A_STICK)
+		.setCustomModel(itemModel)
+		.setMaxStackSize(1)
+		.addData(DataComponentTypes.UNBREAKABLE, Unbreakable.unbreakable(false))
+		.addData(
+			DataComponentTypes.EQUIPPABLE, Equippable
+				.equippable(slot)
+				.damageOnHurt(false)
+				.swappable(true)
+				.equipSound(Key.key("minecraft", "item.armor.equip_netherite"))
+				.assetId(NamespacedKeys.packKey("power_armor"))
+				.build()
+		)
+		.build(),
 ) : CustomItem(identifier, displayName, baseItemFactory), SlotItem {
 
 
@@ -60,6 +82,8 @@ abstract class PowerArmorItem(
 		for(i in tickRecieverModule){
 			addComponent(CustomComponentTypes.TICK_RECIEVER, i)
 		}
+		addComponent(MOD_MANAGER, ModManager(maxPrimaryMods = balancing.maxPrimaryModules, maxSecondaryMods = balancing.maxSecondaryModules ))
+		addComponent(POWER_STORAGE, PowerStorage(balancing.power, 0, true))
 	}
 
 	override fun decorateItemStack(base: ItemStack) {
@@ -79,7 +103,7 @@ abstract class PowerArmorItem(
 			Attribute.SCALE to AttributeModifier(NamespacedKeys.key(identifier), balancing.scale , AttributeModifier.Operation.ADD_NUMBER, slot.group),
 			Attribute.ENTITY_INTERACTION_RANGE to AttributeModifier(NamespacedKeys.key(identifier), balancing.entityReach , AttributeModifier.Operation.ADD_NUMBER, slot.group),
 			Attribute.BLOCK_INTERACTION_RANGE to AttributeModifier(NamespacedKeys.key(identifier), balancing.blockReach , AttributeModifier.Operation.ADD_NUMBER, slot.group),
-			Attribute.ARMOR to AttributeModifier(NamespacedKeys.key(identifier), balancing.armour , AttributeModifier.Operation.ADD_NUMBER, slot.group),
+			Attribute.ARMOR to AttributeModifier(NamespacedKeys.key(identifier), balancing.armor , AttributeModifier.Operation.ADD_NUMBER, slot.group),
 			Attribute.ARMOR_TOUGHNESS to AttributeModifier(NamespacedKeys.key(identifier), balancing.toughness, AttributeModifier.Operation.ADD_NUMBER, slot.group),
 			Attribute.KNOCKBACK_RESISTANCE to AttributeModifier(NamespacedKeys.key(identifier), balancing.knockBackResistance , AttributeModifier.Operation.ADD_NUMBER, slot.group),
 			Attribute.STEP_HEIGHT to AttributeModifier(NamespacedKeys.key(identifier), balancing.stepHeight, AttributeModifier.Operation.ADD_NUMBER, slot.group),
@@ -103,13 +127,15 @@ abstract class PowerArmorItem(
 			}
 			entity.sendActionBar(Component.text("Updated PowerArmor with new Balancing Values"))
 		}
-		getComponent(POWER_STORAGE).setMaxPower(itemStack.customItem ?: return, itemStack, balancing.power.roundToInt())
+		getComponent(POWER_STORAGE).setMaxPower(itemStack.customItem ?: return, itemStack, balancing.power)
 	}
 
 	fun tickPowerMods(entity: LivingEntity, itemStack: ItemStack) {
 		val powerManager = getComponent(POWER_STORAGE)
 		val power = powerManager.getPower(itemStack)
 		if (power <= 0) return
+
+		powerManager.removePower(itemStack, this, balancing.powerConsumedPerSecond) //consume base power
 
 		val attributes = getAttributes(itemStack)
 		for (attribute in attributes.filterIsInstance<PotionEffectAttribute>()) attribute.addPotionEffect(entity, this, itemStack)

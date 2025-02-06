@@ -3,6 +3,7 @@ package net.horizonsend.ion.server.features.custom.items.type.tool.mods
 import net.horizonsend.ion.server.features.custom.items.CustomItemRegistry
 import net.horizonsend.ion.server.features.custom.items.type.tool.PowerHoe
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.EnvironmentMod
+import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.MiniNukeMod
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.NightVisionMod
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.PressureFieldMod
 import net.horizonsend.ion.server.features.custom.items.type.tool.mods.armor.primary.RocketBoostingMod
@@ -64,10 +65,10 @@ object ItemModRegistry {
 	val PRESSURE_FIELD = registerMod(PressureFieldMod)
 	val ROCKET_BOOSTING = registerMod(RocketBoostingMod)
 	val SHOCK_ABSORBING = registerMod(ShockAbsorbingMod)
-	val SPEED_BOOSTING = registerMod(SpeedBoostingMod)
+	val MINI_NUKE = registerMod(MiniNukeMod)
 	//Armor Secondary
 	val ARMOR_BOOST = registerMod(ArmorBoostMod)
-
+	val SPEED_BOOSTING = registerMod(SpeedBoostingMod)
 
 	private fun <T: ItemModification> registerMod(mod: T): T {
 		mods[mod.identifier] = mod
