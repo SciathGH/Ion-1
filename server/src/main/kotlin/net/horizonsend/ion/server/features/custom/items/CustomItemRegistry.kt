@@ -51,6 +51,7 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.NamedTextColor.AQUA
 import net.kyori.adventure.text.format.NamedTextColor.BLACK
 import net.kyori.adventure.text.format.NamedTextColor.BLUE
+import net.kyori.adventure.text.format.NamedTextColor.DARK_GRAY
 import net.kyori.adventure.text.format.NamedTextColor.DARK_GREEN
 import net.kyori.adventure.text.format.NamedTextColor.DARK_PURPLE
 import net.kyori.adventure.text.format.NamedTextColor.GOLD
@@ -569,9 +570,9 @@ object CustomItemRegistry : IonServerComponent() {
 	val ARMOR_MODIFICATION_MINI_NUKE: ModificationItem = register(ModificationItem(
 		"ARMOR_MODIFICATION_MINI_NUKE",
 		"power_armor/module/mini_nuke",
-		ofChildren(Component.text("Mini Nuke", GRAY), Component.text(" Module", GOLD)),
-		text("Explodes Violently upon Player Death.")
-	) { ItemModRegistry.ARMOR_BOOST })
+		ofChildren(Component.text("Mini Nuke", GRAY), Component.text(" Module", GRAY)),
+		text("Explodes Violently after Player's Death.")
+	) { ItemModRegistry.MINI_NUKE })
 
 	//Secondary Armor Modifacations
 	val ARMOR_MODIFICATION_ARMOR_BOOST: ModificationItem = register(ModificationItem(
