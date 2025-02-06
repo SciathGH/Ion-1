@@ -47,6 +47,7 @@ import net.horizonsend.ion.server.miscellaneous.utils.map
 import net.horizonsend.ion.server.miscellaneous.utils.text.itemName
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.text
+import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.NamedTextColor.AQUA
 import net.kyori.adventure.text.format.NamedTextColor.BLACK
 import net.kyori.adventure.text.format.NamedTextColor.BLUE
@@ -436,34 +437,94 @@ object CustomItemRegistry : IonServerComponent() {
 	//	EquipmentSlot.FEET
 	//))
 
-	//Heavy Power Armour
-	val HEAVY_POWER_ARMOUR_HELMET = register(PowerArmorItem(
+	//Heavy Power Armor
+	val HEAVY_POWER_ARMOR_HELMET = register(PowerArmorItem(
 		"HEAVY_POWER_ARMOR_HELMET",
 		ofChildren(text("Heavy Power ", RED), text("Helmet", GRAY)),
 		"power_armor/power_armor_helmet",
 		EquipmentSlot.HEAD,
 		ConfigurationFiles.pvpBalancing().armour::heavyPowerArmor.get()
 	))
-	val HEAVY_POWER_ARMOUR_CHEST = register(PowerArmorItem(
+	val HEAVY_POWER_ARMOR_CHEST = register(PowerArmorItem(
 		"HEAVY_POWER_ARMOR_CHEST",
 		ofChildren(text("Heavy Power ", RED), text("Chest", GRAY)),
 		"power_armor/power_armor_chestplate",
 		EquipmentSlot.CHEST,
 		ConfigurationFiles.pvpBalancing().armour::heavyPowerArmor.get()
 	))
-	val HEAVY_POWER_ARMOUR_LEGGINGS = register(PowerArmorItem(
+	val HEAVY_POWER_ARMOR_LEGGINGS = register(PowerArmorItem(
 		"HEAVY_POWER_ARMOR_LEGGINGS",
 		ofChildren(text("Heavy Power ", RED), text("Leggings", GRAY)),
 		"power_armor/power_armor_leggings",
 		EquipmentSlot.LEGS,
 		 ConfigurationFiles.pvpBalancing().armour::heavyPowerArmor.get()
 	))
-	val HEAVY_POWER_ARMOUR_BOOTS = register(PowerArmorItem(
+	val HEAVY_POWER_ARMOR_BOOTS = register(PowerArmorItem(
 		"HEAVY_POWER_ARMOR_BOOTS",
 		ofChildren(text("Heavy Power ", RED), text("Boots", GRAY)),
 		"power_armor/power_armor_boots",
 		EquipmentSlot.FEET,
 		ConfigurationFiles.pvpBalancing().armour::heavyPowerArmor.get()
+	))
+
+	//Medium Power Armor
+	val MEDIUM_POWER_ARMOR_HELMET = register(PowerArmorItem(
+		"MEDIUM_POWER_ARMOR_HELMET",
+		ofChildren(text("Medium Power ",  GOLD), text("Helmet", GRAY)),
+		"power_armor/power_armor_helmet",
+		EquipmentSlot.HEAD,
+		ConfigurationFiles.pvpBalancing().armour::mediumPowerArmor.get()
+	))
+	val MEDIUM_POWER_ARMOR_CHEST = register(PowerArmorItem(
+		"MEDIUM_POWER_ARMOR_CHEST",
+		ofChildren(text("Medium Power ", GOLD), text("Chest", GRAY)),
+		"power_armor/power_armor_chestplate",
+		EquipmentSlot.CHEST,
+		ConfigurationFiles.pvpBalancing().armour::mediumPowerArmor.get()
+	))
+	val MEDIUM_POWER_ARMOR_LEGGINGS = register(PowerArmorItem(
+		"MEDIUM_POWER_ARMOR_LEGGINGS",
+		ofChildren(text("Medium Power ", GOLD), text("Leggings", GRAY)),
+		"power_armor/power_armor_leggings",
+		EquipmentSlot.LEGS,
+		ConfigurationFiles.pvpBalancing().armour::mediumPowerArmor.get()
+	))
+	val MEDIUM_POWER_ARMOR_BOOTS = register(PowerArmorItem(
+		"MEDIUM_POWER_ARMOR_BOOTS",
+		ofChildren(text("Medium Power ", GOLD), text("Boots", GRAY)),
+		"power_armor/power_armor_boots",
+		EquipmentSlot.FEET,
+		ConfigurationFiles.pvpBalancing().armour::mediumPowerArmor.get()
+	))
+
+	//Light Power Armor
+	val LIGHT_POWER_ARMOR_HELMET = register(PowerArmorItem(
+		"LIGHT_POWER_ARMOR_HELMET",
+		ofChildren(text("Light Power ", GREEN), text("Helmet", GRAY)),
+		"power_armor/power_armor_helmet",
+		EquipmentSlot.HEAD,
+		ConfigurationFiles.pvpBalancing().armour::lightPowerArmor.get()
+	))
+	val LIGHT_POWER_ARMOR_CHEST = register(PowerArmorItem(
+		"LIGHT_POWER_ARMOR_CHEST",
+		ofChildren(text("Light Power ", GREEN), text("Chest", GRAY)),
+		"power_armor/power_armor_chestplate",
+		EquipmentSlot.CHEST,
+		ConfigurationFiles.pvpBalancing().armour::lightPowerArmor.get()
+	))
+	val LIGHT_POWER_ARMOR_LEGGINGS = register(PowerArmorItem(
+		"LIGHT_POWER_ARMOR_LEGGINGS",
+		ofChildren(text("Light Power ", GREEN), text("Leggings", GRAY)),
+		"power_armor/power_armor_leggings",
+		EquipmentSlot.LEGS,
+		ConfigurationFiles.pvpBalancing().armour::lightPowerArmor.get()
+	))
+	val LIGHT_POWER_ARMOR_BOOTS = register(PowerArmorItem(
+		"LIGHT_POWER_ARMOR_BOOTS",
+		ofChildren(text("Light Power ", GREEN), text("Boots", GRAY)),
+		"power_armor/power_armor_boots",
+		EquipmentSlot.FEET,
+		ConfigurationFiles.pvpBalancing().armour::lightPowerArmor.get()
 	))
 
 	val ENERGY_SWORD_BLUE = register(EnergySword("BLUE", BLUE))
