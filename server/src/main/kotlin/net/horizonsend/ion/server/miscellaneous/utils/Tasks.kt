@@ -24,8 +24,8 @@ object Tasks {
 		Bukkit.getScheduler().runTaskLaterAsynchronously(IonServer, block, delay)
 	}
 
-	fun asyncRepeat(delay: Long, interval: Long, block: () -> Unit) {
-		Bukkit.getScheduler().runTaskTimerAsynchronously(IonServer, block, delay, interval)
+	fun asyncRepeat(delay: Long, interval: Long, block: () -> Unit): BukkitTask {
+		return Bukkit.getScheduler().runTaskTimerAsynchronously(IonServer, block, delay, interval)
 	}
 
 	inline fun sync(crossinline block: () -> Unit) { ; syncTask(block); }

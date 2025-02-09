@@ -66,6 +66,7 @@ object ItemModRegistry {
 	val ROCKET_BOOSTING = registerMod(RocketBoostingMod)
 	val SHOCK_ABSORBING = registerMod(ShockAbsorbingMod)
 	val MINI_NUKE = registerMod(MiniNukeMod)
+
 	//Armor Secondary
 	val ARMOR_BOOST = registerMod(ArmorBoostMod)
 	val SPEED_BOOSTING = registerMod(SpeedBoostingMod)
