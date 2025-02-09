@@ -86,7 +86,7 @@ class MiniNukeModExplosion(val location: Location){
 			shockWave.damageFunction = Function { distance -> if(distance > 60.0){0.0}else if(distance>25.8){80.0/ log10(distance-20) }else 1000.0 }
 
 			shockWave.shouldKnockBack = true
-			shockWave.knockBackStrength = 20.0
+			shockWave.knockBackStrength = 3.0
 
 			//burn wave
 			burnWave.count = 10
