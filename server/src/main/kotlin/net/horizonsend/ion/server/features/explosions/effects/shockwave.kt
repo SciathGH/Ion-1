@@ -14,6 +14,7 @@ import net.horizonsend.ion.server.features.explosions.utilities.ring
 import net.horizonsend.ion.server.features.explosions.utilities.sphereBlockOffsets
 import net.horizonsend.ion.server.miscellaneous.utils.DamageEvent
 import net.horizonsend.ion.server.miscellaneous.utils.Tasks
+import org.bukkit.FluidCollisionMode
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.SoundCategory
@@ -111,12 +112,15 @@ fun spawnShockwave(placement: ShockWavePlacement, options: ShockWaveOptions, bur
 				}
 
 				if (options.damageDone && player.location.distance(location) < options.maxDamageRange && entitythatExploded != null){
-					println(options.damageFunction.apply(location.distance(player.location)))
-					DamageEvent.doDamageEvent(
-						options.damageFunction.apply(location.distance(player.location)),
-						EntityDamageEvent.DamageCause.ENTITY_EXPLOSION,
-						player,
-						entitythatExploded, DamageType.EXPLOSION, location, true, true)
+					val vector = location.toVector().subtract(player.location.toVector())
+					if (player.world.rayTraceBlocks(player.location, vector, player.location.distance(location), FluidCollisionMode.SOURCE_ONLY)?.hitBlock == null) {
+						DamageEvent.doDamageEvent(
+							options.damageFunction.apply(location.distance(player.location)),
+							EntityDamageEvent.DamageCause.ENTITY_EXPLOSION,
+							player,
+							entitythatExploded, DamageType.EXPLOSION, location, true, true
+						)
+					}
 				}
 
 				if (options.shouldKnockBack){
