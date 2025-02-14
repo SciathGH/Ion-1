@@ -12,16 +12,12 @@ import net.horizonsend.ion.server.features.explosions.effects.ShockWavePlacement
 import net.horizonsend.ion.server.features.explosions.effects.flashBurn
 import net.horizonsend.ion.server.features.explosions.effects.spawnBurnWave
 import net.horizonsend.ion.server.features.explosions.effects.spawnShockwave
-import net.horizonsend.ion.server.features.explosions.utilities.CameraShakeOptions
 import net.horizonsend.ion.server.features.world.IonWorld.Companion.hasFlag
 import net.horizonsend.ion.server.features.world.WorldFlag
-import net.horizonsend.ion.server.miscellaneous.utils.DamageEvent
 import net.horizonsend.ion.server.miscellaneous.utils.Tasks
 import org.bukkit.Location
 import org.bukkit.Sound
-import org.bukkit.damage.DamageType
 import org.bukkit.entity.Entity
-import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.util.Vector
 import kotlin.math.log10
 

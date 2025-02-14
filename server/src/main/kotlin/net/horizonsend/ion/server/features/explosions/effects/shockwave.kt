@@ -6,8 +6,6 @@ import com.google.common.base.Function
 import io.papermc.paper.event.entity.EntityKnockbackEvent
 import net.horizonsend.ion.server.features.explosions.AppState
 import net.horizonsend.ion.server.features.explosions.utilities.BurnPalette
-import net.horizonsend.ion.server.features.explosions.utilities.CameraShake
-import net.horizonsend.ion.server.features.explosions.utilities.CameraShakeOptions
 import net.horizonsend.ion.server.features.explosions.utilities.blockModel
 import net.horizonsend.ion.server.features.explosions.utilities.centredTransform
 import net.horizonsend.ion.server.features.explosions.utilities.lerp
@@ -16,7 +14,6 @@ import net.horizonsend.ion.server.features.explosions.utilities.ring
 import net.horizonsend.ion.server.features.explosions.utilities.sphereBlockOffsets
 import net.horizonsend.ion.server.miscellaneous.utils.DamageEvent
 import net.horizonsend.ion.server.miscellaneous.utils.Tasks
-import net.horizonsend.ion.server.miscellaneous.utils.distance
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.SoundCategory

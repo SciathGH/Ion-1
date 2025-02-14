@@ -36,8 +36,8 @@ import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
-import kotlin.math.roundToInt
 
 @Suppress("UnstableApiUsage")
 class PowerArmorItem(
@@ -91,7 +91,7 @@ class PowerArmorItem(
 			attributeList().forEach {
 				itemMeta.addAttributeModifier(it.key, it.value)
 			}
-			//itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ) //todo add this back after testing
+			itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
 		}
 
 	}

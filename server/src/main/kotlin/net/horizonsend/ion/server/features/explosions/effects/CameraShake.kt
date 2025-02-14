@@ -1,10 +1,7 @@
-package net.horizonsend.ion.server.features.explosions.utilities
+package net.horizonsend.ion.server.features.explosions.effects
 
 import io.papermc.paper.entity.LookAnchor
 import net.horizonsend.ion.server.miscellaneous.utils.Tasks
-import net.horizonsend.ion.server.miscellaneous.utils.alongVector
-import net.horizonsend.ion.server.miscellaneous.utils.toVector3f
-import org.bukkit.craftbukkit.entity.CraftPlayer
 import org.bukkit.entity.Player
 import java.io.Closeable
 import kotlin.math.cos
