@@ -21,8 +21,7 @@ object PlayerTempValueManager : SLEventListener(){
 	}
  }
 
-class PlayerTempValues(
-	var shouldDoubleJump: Boolean = true,
-	var canRocketFly: Boolean = false
-	)
+class PlayerTempValues{
+	var rocketSpeed: Double = 0.0
+}
 
