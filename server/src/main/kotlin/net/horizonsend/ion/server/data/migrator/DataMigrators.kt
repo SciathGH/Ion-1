@@ -778,8 +778,10 @@ object DataMigrators : IonServerComponent() {
 			.build()
 		)
 
+		registerDataVersion(DataVersion.builder(4).build())
+
 		registerDataVersion(DataVersion
-			.builder(4)
+			.builder(5)
 			.addMigrator(ReplacementMigrator(
 				CustomItemRegistry.GUN_BARREL, CustomItemRegistry.CIRCUITRY,
 				CustomItemRegistry.PISTOL_RECEIVER, CustomItemRegistry.RIFLE_RECEIVER,
