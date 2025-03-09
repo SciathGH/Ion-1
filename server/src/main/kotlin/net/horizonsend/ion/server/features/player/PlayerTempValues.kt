@@ -1,11 +1,11 @@
 package net.horizonsend.ion.server.features.player
 
 import net.horizonsend.ion.server.listener.SLEventListener
+import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
-import java.net.http.WebSocket.Listener
-import java.util.UUID
+import java.util.*
 
 object PlayerTempValueManager : SLEventListener(){
 	val UUIDToPlayerTempValue = mutableMapOf<UUID, PlayerTempValues>()
@@ -22,6 +22,8 @@ object PlayerTempValueManager : SLEventListener(){
  }
 
 class PlayerTempValues{
-	var rocketSpeed: Double = 0.0
+	var maxRocketSpeed: Double = 1.0
+	var rocketBootAccel: Double =  0.2
 }
 
+fun LivingEntity.getTempValues(): PlayerTempValues = PlayerTempValueManager.UUIDToPlayerTempValue[this.uniqueId] ?: PlayerTempValues()
