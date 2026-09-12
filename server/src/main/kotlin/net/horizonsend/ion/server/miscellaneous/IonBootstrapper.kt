@@ -24,6 +24,7 @@ import net.horizonsend.ion.server.features.multiblock.type.starship.weapon.heavy
 import net.horizonsend.ion.server.features.multiblock.type.starship.weapon.heavy.HorizontalRocketStarshipWeaponMultiblock
 import net.horizonsend.ion.server.features.multiblock.type.starship.weapon.heavy.NeutralizerStarshipWeaponMultiblock
 import net.horizonsend.ion.server.features.multiblock.type.starship.weapon.heavy.PhaserStarshipWeaponMultiblock
+import net.horizonsend.ion.server.features.multiblock.type.starship.weapon.heavy.RailgunStarshipWeaponMultiblock
 import net.horizonsend.ion.server.features.multiblock.type.starship.weapon.heavy.TopArsenalStarshipWeaponMultiblock
 import net.horizonsend.ion.server.features.multiblock.type.starship.weapon.heavy.TopSwarmMissileStarshipWeaponMultiblock
 import net.horizonsend.ion.server.features.multiblock.type.starship.weapon.heavy.TorpedoStarshipWeaponMultiblock
@@ -83,7 +84,8 @@ class IonBootstrapper : PluginBootstrap {
 			NeutralizerStarshipWeaponMultiblock,
 			WebifierStarshipWeaponMultiblock,
 			ScramblerStarshipWeaponMultiblock,
-			HeavyNeutralizerStarshipWeaponMultiblock
+			HeavyNeutralizerStarshipWeaponMultiblock,
+			RailgunStarshipWeaponMultiblock,
 		)
 
 
