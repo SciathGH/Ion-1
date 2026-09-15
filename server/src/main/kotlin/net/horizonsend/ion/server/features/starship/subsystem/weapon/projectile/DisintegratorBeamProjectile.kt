@@ -31,7 +31,7 @@ class DisintegratorBeamProjectile(
         private const val RESET_STACK_TIME_MILLIS = 4000L
     }
 
-    override val starshipShieldDamageMultiplier = damage
+    override var starshipShieldDamageMultiplier = damage
     override val color: Color = Color.ORANGE
     override val explosionPower: Float = damage.toFloat()
 

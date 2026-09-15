@@ -33,6 +33,7 @@ import org.bukkit.World
 import org.bukkit.block.Block
 import org.bukkit.craftbukkit.util.CraftMagicNumbers
 import org.bukkit.damage.DamageType
+import org.bukkit.entity.Display
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
@@ -56,7 +57,7 @@ abstract class SimpleProjectile<out B : StarshipProjectileBalancing>(
 	val range: Double get() = balancing.range
 	open val speed: Double get() = balancing.speed
 
-	open val starshipShieldDamageMultiplier: Double get() = balancing.starshipShieldDamageMultiplier
+	open var starshipShieldDamageMultiplier: Double = balancing.starshipShieldDamageMultiplier
 	val areaShieldDamageMultiplier: Double get() = balancing.areaShieldDamageMultiplier
 	open val explosionPower: Float get() = balancing.explosionPower
 
@@ -64,7 +65,7 @@ abstract class SimpleProjectile<out B : StarshipProjectileBalancing>(
 	protected var firedAtNanos: Long = -1
 	protected var lastTick: Long = -1
 	protected var delta: Double = 0.0
-	private var hasHit: Boolean = false
+	var hasHit: Boolean = false
 
 	val nearSound: SoundInfo get() = balancing.fireSoundNear
 	val farSound: SoundInfo get() = balancing.fireSoundFar
@@ -97,7 +98,7 @@ abstract class SimpleProjectile<out B : StarshipProjectileBalancing>(
 			FluidCollisionMode.NEVER,
 			true,
 			0.1,
-			{ it.type != EntityType.ITEM_DISPLAY },
+			{ it !is Display && it.type != EntityType.INTERACTION},
 			{
 				if (source !is StarshipProjectileSource) true // projectile was not fired from a starship
 				else !source.starship.contains(it.x, it.y, it.z) // can collide with any block that is not part of the firing starship

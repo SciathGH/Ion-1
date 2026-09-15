@@ -330,9 +330,8 @@ data class NeutralizerBalancing(
 }
 
 @Serializable
-data class RailgunBalancing(
-	override val fireRestrictions: FireRestrictions = FireRestrictions(canFire = true
-	),
+data class 	RailgunBalancing(
+	override val fireRestrictions: FireRestrictions = FireRestrictions(canFire = true),
 	override var fireCooldownNanos: Long = TimeUnit.MILLISECONDS.toNanos(9),
 	override var firePowerConsumption: Int = 50000,
 	override var isForwardOnly: Boolean = true,
@@ -346,8 +345,10 @@ data class RailgunBalancing(
 	override var angleRadiansHorizontal: Double = 45.0,
 	override var angleRadiansVertical: Double = 180.0,
 
+	override val warmupTime: Double = 1.5,
+
 	override val projectile: RailgunProjectileBalancing = RailgunProjectileBalancing()
-) : StarshipCannonWeaponBalancing<RailgunBalancing.RailgunProjectileBalancing>, StarshipHeavyWeaponBalancing<RailgunBalancing.RailgunProjectileBalancing> {
+) : StarshipCannonWeaponBalancing<RailgunBalancing.RailgunProjectileBalancing>, StarshipHeavyWeaponBalancing<RailgunBalancing.RailgunProjectileBalancing>, StarshipCannonWeaponWithWarmupBalancing<RailgunBalancing.RailgunProjectileBalancing> {
 	@Transient
 	override val clazz: KClass<out BalancedWeaponSubsystem<*>> = RailgunWeaponSubsystem::class
 
@@ -355,13 +356,14 @@ data class RailgunBalancing(
 	data class RailgunProjectileBalancing(
 		override var range: Double = 500.0,
 		override var speed: Double = 2000.0,
-		override var explosionPower: Float = 4f,
-		override var starshipShieldDamageMultiplier: Double = 60.0,
+		override var explosionPower: Float = 2f,
+		override var starshipShieldDamageMultiplier: Double = 30.0,
 		override var areaShieldDamageMultiplier: Double = 20.0,
-		override val entityDamage: EntityDamage = RegularDamage(100.0),
-		override val fireSoundNear: SoundInfo = SoundInfo("horizonsend:starship.weapon.phaser.shoot.near", volume = 1f, source = Sound.Source.PLAYER),
-		override val fireSoundFar: SoundInfo = SoundInfo("horizonsend:starship.weapon.phaser.shoot.far", volume = 1f, source = Sound.Source.PLAYER),
-	) : StarshipProjectileBalancing {
+		override val entityDamage: EntityDamage = RegularDamage(0.0),
+		override val fireSoundNear: SoundInfo = SoundInfo("", volume = 1f, source = Sound.Source.PLAYER),
+		override val fireSoundFar: SoundInfo = SoundInfo("", volume = 1f, source = Sound.Source.PLAYER),
+		override val piercing: Double = 60.0
+	) : StarshipProjectileBalancing, StarshipPiercingProjectileBalancing {
 		@Transient
 		override val clazz: KClass<out Projectile> = RailgunProjectile::class
 	}
@@ -468,8 +470,10 @@ data class PhaserBalancing(
 	override var angleRadiansHorizontal: Double = 180.0,
 	override var angleRadiansVertical: Double = 180.0,
 
+	override val warmupTime: Double = 1.5,
+
 	override val projectile: PhaserProjectileBalancing = PhaserProjectileBalancing()
-) : StarshipCannonWeaponBalancing<PhaserProjectileBalancing>, StarshipHeavyWeaponBalancing<PhaserProjectileBalancing> {
+) : StarshipCannonWeaponBalancing<PhaserProjectileBalancing>, StarshipHeavyWeaponBalancing<PhaserProjectileBalancing>, StarshipCannonWeaponWithWarmupBalancing<PhaserProjectileBalancing> {
 	@Transient
 	override val clazz: KClass<out BalancedWeaponSubsystem<*>> = PhaserWeaponSubsystem::class
 
@@ -1362,8 +1366,10 @@ data class DoomsdayDeviceBalancing(
 	override var angleRadiansVertical: Double = 80.0,
 	override var boostChargeNanos: Long = TimeUnit.SECONDS.toNanos(60),
 
+	override val warmupTime: Double = 4.0,
+
 	override val projectile: DoomsdayDeviceProjectileBalancing = DoomsdayDeviceProjectileBalancing(),
-) : StarshipCannonWeaponBalancing<DoomsdayDeviceProjectileBalancing>, StarshipHeavyWeaponBalancing<DoomsdayDeviceProjectileBalancing> {
+) : StarshipCannonWeaponBalancing<DoomsdayDeviceProjectileBalancing>, StarshipHeavyWeaponBalancing<DoomsdayDeviceProjectileBalancing>, StarshipCannonWeaponWithWarmupBalancing<DoomsdayDeviceProjectileBalancing> {
 	@Transient
 	override val clazz: KClass<out BalancedWeaponSubsystem<*>> = DoomsdayDeviceWeaponSubsystem::class
 

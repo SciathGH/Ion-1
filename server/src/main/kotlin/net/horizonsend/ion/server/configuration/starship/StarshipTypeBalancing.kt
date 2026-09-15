@@ -2034,6 +2034,11 @@ sealed interface StarshipBoidProjectileBalancing : StarshipProjectileBalancing {
 }
 
 @Serializable
+sealed interface StarshipPiercingProjectileBalancing{
+	val piercing: Double
+}
+
+@Serializable
 sealed interface StarshipWeaponBalancing<T : StarshipProjectileBalancing> {
 	val clazz: KClass<out BalancedWeaponSubsystem<*>>
 	val projectile: T
@@ -2063,6 +2068,11 @@ sealed interface StarshipWeaponBalancing<T : StarshipProjectileBalancing> {
 		val maxBlockCount: Int = Int.MAX_VALUE,
 		val incompatibleMultiblocks: List<IncompatibleSubsystemInfo> = listOf(),
 	)
+}
+
+@Serializable
+sealed interface StarshipCannonWeaponWithWarmupBalancing<T: StarshipProjectileBalancing> : StarshipWeaponBalancing<T>{
+	val warmupTime: Double
 }
 
 @Serializable
