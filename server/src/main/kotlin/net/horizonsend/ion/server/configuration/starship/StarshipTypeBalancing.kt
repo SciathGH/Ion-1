@@ -2066,6 +2066,11 @@ sealed interface StarshipWeaponBalancing<T : StarshipProjectileBalancing> {
 }
 
 @Serializable
+sealed interface StarshipCannonWeaponWithWarmupBalancing<T: StarshipProjectileBalancing> : StarshipWeaponBalancing<T>{
+	val warmupTime: Double
+}
+
+@Serializable
 sealed interface StarshipCannonWeaponBalancing<T : StarshipProjectileBalancing> : StarshipWeaponBalancing<T> {
 	val convergeDistance: Double
 

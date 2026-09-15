@@ -6,6 +6,7 @@ import net.horizonsend.ion.server.IonServer
 import net.horizonsend.ion.server.configuration.starship.DoomsdayDeviceBalancing
 import net.horizonsend.ion.server.core.registration.keys.CustomItemKeys
 import net.horizonsend.ion.server.features.client.display.modular.ItemDisplayContainer
+import net.horizonsend.ion.server.features.economy.cargotrade.balancing
 import net.horizonsend.ion.server.features.nations.utils.toPlayersInRadius
 import net.horizonsend.ion.server.features.starship.active.ActiveStarship
 import net.horizonsend.ion.server.features.starship.damager.Damager
@@ -38,10 +39,6 @@ class DoomsdayDeviceWeaponSubsystem(
 ) : CannonWeaponSubsystem<DoomsdayDeviceBalancing>(starship, pos, face, starship.balancingManager.getWeaponSupplier(DoomsdayDeviceWeaponSubsystem::class)), HeavyWeaponSubsystem, AmmoConsumingWeaponSubsystem {
 	override val boostChargeNanos: Long get() = balancing.boostChargeNanos
 
-    companion object {
-        private const val WARM_UP_TIME_SECONDS = 4
-    }
-
     override val length: Int = 11
 
     override fun fire(loc: Location, dir: Vector, shooter: Damager, target: Vector) {
@@ -51,7 +48,7 @@ class DoomsdayDeviceWeaponSubsystem(
 		var tick = 0
         runnable {
 
-            if (tick > (WARM_UP_TIME_SECONDS * 20 / 5)) cancel()
+            if (tick > (balancing.warmupTime * 20 / 5)) cancel()
 
             val newFirePos = getFirePos()
 
@@ -80,7 +77,7 @@ class DoomsdayDeviceWeaponSubsystem(
 			val stopPoint = getFireVec().clone().add(Vector(face.modX * 10.0, face.modY * 10.0, face.modZ * 10.0)).toLocation(loc.world)
 			val furtherStopPoint = stopPoint.add(face.modX * 10.0, face.modY * 10.0, face.modZ * 10.0)
 
-			if (tick < ((WARM_UP_TIME_SECONDS - 1) * 4)) {
+			if (tick < ((balancing.warmupTime - 1) * 4)) {
 				newFirePos.toLocation(loc.world).circlePoints(20.0, 100, face.direction).shuffled().take(50).forEach {
 					it.world.spawnParticle(
 						Particle.TRAIL,
@@ -113,7 +110,7 @@ class DoomsdayDeviceWeaponSubsystem(
             tick += 1
         }.runTaskTimer(IonServer, 0L, 5L)
 
-        Tasks.syncDelay(20 * WARM_UP_TIME_SECONDS.toLong()) {
+        Tasks.syncDelay(20 * balancing.warmupTime.toLong()) {
             val newFirePos = getFirePos()
             DoomsdayDeviceProjectile(StarshipProjectileSource(starship), getName(), newFirePos.toLocation(loc.world), dir, shooter).fire()
 			DoomsdayDeviceFireShockwaveAnimation().schedule()

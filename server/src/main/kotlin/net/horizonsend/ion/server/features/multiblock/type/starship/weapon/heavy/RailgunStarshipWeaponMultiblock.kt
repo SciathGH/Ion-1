@@ -18,7 +18,7 @@ object RailgunStarshipWeaponMultiblock : SignlessStarshipWeaponMultiblock<Railgu
 	override val key: String = "railgun"
 
 	override val displayName: Component get() = text("Railgun")
-	override val description: Component get() = text("Powerful spinally mounted heavy weapon. Extreme shield damage.")//Todo
+	override val description: Component get() = text("Powerful spinally mounted heavy weapon. Extreme shield damage.")
 
 	override fun MultiblockShape.buildStructure() {
 		z(0) {
@@ -28,16 +28,16 @@ object RailgunStarshipWeaponMultiblock : SignlessStarshipWeaponMultiblock<Railgu
 				x(-1).ironBlock()
 			}
 			y(-1) {
-				x(0).type(Material.COPPER_BLOCK)
+				x(0).anyCopperVariant()
 			}
 			y(1) {
-				x(0).type(Material.COPPER_BLOCK)
+				x(0).anyCopperVariant()
 			}
 		}
 		z(1) {
 			y(0) {
 				x(1).anyGlass()
-				x(0).type(Material.WAXED_COPPER_BULB)
+				x(0).anyCopperBulb()
 				x(-1).anyGlass()
 			}
 			y(-1) {
@@ -60,7 +60,7 @@ object RailgunStarshipWeaponMultiblock : SignlessStarshipWeaponMultiblock<Railgu
 		z(2) {
 			y(0) {
 				x(1).anyGlass()
-				x(0).type(Material.WAXED_COPPER_BULB)
+				x(0).anyCopperBulb()
 				x(-1).anyGlass()
 			}
 			y(-1) {
@@ -83,7 +83,7 @@ object RailgunStarshipWeaponMultiblock : SignlessStarshipWeaponMultiblock<Railgu
 		z(3) {
 			y(0) {
 				x(1).anyGlass()
-				x(0).type(Material.WAXED_COPPER_BULB)
+				x(0).anyCopperBulb()
 				x(-1).anyGlass()
 			}
 			y(-1) {
@@ -110,10 +110,10 @@ object RailgunStarshipWeaponMultiblock : SignlessStarshipWeaponMultiblock<Railgu
 				x(-1).ironBlock()
 			}
 			y(-1) {
-				x(0).type(Material.COPPER_BLOCK)
+				x(0).anyCopperVariant()
 			}
 			y(1) {
-				x(0).type(Material.COPPER_BLOCK)
+				x(0).anyCopperVariant()
 			}
 		}
 		z(5) {

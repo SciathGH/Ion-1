@@ -32,10 +32,6 @@ class PhaserWeaponSubsystem(
 
 	override val boostChargeNanos: Long get() = balancing.boostChargeNanos
 
-	companion object {
-		private const val WARM_UP_TIME_SECONDS = 0.5
-	}
-
 	override fun isAcceptableDirection(face: BlockFace) = true
 
 	override fun fire(loc: Location, dir: Vector, shooter: Damager, target: Vector) {
@@ -50,7 +46,7 @@ class PhaserWeaponSubsystem(
 
 		fixDirections(loc)
 
-		Tasks.syncDelay((20.0 * WARM_UP_TIME_SECONDS).toLong()) {
+		Tasks.syncDelay((20.0 * balancing.warmupTime).toLong()) {
 			val newFirePos = getFirePos().toCenterVector()
 			PhaserProjectile(StarshipProjectileSource(starship), getName(), newFirePos.toLocation(loc.world), dir, shooter).fire()
 		}
