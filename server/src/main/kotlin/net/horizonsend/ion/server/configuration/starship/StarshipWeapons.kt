@@ -357,7 +357,7 @@ data class 	RailgunBalancing(
 		override var range: Double = 500.0,
 		override var speed: Double = 2000.0,
 		override var explosionPower: Float = 2f,
-		override var starshipShieldDamageMultiplier: Double = 30.0,
+		override var starshipShieldDamageMultiplier: Double = 80.0,
 		override var areaShieldDamageMultiplier: Double = 20.0,
 		override val entityDamage: EntityDamage = RegularDamage(0.0),
 		override val fireSoundNear: SoundInfo = SoundInfo("", volume = 1f, source = Sound.Source.PLAYER),
