@@ -8,7 +8,8 @@ import net.kyori.adventure.sound.Sound
 data class PVPBalancingConfiguration(
 	val energyWeapons: EnergyWeapons = EnergyWeapons(),
 	val meleeWeapons: MeleeWeapons = MeleeWeapons(),
-	val throwables: Throwables = Throwables()
+	val throwables: Throwables = Throwables(),
+	val armour: Armor = Armor(),
 ) {
 	@Serializable
 	data class MeleeWeapons(
@@ -65,6 +66,52 @@ data class PVPBalancingConfiguration(
 			var maxTicks: Int,
 			var tickInterval: Long,
 			var throwCooldownTicks: Int,
+		)
+	}
+
+	@Serializable
+	data class Armor(
+		val mediumPowerArmor: ArmorBalancing = ArmorBalancing(
+			speed = 0.0,
+			sneakSpeed = 0.0,
+			scale = 0.0,
+			entityReach = 0.0,
+			blockReach = 0.0,
+			armor = 2.0,
+			toughness = 0.0,
+			knockBackResistance = 0.0,
+			power = 50000,
+			powerConsumedPerSecond = 5,
+			stepHeight = 0.0,
+			maxHealth = 0.0,
+			jumpStrength = 0.0,
+			flyingSpeed = 0.0,
+			gravity = 0.0,
+			oxygenBonus = 0.0,
+			waterMovementEfficiency = 0.0,
+			maxPrimaryModules = 1,
+		)
+	){
+		@Serializable
+		data class ArmorBalancing(
+			var speed: Double, //Percentage increase or decrease
+			var sneakSpeed: Double, //Percentage increase or decrease
+			var scale: Double, //Scalar add
+			var entityReach: Double, //Scalar add
+			var blockReach: Double, //Scalar add
+			var armor: Double, //Scalar add
+			var toughness: Double, //Scalar add
+			var knockBackResistance: Double, //Scalar add x10, 0.2 here is 2 ingame
+			var power: Int, //Pure number
+			var powerConsumedPerSecond: Int,
+			var stepHeight: Double,//Scalar add
+			var maxHealth: Double,//Scalar add
+			var jumpStrength: Double,//Scalar add
+			var flyingSpeed: Double,//Scalar add
+			var gravity: Double,//Scalar add
+			var oxygenBonus: Double,//Scalar add
+			var waterMovementEfficiency: Double,//Scalar add
+			var maxPrimaryModules: Int,
 		)
 	}
 
